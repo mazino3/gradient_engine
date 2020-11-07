@@ -1,7 +1,9 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
-#include<GLFW/glfw3.h>
+#include <GLFW/glfw3.h>
+#include <glm/vec3.hpp>
 
+#include <iostream>
 
 int main()
 {
@@ -9,6 +11,12 @@ int main()
     {
         return -1;
     }
+
+    glm::vec3 vec1(1.0f, 0.0f, 1.0f);
+    glm::vec3 vec2(5.0f, 0.0f, 2.0f);
+    auto result = vec1 + vec2;
+
+    std::cout << "result vec: " << result.x << " " << result.y << " " << result.z << std::endl;
 
     GLFWwindow* window;
     window = glfwCreateWindow(640, 480, "Hello GLFW", nullptr, nullptr);
