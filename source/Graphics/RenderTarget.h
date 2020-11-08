@@ -1,0 +1,25 @@
+#ifndef GRAPHICS_RENDER_TARGET_H
+#define GRAPHICS_RENDER_TARGET_H
+
+#include <glm/vec4.hpp>
+#include <memory>
+#include "Mesh.h"
+#include "Shader.h"
+
+struct RenderTargetImpl;
+
+struct RenderTarget
+{
+	RenderTarget();
+	virtual ~RenderTarget() {}
+	virtual bool init() = 0;
+	virtual void bind() = 0;
+	void setClearColor(const glm::vec4& color);
+	void clear();
+
+private:
+
+	std::shared_ptr<RenderTargetImpl> _data;
+};
+
+#endif

@@ -12,7 +12,11 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/glew-cmake-2.1.0)
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
+file(GLOB GRAPHICS_FILES ${PROJECT_SOURCE_DIR}/source/Graphics/*.cpp ${PROJECT_SOURCE_DIR}/source/Graphics/*.h)
+add_library(Graphics ${GRAPHICS_FILES})
+target_link_libraries(Graphics libglew_static)
+target_link_libraries(Graphics glfw)
+
 add_executable(ogl2020 source/main.cpp)
-#target_link_libraries(ogl2020 ${PROJECT_SOURCE_DIR}/lib/OPENGL32.LIB)
-target_link_libraries(ogl2020 libglew_static)
-target_link_libraries(ogl2020 glfw)
+add_dependencies(ogl2020 Graphics)
+target_link_libraries(ogl2020 Graphics)
