@@ -3,18 +3,19 @@
 
 struct MeshImpl
 {
-	int indicesCount;
-	MeshType meshType;
+	GeometryDefinition geometry;
 	GLuint vao;
 	GLuint vbo;
 	GLuint ebo;
+
+	MeshImpl(const GeometryDefinition& geometry) :
+	    geometry(geometry)
+    {}
 };
 
 Mesh::Mesh(const GeometryDefinition& geometry)
 {
-	_data = std::make_shared<MeshImpl>();
-	_data->meshType = geometry.type;
-	_data->indicesCount = geometry.indices.size();
+	_data = std::make_shared<MeshImpl>(geometry);
 
 	//creating vao
 	glGenVertexArrays(1, &_data->vao);
@@ -24,8 +25,8 @@ Mesh::Mesh(const GeometryDefinition& geometry)
 	glGenBuffers(1, &_data->vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, _data->vbo);
 	glBufferData(GL_ARRAY_BUFFER,
-		sizeof(Vertex) * geometry.vertices.size(),
-		&geometry.vertices[0],
+		sizeof(Vertex) * _data->geometry.vertices.size(),
+		&_data->geometry.vertices[0],
 		GL_STATIC_DRAW);
 
 	//pos attribute
@@ -39,7 +40,7 @@ Mesh::Mesh(const GeometryDefinition& geometry)
 	//creating ebo
 	glGenBuffers(1, &_data->ebo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _data->ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * geometry.indices.size(), &geometry.indices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * _data->geometry.indices.size(), &_data->geometry.indices[0], GL_STATIC_DRAW);
 
 	//unbind buffers
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -55,13 +56,13 @@ Mesh::~Mesh()
 void Mesh::draw()
 {
 	int glPrimitiveType = GL_TRIANGLES;
-	switch (_data->meshType)
+	switch (_data->geometry.type)
 	{
 		case MeshType::Triangles:
 			glPrimitiveType = GL_TRIANGLES;
 	}
 
 	glBindVertexArray(_data->vao);
-	glDrawElements(glPrimitiveType, _data->indicesCount, GL_UNSIGNED_INT, 0);
+	glDrawElements(glPrimitiveType, _data->geometry.indices.size(), GL_UNSIGNED_INT, &_data->geometry.indices[0]);
 	glBindVertexArray(0);
 }

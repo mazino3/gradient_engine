@@ -4,6 +4,8 @@
 #include <glm/vec3.hpp>
 
 #include "Graphics/RenderWindow.h"
+#include "Graphics/BypassShader.h"
+#include "Graphics/Mesh.h"
 
 #include <iostream>
 
@@ -18,18 +20,16 @@ int main()
     
     window.setClearColor(glm::vec4(0.1f, 0.0f, 0.2f, 0.0f));
 
+    BypassShader bypassShader;
+    bypassShader.bind();
+
+    GeometryDefinition quad(GeometryDefinition::XY_QUAD);
+    Mesh mesh(quad);
+
     while (window.isOpen())
     {
         window.clear();
-
-        glColor3f(1, 1, 1);
-        glBegin(GL_TRIANGLES);
-        glVertex3f(0, 0, 0);
-        glVertex3f(1, 0, 0);
-        glVertex3f(1, 1, 0);
-        glEnd();
-        glFlush();
-        
+        mesh.draw();
         window.swapBuffers();
     }
 

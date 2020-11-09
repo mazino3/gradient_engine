@@ -14,7 +14,7 @@ std::string readFile(const std::string& filename)
 	std::string shaderCode;
 	std::ifstream file(filename, std::ios::in);
 	if (!file.good()) {
-		std::cerr << "Can't read file " << filename << std::endl;
+		std::cout << "Can't read file " << filename << std::endl;
 		std::terminate();
 	}
 	file.seekg(0, std::ios::end);
@@ -40,13 +40,15 @@ GLuint createShader(GLenum shaderType, const std::string& source)
 		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLength);
 		std::vector<char> shaderLog(infoLogLength);
 		glGetShaderInfoLog(shader, infoLogLength, NULL, &shaderLog[0]);
-		std::cerr << "Error compiling shader: " << &shaderLog[0] << std::endl;
+		std::cout << "Error compiling shader: " << &shaderLog[0] << std::endl;
 	}
 	return shader;
 }
 
 Shader::Shader(ShaderInitType initType, std::string vertexShader, std::string fragmentShader)
 {
+    _data = std::make_shared<ShaderImpl>();
+
 	if (initType == ShaderInitType::Filename)
 	{
 		vertexShader = readFile(vertexShader);
@@ -68,7 +70,7 @@ Shader::Shader(ShaderInitType initType, std::string vertexShader, std::string fr
 		glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infoLogLength);
 		std::vector<char> programLog(infoLogLength);
 		glGetProgramInfoLog(program, infoLogLength, NULL, &programLog[0]);
-		std::cerr << "Error linking shader: " << std::endl << &programLog[0] << std::endl;
+		std::cout << "Error linking shader: " << std::endl << &programLog[0] << std::endl;
 	}
 
 	_data->program = program;

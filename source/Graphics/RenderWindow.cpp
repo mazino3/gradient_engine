@@ -1,5 +1,7 @@
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "RenderWindow.h"
+#include <iostream>
 
 
 struct RenderWindowImpl
@@ -45,6 +47,15 @@ bool RenderWindow::init()
 	}
 
 	glfwMakeContextCurrent(_data->window);
+
+    if(glewInit() != GLEW_OK)
+    {
+        std::cerr << "failed to init glew" << std::endl;
+        return false;
+    }
+
+	_data->initCalled = true;
+	return true;
 }
 
 bool RenderWindow::isOpen()
