@@ -3,11 +3,16 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
+#include <glm/ext.hpp>
 
 struct ShaderImpl
 {
 	GLuint program;
+
+	static GLuint currentProgram;
 };
+
+GLuint ShaderImpl::currentProgram = 0;
 
 std::string readFile(const std::string& filename)
 {
@@ -78,5 +83,16 @@ Shader::Shader(ShaderInitType initType, std::string vertexShader, std::string fr
 
 void Shader::bind()
 {
+	ShaderImpl::currentProgram = _data->program;
 	glUseProgram(_data->program);
+}
+
+void Shader::setUniform(const std::string& name, const glm::mat4x4& mat)
+{
+	if (_data->program != ShaderImpl::currentProgram)
+	{
+		std::cout << "error: setUniform is called without bind" << std::endl;
+	}
+	GLint location = glGetUniformLocation(_data->program, name.c_str());
+	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(mat));
 }
