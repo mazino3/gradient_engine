@@ -27,6 +27,7 @@ struct Camera
 
 	glm::mat4x4 getProjectionMatrix();
 	glm::mat4x4 getViewMatrix();
+
 private:
 
 	std::shared_ptr<CameraImpl> _data;
