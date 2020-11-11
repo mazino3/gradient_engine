@@ -1,6 +1,10 @@
 #include "Transform.h"
 #include <glm/ext.hpp>
 
+Transform::Transform() : 
+	scale(1, 1, 1)
+{}
+
 glm::mat4x4 Transform::getWorldMatrix()
 {
 	glm::mat4x4 matScale = glm::scale(glm::mat4x4(1.0f), scale);

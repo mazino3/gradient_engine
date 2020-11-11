@@ -10,6 +10,8 @@ struct Transform
 	glm::vec3 rotation; //around xyz
 	glm::vec3 scale;
 
+	Transform();
+
 	glm::mat4x4 getWorldMatrix();
 };
 
