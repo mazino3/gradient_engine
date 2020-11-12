@@ -2,7 +2,7 @@
 #include <string>
 
 static std::string vertexShader =
-"#version 150\n"
+"#version 130\n"
 ""
 "uniform mat4 projection;"
 "uniform mat4 view;"
@@ -17,7 +17,7 @@ static std::string vertexShader =
 "}";
 
 static std::string fragmentShader =
-"#version 150\n"
+"#version 130\n"
 "precision highp float;\n"
 "in vec4 ex_Color;\n"
 "out vec4 gl_FragColor;\n"
