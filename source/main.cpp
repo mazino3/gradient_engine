@@ -9,6 +9,7 @@
 #include "Graphics/Mesh.h"
 #include "Graphics/Transform.h"
 #include "Graphics/Camera.h"
+#include "Graphics/Texture.h"
 
 #include <iostream>
 
@@ -38,6 +39,9 @@ int main()
     shader3d.setModelMatrix(tm.getWorldMatrix());
     shader3d.setProjectionMatrix(camera.getProjectionMatrix());
     shader3d.setViewMatrix(camera.getViewMatrix());
+
+    Texture diffuseTexture("Assets/Sprites/Brick.png");
+    shader3d.setDiffuseTexture(diffuseTexture);
 
     GeometryDefinition quad(GeometryDefinition::XY_QUAD);
     Mesh mesh(quad);
