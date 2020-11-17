@@ -34,6 +34,12 @@ Texture::Texture(const std::string& filename)
 	glHint(GL_GENERATE_MIPMAP_HINT, GL_FASTEST);
 	glGenerateMipmap(GL_TEXTURE_2D);
 
+	if (glewIsSupported("GL_EXT_texture_filter_anisotropic"))
+	{
+		GLfloat anisoSetting = 0.0f;
+		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &anisoSetting);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisoSetting);
+	}
 
 	stbi_image_free(imageData);
 }
