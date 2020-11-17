@@ -20,3 +20,9 @@ target_link_libraries(Graphics glfw)
 add_executable(ogl2020 source/main.cpp)
 add_dependencies(ogl2020 Graphics)
 target_link_libraries(ogl2020 Graphics)
+
+add_custom_command(
+        TARGET ogl2020 POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+                ${PROJECT_SOURCE_DIR}/Assets
+                 $<TARGET_FILE_DIR:ogl2020>/Assets)
