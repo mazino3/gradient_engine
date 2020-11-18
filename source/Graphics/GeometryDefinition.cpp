@@ -38,3 +38,62 @@ GeometryDefinition GeometryDefinition::XY_QUAD(
 		0, 2, 3
 	}
 );
+
+GeometryDefinition GeometryDefinition::CUBE(
+	MeshType::Triangles,
+	std::vector<Vertex>
+	{
+	//xy quads
+		Vertex(vec3(-0.5f, -0.5f, -0.5f), vec3(0, 0, -1), Colors::WHITE, vec2(0, 0)),
+		Vertex(vec3(0.5f, -0.5f, -0.5f), vec3(0, 0, -1), Colors::WHITE, vec2(1, 0)),
+		Vertex(vec3(0.5f, 0.5f, -0.5f), vec3(0, 0, -1), Colors::WHITE, vec2(1, 1)),
+		Vertex(vec3(-0.5f, 0.5f, -0.5f), vec3(0, 0, -1), Colors::WHITE, vec2(0, 1)),
+
+		Vertex(vec3(-0.5f, -0.5f, 0.5f), vec3(0, 0, 1), Colors::WHITE, vec2(0, 0)),
+		Vertex(vec3(0.5f, -0.5f, 0.5f), vec3(0, 0, 1), Colors::WHITE, vec2(1, 0)),
+		Vertex(vec3(0.5f, 0.5f, 0.5f), vec3(0, 0, 1), Colors::WHITE, vec2(1, 1)),
+		Vertex(vec3(-0.5f, 0.5f, 0.5f), vec3(0, 0, 1), Colors::WHITE, vec2(0, 1)),
+	//xz quads
+		Vertex(vec3(-0.5f, -0.5f, -0.5f), vec3(0, -1, 0), Colors::WHITE, vec2(0, 0)),
+		Vertex(vec3(0.5f, -0.5f, -0.5f), vec3(0, -1, 0), Colors::WHITE, vec2(1, 0)),
+		Vertex(vec3(0.5f, -0.5f, 0.5f), vec3(0, -1, 0), Colors::WHITE, vec2(1, 1)),
+		Vertex(vec3(-0.5f, -0.5f, 0.5f), vec3(0, -1, 0), Colors::WHITE, vec2(0, 1)),
+
+		Vertex(vec3(-0.5f, 0.5f, -0.5f), vec3(0, 1, 0), Colors::WHITE, vec2(0, 0)),
+		Vertex(vec3(0.5f, 0.5f, -0.5f), vec3(0, 1, 0), Colors::WHITE, vec2(1, 0)),
+		Vertex(vec3(0.5f, 0.5f, 0.5f), vec3(0, 1, 0), Colors::WHITE, vec2(1, 1)),
+		Vertex(vec3(-0.5f, 0.5f, 0.5f), vec3(0, 1, 0), Colors::WHITE, vec2(0, 1)),
+	//yz quads
+		Vertex(vec3(-0.5f, -0.5f, -0.5f), vec3(-1, 0, 0), Colors::WHITE, vec2(0, 0)),
+		Vertex(vec3(-0.5f, 0.5f, -0.5f), vec3(-1, 0, 0), Colors::WHITE, vec2(1, 0)),
+		Vertex(vec3(-0.5f, 0.5f, 0.5f), vec3(-1, 0, 0), Colors::WHITE, vec2(1, 1)),
+		Vertex(vec3(-0.5f, -0.5f, 0.5f), vec3(-1, 0, 0), Colors::WHITE, vec2(0, 1)),
+
+		Vertex(vec3(0.5f, -0.5f, -0.5f), vec3(1, 0, 0), Colors::WHITE, vec2(0, 0)),
+		Vertex(vec3(0.5f, 0.5f, -0.5f), vec3(1, 0, 0), Colors::WHITE, vec2(1, 0)),
+		Vertex(vec3(0.5f, 0.5f, 0.5f), vec3(1, 0, 0), Colors::WHITE, vec2(1, 1)),
+		Vertex(vec3(0.5f, -0.5f, 0.5f), vec3(1, 0, 0), Colors::WHITE, vec2(0, 1)),
+	},
+	std::vector<uint32_t> //schet drevnih schizov
+	{
+		0, 1, 2,
+		0, 2, 3,
+
+		4, 5, 6,
+		4, 6, 7,
+
+		8, 9, 10,
+		8, 10, 11,
+
+		12, 13, 14,
+		12, 14, 15,
+
+		16, 17, 18,
+		16, 18, 19,
+
+		20, 21, 22,
+		20, 22, 23
+	}
+);
+
+

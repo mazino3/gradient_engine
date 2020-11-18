@@ -54,6 +54,8 @@ bool RenderWindow::init()
         return false;
     }
 
+	glEnable(GL_DEPTH_TEST);
+
 	_data->initCalled = true;
 	return true;
 }
