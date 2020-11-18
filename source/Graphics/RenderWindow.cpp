@@ -39,6 +39,7 @@ bool RenderWindow::init()
 		return false;
 	}
 
+	glfwWindowHint(GLFW_SAMPLES, 4);
 	_data->window = glfwCreateWindow(_data->width, _data->height, _data->name.c_str(), nullptr, nullptr);
 	if (_data->window == nullptr)
 	{
@@ -55,6 +56,7 @@ bool RenderWindow::init()
     }
 
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_MULTISAMPLE);
 
 	_data->initCalled = true;
 	return true;
