@@ -33,6 +33,8 @@ struct GeometryDefinition
 
 	static GeometryDefinition XY_QUAD;
 	static GeometryDefinition CUBE;
+
+	static GeometryDefinition createSphere(int points);
 };
 
 #endif

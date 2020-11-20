@@ -43,8 +43,9 @@ int main()
     Texture diffuseTexture("Assets/Sprites/Brick.png");
     shader3d.setDiffuseTexture(diffuseTexture);
 
-    GeometryDefinition quad(GeometryDefinition::CUBE);
-    Mesh mesh(quad);
+    //GeometryDefinition quad(GeometryDefinition::CUBE);
+    GeometryDefinition sphere(GeometryDefinition::createSphere(100));
+    Mesh mesh(sphere);
 
     while (window.isOpen())
     {

@@ -1,5 +1,6 @@
 #include "GeometryDefinition.h"
 #include "Colors.h"
+#include "math.h"
 
 using namespace glm;
 
@@ -96,4 +97,48 @@ GeometryDefinition GeometryDefinition::CUBE(
 	}
 );
 
+GeometryDefinition GeometryDefinition::createSphere(int points)
+{
+	static const float PI = 3.141593f;
+
+	std::vector<Vertex> vertices;
+	std::vector<uint32_t> indices;
+
+	//adding vertices
+
+	for (int i = 0; i <= points; i++)
+	{
+		for (int j = 0; j <= points; j++)
+		{
+			float texCoordX = (float)i / (float)points;
+			float texCoordY = (float)j / (float)points;
+			float angleA = (float)i / (float)points * PI;
+			float angleB = (float)j / (float)points * PI * 2;
+			float r = sinf(angleA);
+			float x = cosf(angleB) * r;
+			float y = sinf(angleB) * r;
+			float z = cosf(angleA);
+			
+			vertices.push_back(Vertex(glm::vec3(x, y, z), glm::vec3(x, y, z), Colors::WHITE, glm::vec2(texCoordX, texCoordY)));
+		}
+	}
+
+	//adding indices
+
+	for (int i = 0; i < points; i++)
+	{
+		for (int j = 0; j < points; j++)
+		{
+			indices.push_back(j + i * (points + 1));
+			indices.push_back(j + 1 + i * (points + 1));
+			indices.push_back(j + 1 + (i + 1) * (points + 1));
+
+			indices.push_back(j + i * (points + 1));
+			indices.push_back(j + 1 + (i + 1) * (points + 1));
+			indices.push_back(j + (i + 1) * (points + 1));
+		}
+	}
+
+	return GeometryDefinition(MeshType::Triangles, vertices, indices);
+}
 
