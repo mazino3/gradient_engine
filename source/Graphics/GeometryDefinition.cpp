@@ -110,8 +110,8 @@ GeometryDefinition GeometryDefinition::createSphere(int points)
 	{
 		for (int j = 0; j <= points; j++)
 		{
-			float texCoordX = (float)i / (float)points;
-			float texCoordY = (float)j / (float)points;
+			float texCoordX = (float)j / (float)points;
+			float texCoordY = (float)i / (float)points;
 			float angleA = (float)i / (float)points * PI;
 			float angleB = (float)j / (float)points * PI * 2;
 			float r = sinf(angleA);
