@@ -44,7 +44,7 @@ int main()
     shader3d.setDiffuseTexture(diffuseTexture);
 
     //GeometryDefinition quad(GeometryDefinition::CUBE);
-    GeometryDefinition sphere(GeometryDefinition::createSphere(100));
+    GeometryDefinition sphere(GeometryDefinition::createTorus(100, 1, 0.4));
     Mesh mesh(sphere);
 
     while (window.isOpen())

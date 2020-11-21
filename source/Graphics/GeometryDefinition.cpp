@@ -1,6 +1,7 @@
 #include "GeometryDefinition.h"
 #include "Colors.h"
 #include "math.h"
+#include <glm/ext.hpp>
 
 static const float PI = 3.141593f;
 
@@ -149,11 +150,37 @@ GeometryDefinition GeometryDefinition::createTorus(int points, float radius, flo
 
 	for (int i = 0; i <= points; i++)
 	{
-		float phase = (float)i/(float)(points) * PI * 2;
+		float phase = (float)i / (float)(points) * PI * 2;
 		for (int j = 0; j <= points; j++)
 		{
+			float phase2 = (float)j / (float)points * PI * 2;
+			glm::vec4 origin(radius, 0, 0, 1);
+			glm::vec4 normal(cosf(phase2), 0, sinf(phase2), 1);
+			glm::vec4 pos = origin + normal * thickness;
+			glm::vec2 texCoord(phase / PI / 2, phase2 / PI / 2);
 
+			glm::mat4x4 rotMatrix = glm::rotate(glm::mat4x4(1.0f), phase, glm::vec3(0.0f, 0.0f, 1.0f));
+			normal = rotMatrix * normal;
+			pos = rotMatrix * pos;
+
+			vertices.push_back(Vertex(pos, normal, Colors::WHITE, texCoord));
 		}
 	}
+
+	for (int i = 0; i < points; i++)
+	{
+		for (int j = 0; j < points; j++)
+		{
+			indices.push_back(j + i * (points + 1));
+			indices.push_back(j + 1 + i * (points + 1));
+			indices.push_back(j + 1 + (i + 1) * (points + 1));
+
+			indices.push_back(j + i * (points + 1));
+			indices.push_back(j + 1 + (i + 1) * (points + 1));
+			indices.push_back(j + (i + 1) * (points + 1));
+		}
+	}
+
+	return GeometryDefinition(MeshType::Triangles, vertices, indices);
 }
 
