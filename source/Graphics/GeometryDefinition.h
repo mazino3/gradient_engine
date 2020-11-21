@@ -35,6 +35,7 @@ struct GeometryDefinition
 	static GeometryDefinition CUBE;
 
 	static GeometryDefinition createSphere(int points);
+	static GeometryDefinition createTorus(int points, float radius, float thickness);
 };
 
 #endif

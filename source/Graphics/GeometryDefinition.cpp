@@ -2,6 +2,8 @@
 #include "Colors.h"
 #include "math.h"
 
+static const float PI = 3.141593f;
+
 using namespace glm;
 
 Vertex::Vertex() : 
@@ -99,8 +101,6 @@ GeometryDefinition GeometryDefinition::CUBE(
 
 GeometryDefinition GeometryDefinition::createSphere(int points)
 {
-	static const float PI = 3.141593f;
-
 	std::vector<Vertex> vertices;
 	std::vector<uint32_t> indices;
 
@@ -140,5 +140,20 @@ GeometryDefinition GeometryDefinition::createSphere(int points)
 	}
 
 	return GeometryDefinition(MeshType::Triangles, vertices, indices);
+}
+
+GeometryDefinition GeometryDefinition::createTorus(int points, float radius, float thickness)
+{
+	std::vector<Vertex> vertices;
+	std::vector<uint32_t> indices;
+
+	for (int i = 0; i <= points; i++)
+	{
+		float phase = (float)i/(float)(points) * PI * 2;
+		for (int j = 0; j <= points; j++)
+		{
+
+		}
+	}
 }
 
