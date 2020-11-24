@@ -15,6 +15,7 @@ struct Shader3d : Shader
 	void setModelMatrix(const glm::mat4x4& matrix);
 	void setDiffuseTexture(Texture& texture);
 	void setMaterial(const Material& material, int index);
+	void setCurrentMaterialIndex(int index);
 	void setEyeDirection(const glm::vec3& eyeDirection);
 };
 

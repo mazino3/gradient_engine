@@ -31,6 +31,7 @@ static std::string fragmentShader =
 "	float shininess;"
 "};"
 ""
+"uniform int materialIndex;"
 "uniform MaterialProperties materials[16];"
 "uniform sampler2D diffuseTex;\n"
 "in vec4 ex_Color;\n"
@@ -71,4 +72,9 @@ void Shader3d::setMaterial(const Material& material, int index)
 	setUniform(uniformPrefix + ".diffuse", material.diffuse);
 	setUniform(uniformPrefix + ".specular", material.specular);
 	setUniform(uniformPrefix + ".shininess", material.shininess);
+}
+
+void Shader3d::setCurrentMaterialIndex(int index)
+{
+	setUniform("materialIndex", index);
 }
