@@ -31,6 +31,16 @@ static std::string fragmentShader =
 "	float shininess;\n"
 "};\n"
 ""
+"struct DirectionalLight {\n"
+"	vec3 direction;\n"
+"	vec3 ambientColor;\n"
+"	vec3 diffuseColor;\n"
+"	vec3 specularColor;\n"
+"};\n"
+""
+"uniform int directionalLightsCount;"
+"uniform DirectionalLight directionalLights[16];"
+""
 "uniform int materialIndex;\n"
 "uniform MaterialProperties materials[16];\n"
 "uniform vec3 eyeDirection;\n"
@@ -83,4 +93,24 @@ void Shader3d::setCurrentMaterialIndex(int index)
 void Shader3d::setEyeDirection(const glm::vec3& eyeDirection)
 {
 	setUniform("eyeDirection", eyeDirection);
+}
+
+void Shader3d::setDirectionalLightsCount(int count)
+{
+	setUniform("directionalLightsCount", count);
+}
+
+/*
+"	vec3 ambientColor;\n"
+"	vec3 diffuseColor;\n"
+"	vec3 specularColor;\n"
+*/
+
+void Shader3d::setDirectionalLight(const DirectionalLight& light, int index)
+{
+	std::string uniformPrefix = "directionalLights[" + std::to_string(index) + "]";
+	setUniform(uniformPrefix + ".direction", light.direction);
+	setUniform(uniformPrefix + ".ambientColor", light.ambientColor);
+	setUniform(uniformPrefix + ".diffuseColor", light.diffuseColor);
+	setUniform(uniformPrefix + ".specularColor", light.specularColor);
 }

@@ -3,7 +3,7 @@
 
 #include <glm/vec3.hpp>
 
-struct PositionalLight
+struct DirectionalLight
 {
 	glm::vec3 ambientColor;
 	glm::vec3 diffuseColor;
@@ -11,7 +11,7 @@ struct PositionalLight
 	glm::vec3 direction;
 };
 
-struct DirectionalLight
+struct PositionalLight
 {
 	glm::vec3 ambientColor;
 	glm::vec3 diffuseColor;
