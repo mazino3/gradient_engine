@@ -8,7 +8,7 @@ struct Material
 	glm::vec3 emission; //light produced by the material
 	glm::vec3 ambient; //what part of ambient light is reflected
 	glm::vec3 diffuse; //what part of diffuse light is scaterred
-	glm::vec3 spectacular; //what part of spectacular light is scattered
+	glm::vec3 specular; //what part of specular light is scattered
 	float shininess;
 };
 

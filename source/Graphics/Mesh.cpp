@@ -41,6 +41,10 @@ Mesh::Mesh(const GeometryDefinition& geometry)
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*) offsetof(Vertex, Vertex::texCoords));
 
+	//normal attribute
+	glEnableVertexAttribArray(3);
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*) offsetof(Vertex, Vertex::normal));
+
 	//creating ebo
 	glGenBuffers(1, &_data->ebo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _data->ebo);

@@ -10,6 +10,14 @@ struct ShaderImpl
 	GLuint program;
 
 	static GLuint currentProgram;
+
+	void checkProgram()
+	{
+		if (program != currentProgram)
+		{
+			std::cout << "error: setUniform is called without bind" << std::endl;
+		}
+	}
 };
 
 GLuint ShaderImpl::currentProgram = 0;
@@ -89,10 +97,21 @@ void Shader::bind()
 
 void Shader::setUniform(const std::string& name, const glm::mat4x4& mat)
 {
-	if (_data->program != ShaderImpl::currentProgram)
-	{
-		std::cout << "error: setUniform is called without bind" << std::endl;
-	}
+	_data->checkProgram();
 	GLint location = glGetUniformLocation(_data->program, name.c_str());
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(mat));
+}
+
+void Shader::setUniform(const std::string& name, const glm::vec3& vec3)
+{
+	_data->checkProgram();
+	GLint location = glGetUniformLocation(_data->program, name.c_str());
+	glUniform3f(location, vec3.x, vec3.y, vec3.z);
+}
+
+void Shader::setUniform(const std::string& name, float f)
+{
+	_data->checkProgram();
+	GLint location = glGetUniformLocation(_data->program, name.c_str());
+	glUniform1f(location, f);
 }
