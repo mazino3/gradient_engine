@@ -3,7 +3,7 @@
 
 struct Material
 {
-
+	float shininess;
 };
 
 #endif
