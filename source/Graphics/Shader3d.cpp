@@ -23,16 +23,17 @@ static std::string fragmentShader =
 "#version 130\n"
 "precision highp float;\n"
 ""
-"struct MaterialProperties {"
-"	vec3 emission;"
-"	vec3 ambient;"
-"	vec3 diffuse;"
-"	vec3 specular;"
-"	float shininess;"
-"};"
+"struct MaterialProperties {\n"
+"	vec3 emission;\n"
+"	vec3 ambient;\n"
+"	vec3 diffuse;\n"
+"	vec3 specular;\n"
+"	float shininess;\n"
+"};\n"
 ""
-"uniform int materialIndex;"
-"uniform MaterialProperties materials[16];"
+"uniform int materialIndex;\n"
+"uniform MaterialProperties materials[16];\n"
+"uniform vec3 eyeDirection;\n"
 "uniform sampler2D diffuseTex;\n"
 "in vec4 ex_Color;\n"
 "in vec2 ex_TexCoord;\n"
@@ -77,4 +78,9 @@ void Shader3d::setMaterial(const Material& material, int index)
 void Shader3d::setCurrentMaterialIndex(int index)
 {
 	setUniform("materialIndex", index);
+}
+
+void Shader3d::setEyeDirection(const glm::vec3& eyeDirection)
+{
+	setUniform("eyeDirection", eyeDirection);
 }
