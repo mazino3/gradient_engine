@@ -7,16 +7,22 @@ static std::string vertexShader =
 "uniform mat4 projection;\n"
 "uniform mat4 view;\n"
 "uniform mat4 model;\n"
+"uniform mat4 normalTm;\n"
 ""
 "in vec3 in_Position;\n"
 "in vec4 in_Color;\n"
 "in vec2 in_TexCoord;\n"
+"in vec3 in_Normal;\n"
 "out vec4 ex_Color;\n"
 "out vec2 ex_TexCoord;\n"
+"out vec3 ex_Normal;\n"
+"out vec3 ex_VertPos;\n"
 "void main(void) {\n"
 "	gl_Position = projection * view * model * vec4(in_Position, 1.0);\n"
 "	ex_Color = in_Color;\n"
 "	ex_TexCoord = in_TexCoord;\n"
+"	ex_Normal = (normalTm * vec4(in_Normal, 1.0)).xyz;\n"
+"	ex_VertPos = (view * model * vec4(in_Position, 1.0)).xyz;\n"
 "}";
 
 static std::string fragmentShader =
@@ -47,9 +53,21 @@ static std::string fragmentShader =
 "uniform sampler2D diffuseTex;\n"
 "in vec4 ex_Color;\n"
 "in vec2 ex_TexCoord;\n"
+"in vec3 ex_Normal;\n"
+"in vec3 ex_VertPos;\n"
 "out vec4 gl_FragColor;\n"
 "void main(void) {\n"
-"	gl_FragColor = ex_Color * texture(diffuseTex, ex_TexCoord);\n"
+"	vec3 resultColor = vec3(0.0, 0.0, 0.0);\n"
+"	vec3 normal = normalize(ex_Normal);\n"
+"	vec3 eyeDir = normalize(-ex_VertPos);\n"
+"	for (int i = 0; i < directionalLightsCount; i++) {\n"
+"		vec3 reflection = normalize(reflect(-directionalLights[i].direction, normal));\n"
+"		float cosTheta = dot(directionalLights[i].direction, normal);\n"
+"		float cosPhi = dot(eyeDir, reflection);\n"
+"		vec3 diffuse = directionalLights[i].diffuseColor * materials[materialIndex].diffuse * max(cosTheta, 0.0);\n"
+"		resultColor += diffuse;\n"
+"	}\n"	
+"	gl_FragColor = vec4(resultColor, 1.0) * texture(diffuseTex, ex_TexCoord);\n"
 "}";
 
 Shader3d::Shader3d() : Shader(ShaderInitType::Code, vertexShader, fragmentShader)
@@ -68,6 +86,11 @@ void Shader3d::setProjectionMatrix(const glm::mat4x4& matrix)
 void Shader3d::setViewMatrix(const glm::mat4x4& matrix)
 {
 	setUniform("view", matrix);
+}
+
+void Shader3d::setNormalMatrix(const glm::mat4x4& matrix)
+{
+	setUniform("normalTm", matrix);
 }
 
 void Shader3d::setDiffuseTexture(Texture& texture)

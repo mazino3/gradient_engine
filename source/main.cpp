@@ -43,6 +43,29 @@ int main()
     Texture diffuseTexture("Assets/Sprites/world.jpg");
     shader3d.setDiffuseTexture(diffuseTexture);
 
+    //setting up lights
+
+    Material material;
+    material.ambient = glm::vec3(1, 1, 1);
+    material.diffuse = glm::vec3(1, 1, 1);
+    material.specular = glm::vec3(1, 1, 1);
+    material.shininess = 20;
+
+    DirectionalLight light;
+    light.ambientColor = glm::vec3(0.2f, 0.2f, 0.2f);
+    light.diffuseColor = glm::vec3(1.0f, 1.0f, 1.0f);
+    light.specularColor = glm::vec3(1.0f, 1.0f, 1.0f);
+    light.direction = glm::normalize(glm::vec3(1, 1, -1));
+
+    shader3d.setCurrentMaterialIndex(0);
+    shader3d.setMaterial(material, 0);
+    shader3d.setDirectionalLightsCount(1);
+    shader3d.setDirectionalLight(light, 0);
+    shader3d.setEyeDirection(camera.dirFront);
+    
+    glm::mat4x4 modelViewMatrix = camera.getViewMatrix() * tm.getWorldMatrix();
+    shader3d.setNormalMatrix(glm::transpose(glm::inverse(modelViewMatrix)));
+
     //GeometryDefinition quad(GeometryDefinition::CUBE);
     GeometryDefinition sphere(GeometryDefinition::createTorus(100, 1, 0.4));
     Mesh mesh(sphere);
