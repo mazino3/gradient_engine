@@ -40,7 +40,7 @@ int main()
     shader3d.setProjectionMatrix(camera.getProjectionMatrix());
     shader3d.setViewMatrix(camera.getViewMatrix());
 
-    Texture diffuseTexture("Assets/Sprites/world.jpg");
+    Texture diffuseTexture("Assets/Sprites/Brick.png");
     shader3d.setDiffuseTexture(diffuseTexture);
 
     //setting up lights
@@ -49,13 +49,13 @@ int main()
     material.ambient = glm::vec3(1, 1, 1);
     material.diffuse = glm::vec3(1, 1, 1);
     material.specular = glm::vec3(1, 1, 1);
-    material.shininess = 20;
+    material.shininess = 30;
 
     DirectionalLight light;
     light.ambientColor = glm::vec3(0.2f, 0.2f, 0.2f);
     light.diffuseColor = glm::vec3(1.0f, 1.0f, 1.0f);
-    light.specularColor = glm::vec3(1.0f, 1.0f, 1.0f);
-    light.direction = glm::normalize(glm::vec3(1, 1, -1));
+    light.specularColor = glm::vec3(5.0f, 5.0f, 5.0f);
+    light.direction = glm::normalize(glm::vec3(1, -1, 0));
 
     shader3d.setCurrentMaterialIndex(0);
     shader3d.setMaterial(material, 0);
@@ -63,12 +63,12 @@ int main()
     shader3d.setDirectionalLight(light, 0);
     shader3d.setEyeDirection(camera.dirFront);
     
-    glm::mat4x4 modelViewMatrix = camera.getViewMatrix() * tm.getWorldMatrix();
-    shader3d.setNormalMatrix(glm::transpose(glm::inverse(modelViewMatrix)));
+    
 
     //GeometryDefinition quad(GeometryDefinition::CUBE);
-    GeometryDefinition sphere(GeometryDefinition::createTorus(100, 1, 0.4));
-    Mesh mesh(sphere);
+    GeometryDefinition torus(GeometryDefinition::createTorus(100, 1, 0.4));
+    //GeometryDefinition sphere(GeometryDefinition::createSphere(100));
+    Mesh mesh(torus);
 
     while (window.isOpen())
     {
@@ -76,6 +76,8 @@ int main()
         tm.rotation.y += 20.0f * 1.0f / 60.0f;
         //tm.rotation.z += 10.0f * 1.0f / 60.0f;
         shader3d.setModelMatrix(tm.getWorldMatrix());
+        glm::mat4x4 modelViewMatrix = camera.getViewMatrix() * tm.getWorldMatrix();
+        shader3d.setNormalMatrix(glm::transpose(glm::inverse(modelViewMatrix)));
 
         window.clear();
         mesh.draw();
