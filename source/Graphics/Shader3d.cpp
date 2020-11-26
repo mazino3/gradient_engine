@@ -65,8 +65,9 @@ static std::string fragmentShader =
 "		float cosTheta = dot(directionalLights[i].direction, normal);\n"
 "		float cosPhi = dot(eyeDir, reflection);\n"
 "		vec3 diffuse = directionalLights[i].diffuseColor * materials[materialIndex].diffuse * max(cosTheta, 0.0);\n"
-"		vec3 specular = directionalLights[i].specularColor * materials[materialIndex].specular * pow(max(cosPhi, 0.0), materials[materialIndex].shininess);"
-"		resultColor += diffuse + specular;\n"
+"		vec3 specular = directionalLights[i].specularColor * materials[materialIndex].specular * pow(max(cosPhi, 0.0), materials[materialIndex].shininess);\n"
+"		vec3 ambient = directionalLights[i].ambientColor * materials[materialIndex].ambient;\n"
+"		resultColor += diffuse + specular + ambient;\n"
 "	}\n"	
 "	gl_FragColor = vec4(resultColor, 1.0) * texture(diffuseTex, ex_TexCoord);\n"
 "}";

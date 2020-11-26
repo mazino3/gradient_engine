@@ -40,7 +40,7 @@ int main()
     shader3d.setProjectionMatrix(camera.getProjectionMatrix());
     shader3d.setViewMatrix(camera.getViewMatrix());
 
-    Texture diffuseTexture("Assets/Sprites/Brick.png");
+    Texture diffuseTexture("Assets/Sprites/world.jpg");
     shader3d.setDiffuseTexture(diffuseTexture);
 
     //setting up lights
