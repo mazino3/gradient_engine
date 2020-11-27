@@ -32,7 +32,8 @@ int main()
     camera.position = glm::vec3(-5, 0, 5);
     camera.dirFront = glm::normalize(glm::vec3(1, 0, -1));
     camera.dirUp = glm::normalize(glm::vec3(1, 0, 1));
-    camera.setPerspective(45.0f, 640.0f / 480.0f, 0.1f, 200.0f);
+    //camera.setPerspective(45.0f, 640.0f / 480.0f, 0.1f, 200.0f);
+    camera.setOrtho(-10, 10, -10, 10, 0.1f, 200.0f);
     tm.rotation.x = 180.0f;
     //tm.scale *= 3;
 

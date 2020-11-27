@@ -23,6 +23,7 @@ struct Camera
 	Camera();
 
 	void setPerspective(float fov, float ratio, float nearPlane, float farPlane);
+	void setOrtho(float left, float right, float bottom, float top, float nearPlane, float farPlane);
 	CameraType getCameraType();
 
 	glm::mat4x4 getProjectionMatrix();
