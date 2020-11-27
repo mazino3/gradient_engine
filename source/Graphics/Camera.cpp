@@ -39,3 +39,8 @@ glm::mat4x4 Camera::getViewMatrix()
 	return glm::lookAt(position, position + dirFront, dirUp);
 }
 
+CameraType Camera::getCameraType()
+{
+	return _data->type;
+}
+
