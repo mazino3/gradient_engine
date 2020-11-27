@@ -39,8 +39,3 @@ glm::mat4x4 Camera::getViewMatrix()
 	return glm::lookAt(position, position + dirFront, dirUp);
 }
 
-glm::mat4x4 Camera::getNormalMatrix()
-{
-	return glm::transpose(glm::inverse(getViewMatrix()));
-}
-
