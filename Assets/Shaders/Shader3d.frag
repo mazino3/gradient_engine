@@ -62,7 +62,7 @@ void main(void) {
 	
 	//positional lights
 	for (int i = 0; i < positionalLightsCount; i++) {
-		vec3 direction = ex_VertPos - positionalLights[i].position;
+		vec3 direction = -normalize(ex_VertPos - positionalLights[i].position);
 		vec3 reflection = normalize(reflect(-direction, normal));
 		float cosTheta = dot(direction, normal);
 		float cosPhi = dot(eyeDir, reflection);
@@ -70,7 +70,7 @@ void main(void) {
 		vec3 specular = positionalLights[i].specularColor * materials[materialIndex].specular * pow(max(cosPhi, 0.0), materials[materialIndex].shininess);
 		vec3 ambient = positionalLights[i].ambientColor * materials[materialIndex].ambient;
 		
-		float dist = distance(ex_VertPos, positionalLights[i].position);
+		float dist = length(ex_VertPos - positionalLights[i].position);
 		float attenuation = 1.0 / (positionalLights[i].constantAttenuation + positionalLights[i].linearAttenuation * dist + positionalLights[i].quadraticAttenuation * dist * dist);
 		
 		resultColor += (diffuse + specular) * attenuation + ambient;
