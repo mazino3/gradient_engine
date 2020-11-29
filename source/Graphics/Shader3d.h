@@ -19,8 +19,11 @@ struct Shader3d : Shader
 	void setMaterial(const Material& material, int index);
 	void setCurrentMaterialIndex(int index);
 	void setEyeDirection(const glm::vec3& eyeDirection);
+
 	void setDirectionalLightsCount(int count);
 	void setDirectionalLight(const DirectionalLight& light, int index);
+	void setPositionalLightsCount(int count);
+	void setPositionalLight(const PositionalLight& light, int index);
 };
 
 #endif

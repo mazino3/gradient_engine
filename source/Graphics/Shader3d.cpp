@@ -63,3 +63,20 @@ void Shader3d::setDirectionalLight(const DirectionalLight& light, int index)
 	setUniform(uniformPrefix + ".diffuseColor", light.diffuseColor);
 	setUniform(uniformPrefix + ".specularColor", light.specularColor);
 }
+
+void Shader3d::setPositionalLightsCount(int count)
+{
+	setUniform("positionalLightsCount", count);
+}
+
+void Shader3d::setPositionalLight(const PositionalLight& light, int index)
+{
+	std::string uniformPrefix = "positionalLights[" + std::to_string(index) + "]";
+	setUniform(uniformPrefix + ".position", light.position);
+	setUniform(uniformPrefix + ".ambientColor", light.ambientColor);
+	setUniform(uniformPrefix + ".diffuseColor", light.diffuseColor);
+	setUniform(uniformPrefix + ".specularColor", light.specularColor);
+	setUniform(uniformPrefix + ".constantAttenuation", light.constantAttenuation);
+	setUniform(uniformPrefix + ".linearAttenuation", light.linearAttenuation);
+	setUniform(uniformPrefix + ".quadraticAttenuation", light.quadraticAttenuation);
+}
