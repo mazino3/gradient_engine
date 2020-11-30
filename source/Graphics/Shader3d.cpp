@@ -80,3 +80,13 @@ void Shader3d::setPositionalLight(const PositionalLight& light, int index)
 	setUniform(uniformPrefix + ".linearAttenuation", light.linearAttenuation);
 	setUniform(uniformPrefix + ".quadraticAttenuation", light.quadraticAttenuation);
 }
+
+void Shader3d::setTextureScalingEnabled(bool textureScalingEnabled)
+{
+	setUniform("textureScalingEnabled", textureScalingEnabled ? 1 : 0);
+}
+
+void Shader3d::setTextureScale(const glm::vec3& textureScale)
+{
+	setUniform("textureScale", textureScale);
+}

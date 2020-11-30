@@ -24,6 +24,9 @@ struct Shader3d : Shader
 	void setDirectionalLight(const DirectionalLight& light, int index);
 	void setPositionalLightsCount(int count);
 	void setPositionalLight(const PositionalLight& light, int index);
+
+	void setTextureScalingEnabled(bool textureScalingEnabled);
+	void setTextureScale(const glm::vec3& textureScale);
 };
 
 #endif

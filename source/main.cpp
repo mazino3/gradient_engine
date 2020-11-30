@@ -78,7 +78,7 @@ int main()
     tm.scale.y = 10;
     tm.scale.z = 0.1;
     GeometryDefinition quad(GeometryDefinition::CUBE);
-    //GeometryDefinition torus(GeometryDefinition::createTorus(100, 1, 0.4));
+    GeometryDefinition torus(GeometryDefinition::createTorus(100, 1, 0.4));
     //GeometryDefinition sphere(GeometryDefinition::createSphere(100));
     Mesh mesh(quad);
 
@@ -87,8 +87,8 @@ int main()
     while (window.isOpen())
     {
         phase += 0.01f;
-        //tm.rotation.x += 30.0f * 1.0f / 60.0f;
-        //tm.rotation.y += 20.0f * 1.0f / 60.0f;
+        tm.rotation.x += 30.0f * 1.0f / 60.0f;
+        tm.rotation.y += 20.0f * 1.0f / 60.0f;
         //tm.rotation.z += 10.0f * 1.0f / 60.0f;
         shader3d.setModelMatrix(tm.getWorldMatrix());
         glm::mat4x4 modelViewMatrix = camera.getViewMatrix() * tm.getWorldMatrix();
@@ -97,6 +97,11 @@ int main()
         light.position.x = cosf(phase) * 5;
         light.position.y = sinf(phase) * 5;
         shader3d.setPositionalLight(light, 0);
+
+        tm.scale.x = 5 + sinf(phase) * 2;
+        tm.scale.z = 5 + cosf(phase * 3.1415) * 2;
+        shader3d.setTextureScalingEnabled(true);
+        shader3d.setTextureScale(tm.scale);
 
         window.clear();
         mesh.draw();
