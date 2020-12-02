@@ -30,6 +30,16 @@ void Shader3d::setDiffuseTexture(Texture& texture)
 	texture.bind(0);
 }
 
+void Shader3d::setNormalTexture(Texture& texture)
+{
+	texture.bind(1);
+}
+
+void Shader3d::setNormalMapEnabled(bool enabled)
+{
+	setUniform("normalMapEnabled", enabled ? 1 : 0);
+}
+
 void Shader3d::setMaterial(const Material& material, int index)
 {
 	std::string uniformPrefix = "materials[" + std::to_string(index) + "]";

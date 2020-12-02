@@ -35,18 +35,33 @@ uniform PositionalLight positionalLights[16];
 uniform int materialIndex;
 uniform MaterialProperties materials[16];
 
+uniform bool normalMapEnabled;
 uniform vec3 eyeDirection;
 uniform sampler2D diffuseTex;
+uniform sampler2D normalTex;
 
 in vec4 ex_Color;
 in vec2 ex_TexCoord;
 in vec3 ex_Normal;
+in vec3 ex_Tangent;
+in vec3 ex_Bitangent;
 in vec3 ex_VertPos;
 out vec4 gl_FragColor;
 
 void main(void) {
 	vec3 resultColor = vec3(0.0, 0.0, 0.0);
-	vec3 normal = normalize(ex_Normal);
+	vec3 normal = ex_Normal;
+	if (normalMapEnabled)
+	{
+		vec4 normalColor = texture(normalTex, ex_TexCoord);
+		normal.x = (normalColor.x * 2.0) - 1.0;
+		normal.y = (normalColor.y * 2.0) - 1.0;
+		normal.z = (normalColor.z * 2.0) - 1.0;
+		normal = normalize(normal);
+		
+		normal = ex_Tangent * normal.x + ex_Bitangent * normal.y + ex_Normal * normal.z;
+		normal = normalize(normal);
+	}
 	vec3 eyeDir = normalize(-ex_VertPos);
 	
 	//directional lights

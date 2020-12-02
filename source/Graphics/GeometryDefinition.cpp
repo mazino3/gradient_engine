@@ -10,6 +10,8 @@ using namespace glm;
 Vertex::Vertex() : 
 	pos(0, 0, 0),
 	normal(0, 0, 0),
+	tangent(0, 0, 0),
+	bitangent(0, 0, 0),
 	color(1, 1, 1, 1),
 	texCoords(0, 0)
 {}
@@ -17,6 +19,17 @@ Vertex::Vertex() :
 Vertex::Vertex(const vec3& pos, const vec3& normal, const vec4& color, const vec2& texCoords) :
 	pos(pos),
 	normal(normal),
+	tangent(0, 0, 0),
+	bitangent(0, 0, 0),
+	color(color),
+	texCoords(texCoords)
+{}
+
+Vertex::Vertex(const vec3& pos, const vec3& normal, const vec3& tangent, const vec3& bitangent, const vec4& color, const vec2& texCoords) :
+	pos(pos),
+	normal(normal),
+	tangent(tangent),
+	bitangent(bitangent),
 	color(color),
 	texCoords(texCoords)
 {}
@@ -48,35 +61,35 @@ GeometryDefinition GeometryDefinition::CUBE(
 	std::vector<Vertex>
 	{
 	//xy quads
-		Vertex(vec3(-0.5f, -0.5f, -0.5f), vec3(0, 0, -1), Colors::WHITE, vec2(0, 0)),
-		Vertex(vec3(0.5f, -0.5f, -0.5f), vec3(0, 0, -1), Colors::WHITE, vec2(1, 0)),
-		Vertex(vec3(0.5f, 0.5f, -0.5f), vec3(0, 0, -1), Colors::WHITE, vec2(1, 1)),
-		Vertex(vec3(-0.5f, 0.5f, -0.5f), vec3(0, 0, -1), Colors::WHITE, vec2(0, 1)),
+		Vertex(vec3(-0.5f, -0.5f, -0.5f), vec3(0, 0, -1), vec3(-1, 0, 0), vec3(0, -1, 0), Colors::WHITE, vec2(0, 0)),
+		Vertex(vec3(0.5f, -0.5f, -0.5f), vec3(0, 0, -1), vec3(-1, 0, 0), vec3(0, -1, 0), Colors::WHITE, vec2(1, 0)),
+		Vertex(vec3(0.5f, 0.5f, -0.5f), vec3(0, 0, -1), vec3(-1, 0, 0), vec3(0, -1, 0), Colors::WHITE, vec2(1, 1)),
+		Vertex(vec3(-0.5f, 0.5f, -0.5f), vec3(0, 0, -1), vec3(-1, 0, 0), vec3(0, -1, 0), Colors::WHITE, vec2(0, 1)),
 
-		Vertex(vec3(-0.5f, -0.5f, 0.5f), vec3(0, 0, 1), Colors::WHITE, vec2(0, 0)),
-		Vertex(vec3(0.5f, -0.5f, 0.5f), vec3(0, 0, 1), Colors::WHITE, vec2(1, 0)),
-		Vertex(vec3(0.5f, 0.5f, 0.5f), vec3(0, 0, 1), Colors::WHITE, vec2(1, 1)),
-		Vertex(vec3(-0.5f, 0.5f, 0.5f), vec3(0, 0, 1), Colors::WHITE, vec2(0, 1)),
+		Vertex(vec3(-0.5f, -0.5f, 0.5f), vec3(0, 0, 1), vec3(1, 0, 0), vec3(0, 1, 0), Colors::WHITE, vec2(0, 0)),
+		Vertex(vec3(0.5f, -0.5f, 0.5f), vec3(0, 0, 1), vec3(1, 0, 0), vec3(0, 1, 0), Colors::WHITE, vec2(1, 0)),
+		Vertex(vec3(0.5f, 0.5f, 0.5f), vec3(0, 0, 1), vec3(1, 0, 0), vec3(0, 1, 0), Colors::WHITE, vec2(1, 1)),
+		Vertex(vec3(-0.5f, 0.5f, 0.5f), vec3(0, 0, 1), vec3(1, 0, 0), vec3(0, 1, 0), Colors::WHITE, vec2(0, 1)),
 	//xz quads
-		Vertex(vec3(-0.5f, -0.5f, -0.5f), vec3(0, -1, 0), Colors::WHITE, vec2(0, 0)),
-		Vertex(vec3(0.5f, -0.5f, -0.5f), vec3(0, -1, 0), Colors::WHITE, vec2(1, 0)),
-		Vertex(vec3(0.5f, -0.5f, 0.5f), vec3(0, -1, 0), Colors::WHITE, vec2(1, 1)),
-		Vertex(vec3(-0.5f, -0.5f, 0.5f), vec3(0, -1, 0), Colors::WHITE, vec2(0, 1)),
+		Vertex(vec3(-0.5f, -0.5f, -0.5f), vec3(0, -1, 0), vec3(-1, 0, 0), vec3(0, 0, -1), Colors::WHITE, vec2(0, 0)),
+		Vertex(vec3(0.5f, -0.5f, -0.5f), vec3(0, -1, 0), vec3(-1, 0, 0), vec3(0, 0, -1), Colors::WHITE, vec2(1, 0)),
+		Vertex(vec3(0.5f, -0.5f, 0.5f), vec3(0, -1, 0), vec3(-1, 0, 0), vec3(0, 0, -1), Colors::WHITE, vec2(1, 1)),
+		Vertex(vec3(-0.5f, -0.5f, 0.5f), vec3(0, -1, 0), vec3(-1, 0, 0), vec3(0, 0, -1), Colors::WHITE, vec2(0, 1)),
 
-		Vertex(vec3(-0.5f, 0.5f, -0.5f), vec3(0, 1, 0), Colors::WHITE, vec2(0, 0)),
-		Vertex(vec3(0.5f, 0.5f, -0.5f), vec3(0, 1, 0), Colors::WHITE, vec2(1, 0)),
-		Vertex(vec3(0.5f, 0.5f, 0.5f), vec3(0, 1, 0), Colors::WHITE, vec2(1, 1)),
-		Vertex(vec3(-0.5f, 0.5f, 0.5f), vec3(0, 1, 0), Colors::WHITE, vec2(0, 1)),
+		Vertex(vec3(-0.5f, 0.5f, -0.5f), vec3(0, 1, 0), vec3(1, 0, 0), vec3(0, 0, 1), Colors::WHITE, vec2(0, 0)),
+		Vertex(vec3(0.5f, 0.5f, -0.5f), vec3(0, 1, 0), vec3(1, 0, 0), vec3(0, 0, 1), Colors::WHITE, vec2(1, 0)),
+		Vertex(vec3(0.5f, 0.5f, 0.5f), vec3(0, 1, 0), vec3(1, 0, 0), vec3(0, 0, 1), Colors::WHITE, vec2(1, 1)),
+		Vertex(vec3(-0.5f, 0.5f, 0.5f), vec3(0, 1, 0), vec3(1, 0, 0), vec3(0, 0, 1), Colors::WHITE, vec2(0, 1)),
 	//yz quads
-		Vertex(vec3(-0.5f, -0.5f, -0.5f), vec3(-1, 0, 0), Colors::WHITE, vec2(0, 0)),
-		Vertex(vec3(-0.5f, 0.5f, -0.5f), vec3(-1, 0, 0), Colors::WHITE, vec2(1, 0)),
-		Vertex(vec3(-0.5f, 0.5f, 0.5f), vec3(-1, 0, 0), Colors::WHITE, vec2(1, 1)),
-		Vertex(vec3(-0.5f, -0.5f, 0.5f), vec3(-1, 0, 0), Colors::WHITE, vec2(0, 1)),
+		Vertex(vec3(-0.5f, -0.5f, -0.5f), vec3(-1, 0, 0), vec3(0, -1, 0), vec3(0, 0, -1), Colors::WHITE, vec2(0, 0)),
+		Vertex(vec3(-0.5f, 0.5f, -0.5f), vec3(-1, 0, 0), vec3(0, -1, 0), vec3(0, 0, -1), Colors::WHITE, vec2(1, 0)),
+		Vertex(vec3(-0.5f, 0.5f, 0.5f), vec3(-1, 0, 0), vec3(0, -1, 0), vec3(0, 0, -1), Colors::WHITE, vec2(1, 1)),
+		Vertex(vec3(-0.5f, -0.5f, 0.5f), vec3(-1, 0, 0), vec3(0, -1, 0), vec3(0, 0, -1), Colors::WHITE, vec2(0, 1)),
 
-		Vertex(vec3(0.5f, -0.5f, -0.5f), vec3(1, 0, 0), Colors::WHITE, vec2(0, 0)),
-		Vertex(vec3(0.5f, 0.5f, -0.5f), vec3(1, 0, 0), Colors::WHITE, vec2(1, 0)),
-		Vertex(vec3(0.5f, 0.5f, 0.5f), vec3(1, 0, 0), Colors::WHITE, vec2(1, 1)),
-		Vertex(vec3(0.5f, -0.5f, 0.5f), vec3(1, 0, 0), Colors::WHITE, vec2(0, 1)),
+		Vertex(vec3(0.5f, -0.5f, -0.5f), vec3(1, 0, 0), vec3(0, 1, 0), vec3(0, 0, 1), Colors::WHITE, vec2(0, 0)),
+		Vertex(vec3(0.5f, 0.5f, -0.5f), vec3(1, 0, 0), vec3(0, 1, 0), vec3(0, 0, 1), Colors::WHITE, vec2(1, 0)),
+		Vertex(vec3(0.5f, 0.5f, 0.5f), vec3(1, 0, 0), vec3(0, 1, 0), vec3(0, 0, 1), Colors::WHITE, vec2(1, 1)),
+		Vertex(vec3(0.5f, -0.5f, 0.5f), vec3(1, 0, 0), vec3(0, 1, 0), vec3(0, 0, 1), Colors::WHITE, vec2(0, 1)),
 	},
 	std::vector<uint32_t> //schet drevnih schizov
 	{
@@ -156,14 +169,19 @@ GeometryDefinition GeometryDefinition::createTorus(int points, float radius, flo
 			float phase2 = (float)j / (float)points * PI * 2;
 			glm::vec4 origin(radius, 0, 0, 1);
 			glm::vec4 normal(cosf(phase2), 0, sinf(phase2), 1);
+			float tangentPhase = phase2 - PI / 2;
+			glm::vec4 tangent(cosf(tangentPhase), 0, sinf(tangentPhase), 1);
+			glm::vec4 bitangent(0, 1, 0, 1);
 			glm::vec4 pos = origin + normal * thickness;
 			glm::vec2 texCoord(phase / PI / 2, phase2 / PI / 2);
 
 			glm::mat4x4 rotMatrix = glm::rotate(glm::mat4x4(1.0f), phase, glm::vec3(0.0f, 0.0f, 1.0f));
 			normal = rotMatrix * normal;
+			tangent = rotMatrix * tangent;
+			bitangent = rotMatrix * bitangent;
 			pos = rotMatrix * pos;
 
-			vertices.push_back(Vertex(pos, normal, Colors::WHITE, texCoord));
+			vertices.push_back(Vertex(pos, normal, tangent, bitangent, Colors::WHITE, texCoord));
 		}
 	}
 

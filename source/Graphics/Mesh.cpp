@@ -45,6 +45,14 @@ Mesh::Mesh(const GeometryDefinition& geometry)
 	glEnableVertexAttribArray(3);
 	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*) offsetof(Vertex, Vertex::normal));
 
+	//tangent attribute
+	glEnableVertexAttribArray(4);
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Vertex::tangent));
+
+	//bitangent attribute
+	glEnableVertexAttribArray(5);
+	glVertexAttribPointer(5, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Vertex::bitangent));
+
 	//creating ebo
 	glGenBuffers(1, &_data->ebo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _data->ebo);

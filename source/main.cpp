@@ -37,8 +37,11 @@ int main()
     shader3d.setProjectionMatrix(camera.getProjectionMatrix());
     shader3d.setViewMatrix(camera.getViewMatrix());
 
-    Texture diffuseTexture("Assets/Sprites/Stone.jpg");
+    Texture diffuseTexture("Assets/Sprites/Brick2_Color.jpg");
+    Texture normalTexture("Assets/Sprites/Brick2_Normal.jpg");
     shader3d.setDiffuseTexture(diffuseTexture);
+    shader3d.setNormalTexture(normalTexture);
+    shader3d.setNormalMapEnabled(true);
 
     //setting up lights
 
@@ -46,41 +49,46 @@ int main()
     material.ambient = glm::vec3(1, 1, 1);
     material.diffuse = glm::vec3(1, 1, 1);
     material.specular = glm::vec3(1, 1, 1);
-    material.shininess = 30;
+    material.shininess = 10;
 
-    /*
+    
     DirectionalLight light;
     light.ambientColor = glm::vec3(0.2f, 0.2f, 0.2f);
     light.diffuseColor = glm::vec3(1.0f, 1.0f, 1.0f);
-    light.specularColor = glm::vec3(5.0f, 5.0f, 5.0f);
-    light.direction = glm::normalize(glm::vec3(1, -1, 0));
-    */
+    light.specularColor = glm::vec3(1.0f, 1.0f, 1.0f);
+    light.direction = glm::normalize(glm::vec3(0, 0, -1));
+    
 
+    /*
     PositionalLight light;
     light.ambientColor = glm::vec3(0.2f, 0.2f, 0.2f);
     light.diffuseColor = glm::vec3(1.0f, 1.0f, 1.0f);
-    light.specularColor = glm::vec3(5.0f, 5.0f, 5.0f);
-    light.diffuseColor *= 50;
+    light.specularColor = glm::vec3(1.0f, 1.0f, 1.0f);
+    light.diffuseColor *= 200;
+    light.specularColor *= 200;
     light.position = glm::vec3(0, 0, 0.5);
     light.constantAttenuation = 1;
     light.linearAttenuation = 2;
     light.quadraticAttenuation = 1;
+    */
 
     shader3d.setCurrentMaterialIndex(0);
     shader3d.setMaterial(material, 0);
-    shader3d.setPositionalLightsCount(1);
-    shader3d.setPositionalLight(light, 0);
+    //shader3d.setPositionalLightsCount(1);
+    //shader3d.setPositionalLight(light, 0);
+    shader3d.setDirectionalLightsCount(1);
+    shader3d.setDirectionalLight(light, 0);
     shader3d.setEyeDirection(camera.dirFront);
     
     
     Transform tm;
-    tm.scale.x = 10;
-    tm.scale.y = 10;
-    tm.scale.z = 0.1;
+    //tm.scale.x = 10;
+    //tm.scale.y = 10;
+    //tm.scale.z = 0.1;
     GeometryDefinition quad(GeometryDefinition::CUBE);
     GeometryDefinition torus(GeometryDefinition::createTorus(100, 1, 0.4));
     //GeometryDefinition sphere(GeometryDefinition::createSphere(100));
-    Mesh mesh(quad);
+    Mesh mesh(torus);
 
     float phase = 0;
 
@@ -94,14 +102,11 @@ int main()
         glm::mat4x4 modelViewMatrix = camera.getViewMatrix() * tm.getWorldMatrix();
         shader3d.setNormalMatrix(glm::transpose(glm::inverse(modelViewMatrix)));
 
-        light.position.x = cosf(phase) * 5;
-        light.position.y = sinf(phase) * 5;
-        shader3d.setPositionalLight(light, 0);
 
-        tm.scale.x = 5 + sinf(phase) * 2;
-        tm.scale.z = 5 + cosf(phase * 3.1415) * 2;
+        //tm.scale.x = 5 + sinf(phase) * 2;
+        //tm.scale.z = 5 + cosf(phase * 3.1415) * 2;
         shader3d.setTextureScalingEnabled(true);
-        shader3d.setTextureScale(tm.scale);
+        shader3d.setTextureScale(tm.scale * 2.0f);
 
         window.clear();
         mesh.draw();

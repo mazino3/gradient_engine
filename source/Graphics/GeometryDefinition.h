@@ -11,11 +11,14 @@ struct Vertex
 {
 	glm::vec3 pos;
 	glm::vec3 normal;
+	glm::vec3 tangent;
+	glm::vec3 bitangent;
 	glm::vec4 color;
 	glm::vec2 texCoords;
 
 	Vertex();
 	Vertex(const glm::vec3& pos, const glm::vec3& normal, const glm::vec4& color, const glm::vec2& texCoords);
+	Vertex(const glm::vec3& pos, const glm::vec3& normal, const glm::vec3& tangent, const glm::vec3& bitangent, const glm::vec4& color, const glm::vec2& texCoords);
 };
 
 enum class MeshType
