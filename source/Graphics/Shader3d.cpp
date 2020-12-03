@@ -28,11 +28,13 @@ void Shader3d::setNormalMatrix(const glm::mat4x4& matrix)
 void Shader3d::setDiffuseTexture(Texture& texture)
 {
 	texture.bind(0);
+	setUniform("diffuseTex", 0);
 }
 
 void Shader3d::setNormalTexture(Texture& texture)
 {
 	texture.bind(1);
+	setUniform("normalTex", 1);
 }
 
 void Shader3d::setNormalMapEnabled(bool enabled)

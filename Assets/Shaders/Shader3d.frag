@@ -57,7 +57,6 @@ void main(void) {
 		normal.x = (normalColor.x * 2.0) - 1.0;
 		normal.y = (normalColor.y * 2.0) - 1.0;
 		normal.z = (normalColor.z * 2.0) - 1.0;
-		normal = normalize(normal);
 		
 		normal = ex_Tangent * normal.x + ex_Bitangent * normal.y + ex_Normal * normal.z;
 		normal = normalize(normal);

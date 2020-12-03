@@ -49,14 +49,14 @@ int main()
     material.ambient = glm::vec3(1, 1, 1);
     material.diffuse = glm::vec3(1, 1, 1);
     material.specular = glm::vec3(1, 1, 1);
-    material.shininess = 10;
+    material.shininess = 50;
 
     
     DirectionalLight light;
-    light.ambientColor = glm::vec3(0.2f, 0.2f, 0.2f);
+    light.ambientColor = glm::vec3(0.3f, 0.3f, 0.3f);
     light.diffuseColor = glm::vec3(1.0f, 1.0f, 1.0f);
-    light.specularColor = glm::vec3(1.0f, 1.0f, 1.0f);
-    light.direction = glm::normalize(glm::vec3(0, 0, -1));
+    light.specularColor = glm::vec3(5.0f, 5.0f, 5.0f);
+    light.direction = glm::normalize(glm::vec3(1, 0, 0));
     
 
     /*
@@ -82,9 +82,9 @@ int main()
     
     
     Transform tm;
-    //tm.scale.x = 10;
-    //tm.scale.y = 10;
-    //tm.scale.z = 0.1;
+    tm.scale.x = 3;
+    tm.scale.y = 3;
+    tm.scale.z = 3;
     GeometryDefinition quad(GeometryDefinition::CUBE);
     GeometryDefinition torus(GeometryDefinition::createTorus(100, 1, 0.4));
     //GeometryDefinition sphere(GeometryDefinition::createSphere(100));
@@ -106,7 +106,7 @@ int main()
         //tm.scale.x = 5 + sinf(phase) * 2;
         //tm.scale.z = 5 + cosf(phase * 3.1415) * 2;
         shader3d.setTextureScalingEnabled(true);
-        shader3d.setTextureScale(tm.scale * 2.0f);
+        shader3d.setTextureScale(tm.scale);
 
         window.clear();
         mesh.draw();
