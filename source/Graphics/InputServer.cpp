@@ -45,25 +45,60 @@ void InputServer::removeInputClient(InputClientBase& inputClient)
 
 void InputServer::fireMousePressed(double xpos, double ypos, int button)
 {
-	//todo: implement
+	for (const auto& inputClient : data->inputClients)
+	{
+		bool consumed = inputClient.first->onMousePressed(xpos, ypos, button);
+		if (consumed)
+		{
+			break;
+		}
+	}
 }
 
 void InputServer::fireMouseMoved(double xpos, double ypos)
 {
-	//todo: implement
+	for (const auto& inputClient : data->inputClients)
+	{
+		bool consumed = inputClient.first->onMouseMoved(xpos, ypos);
+		if (consumed)
+		{
+			break;
+		}
+	}
 }
 
 void InputServer::fireMouseReleased(double xpos, double ypos, int button)
 {
-	//todo: implement
+	for (const auto& inputClient : data->inputClients)
+	{
+		bool consumed = inputClient.first->onMouseReleased(xpos, ypos, button);
+		if (consumed)
+		{
+			break;
+		}
+	}
 }
 
 void InputServer::fireKeyPressed(int key)
 {
-	//todo: implement
+	for (const auto& inputClient : data->inputClients)
+	{
+		bool consumed = inputClient.first->onKeyPressed(key);
+		if (consumed)
+		{
+			break;
+		}
+	}
 }
 
 void InputServer::fireKeyReleased(int key)
 {
-	//todo: implement
+	for (const auto& inputClient : data->inputClients)
+	{
+		bool consumed = inputClient.first->onKeyReleased(key);
+		if (consumed)
+		{
+			break;
+		}
+	}
 }
