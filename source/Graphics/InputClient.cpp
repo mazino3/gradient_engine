@@ -47,27 +47,32 @@ bool InputClient::onKeyReleased(int key)
 	data->keyReleasedCallback(key);
 }
 
-void InputClient::onMousePressed(std::function<bool(double, double, int)> callback)
+InputClient& InputClient::onMousePressed(std::function<bool(double, double, int)> callback)
 {
 	data->mousePressedCallback = callback;
+	return *this;
 }
 
-void InputClient::onMouseMoved(std::function<bool(double, double)> callback)
+InputClient& InputClient::onMouseMoved(std::function<bool(double, double)> callback)
 {
 	data->mouseMovedCallback = callback;
+	return *this;
 }
 
-void InputClient::onMouseReleased(std::function<bool(double, double, int)> callback)
+InputClient& InputClient::onMouseReleased(std::function<bool(double, double, int)> callback)
 {
 	data->mouseReleasedCallback = callback;
+	return *this;
 }
 
-void InputClient::onKeyPressed(std::function<bool(int)> callback)
+InputClient& InputClient::onKeyPressed(std::function<bool(int)> callback)
 {
 	data->keyPressedCallback = callback;
+	return *this;
 }
 
-void InputClient::onKeyReleased(std::function<bool(int)> callback)
+InputClient& InputClient::onKeyReleased(std::function<bool(int)> callback)
 {
 	data->keyReleasedCallback = callback;
+	return *this;
 }

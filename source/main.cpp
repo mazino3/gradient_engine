@@ -10,6 +10,7 @@
 #include "Graphics/Transform.h"
 #include "Graphics/Camera.h"
 #include "Graphics/Texture.h"
+#include "Graphics/InputClient.h"
 
 #include <iostream>
 
@@ -23,6 +24,19 @@ int main()
     }
     
     window.setClearColor(glm::vec4(0.1f, 0.0f, 0.2f, 0.0f));
+
+    InputClient inputClient;
+    inputClient.onKeyPressed([](int key) 
+    {
+        std::cout << "key pressed: " << key << std::endl;
+        return true;
+    });
+    inputClient.onKeyReleased([](int key) 
+    {
+        std::cout << "key released: " << key << std::endl;
+        return true;
+    });
+    window.getInput().addInputClient(inputClient, 0.0f);
 
     Shader3d shader3d;
     shader3d.bind();

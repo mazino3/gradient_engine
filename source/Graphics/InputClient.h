@@ -17,11 +17,11 @@ struct InputClient : InputClientBase
 	bool onKeyPressed(int key);
 	bool onKeyReleased(int key);
 
-	void onMousePressed(std::function<bool(double, double, int)> callback);
-	void onMouseMoved(std::function<bool(double, double)> callback);
-	void onMouseReleased(std::function<bool(double, double, int)> callback);
-	void onKeyPressed(std::function<bool(int)> callback);
-	void onKeyReleased(std::function<bool(int)> callback);
+	InputClient& onMousePressed(std::function<bool(double, double, int)> callback);
+	InputClient& onMouseMoved(std::function<bool(double, double)> callback);
+	InputClient& onMouseReleased(std::function<bool(double, double, int)> callback);
+	InputClient& onKeyPressed(std::function<bool(int)> callback);
+	InputClient& onKeyReleased(std::function<bool(int)> callback);
 private: 
 	std::shared_ptr<InputClientImpl> data;
 };

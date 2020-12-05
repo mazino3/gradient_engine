@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 #include "RenderTarget.h"
+#include "InputServer.h"
 
 struct RenderWindowImpl;
 
@@ -15,6 +16,7 @@ struct RenderWindow : RenderTarget
 	void bind() override;
 	bool isOpen();
 	void swapBuffers();
+	InputServer& getInput();
 
 private:
 
