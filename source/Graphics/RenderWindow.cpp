@@ -35,6 +35,12 @@ struct RenderWindowImpl
 			renderWindow->inputServer.fireKeyReleased(glfwKeycodeToEngineKeycode(key));
 		}
 	}
+
+	static void cursorCallback(GLFWwindow* window, double xpos, double ypos)
+	{
+		RenderWindowImpl* renderWindow = (RenderWindowImpl*)glfwGetWindowUserPointer(window);
+		renderWindow->inputServer.fireMouseMoved(xpos, ypos);
+	}
 };
 
 RenderWindow::RenderWindow(int width, int height, const std::string& name)
@@ -76,6 +82,7 @@ bool RenderWindow::init()
 
 	glfwSetWindowUserPointer(_data->window, &(*_data));
 	glfwSetKeyCallback(_data->window, RenderWindowImpl::keyCallback);
+	glfwSetCursorPosCallback(_data->window, RenderWindowImpl::cursorCallback);
 
 	_data->initCalled = true;
 	return true;
