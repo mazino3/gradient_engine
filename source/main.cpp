@@ -41,6 +41,16 @@ int main()
         std::cout << "mouse moved: " << xpos << " " << ypos << std::endl;
         return true;
     });
+    inputClient.onMousePressed([](double xpos, double ypos, int button) 
+    {
+        std::cout << "mouse pressed at: " << xpos << " " << ypos << std::endl;
+        return true;
+    });
+    inputClient.onMouseReleased([](double xpos, double ypos, int button) 
+    {
+        std::cout << "mouse released at: " << xpos << " " << ypos << std::endl;
+        return true;
+    });
     window.getInput().addInputClient(inputClient, 0.0f);
 
     Shader3d shader3d;

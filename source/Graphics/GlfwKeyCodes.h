@@ -4,6 +4,22 @@
 #include "GLFW/glfw3.h"
 #include "KeyCodes.h"
 
+int glfwMouseCodeToEngineMouseCode(int glfwKeycode)
+{
+	switch (glfwKeycode)
+	{
+		case GLFW_MOUSE_BUTTON_1: return KEYCODE_MOUSE_BUTTON_1;
+		case GLFW_MOUSE_BUTTON_2: return KEYCODE_MOUSE_BUTTON_2;
+		case GLFW_MOUSE_BUTTON_3: return KEYCODE_MOUSE_BUTTON_3;
+		case GLFW_MOUSE_BUTTON_4: return KEYCODE_MOUSE_BUTTON_4;
+		case GLFW_MOUSE_BUTTON_5: return KEYCODE_MOUSE_BUTTON_5;
+		case GLFW_MOUSE_BUTTON_6: return KEYCODE_MOUSE_BUTTON_6;
+		case GLFW_MOUSE_BUTTON_7: return KEYCODE_MOUSE_BUTTON_7;
+		case GLFW_MOUSE_BUTTON_8: return KEYCODE_MOUSE_BUTTON_8;
+	}
+	return glfwKeycode;
+}
+
 int glfwKeycodeToEngineKeycode(int glfwKeycode)
 {
 	switch (glfwKeycode)

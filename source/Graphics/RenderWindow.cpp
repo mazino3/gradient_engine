@@ -41,6 +41,21 @@ struct RenderWindowImpl
 		RenderWindowImpl* renderWindow = (RenderWindowImpl*)glfwGetWindowUserPointer(window);
 		renderWindow->inputServer.fireMouseMoved(xpos, ypos);
 	}
+
+	static void mousePressedCallback(GLFWwindow* window, int button, int action, int mods)
+	{
+		RenderWindowImpl* renderWindow = (RenderWindowImpl*)glfwGetWindowUserPointer(window);
+		double xpos, ypos;
+		glfwGetCursorPos(window, &xpos, &ypos);
+		if (action == GLFW_PRESS)
+		{
+			renderWindow->inputServer.fireMousePressed(xpos, ypos, glfwMouseCodeToEngineMouseCode(button));
+		}
+		else if (action == GLFW_RELEASE)
+		{
+			renderWindow->inputServer.fireMouseReleased(xpos, ypos, glfwMouseCodeToEngineMouseCode(button));
+		}
+	}
 };
 
 RenderWindow::RenderWindow(int width, int height, const std::string& name)
@@ -83,6 +98,7 @@ bool RenderWindow::init()
 	glfwSetWindowUserPointer(_data->window, &(*_data));
 	glfwSetKeyCallback(_data->window, RenderWindowImpl::keyCallback);
 	glfwSetCursorPosCallback(_data->window, RenderWindowImpl::cursorCallback);
+	glfwSetMouseButtonCallback(_data->window, RenderWindowImpl::mousePressedCallback);
 
 	_data->initCalled = true;
 	return true;
