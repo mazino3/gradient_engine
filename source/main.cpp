@@ -11,6 +11,7 @@
 #include "Graphics/Camera.h"
 #include "Graphics/Texture.h"
 #include "Graphics/InputClient.h"
+#include "Graphics/OrbitCameraController.h"
 
 #include <iostream>
 
@@ -25,42 +26,14 @@ int main()
     
     window.setClearColor(glm::vec4(0.1f, 0.0f, 0.2f, 0.0f));
 
-    InputClient inputClient;
-    inputClient.onKeyPressed([](int key) 
-    {
-        std::cout << "key pressed: " << key << std::endl;
-        return true;
-    });
-    inputClient.onKeyReleased([](int key) 
-    {
-        std::cout << "key released: " << key << std::endl;
-        return true;
-    });
-    inputClient.onMouseMoved([](double xpos, double ypos) 
-    {
-        std::cout << "mouse moved: " << xpos << " " << ypos << std::endl;
-        return true;
-    });
-    inputClient.onMousePressed([](double xpos, double ypos, int button) 
-    {
-        std::cout << "mouse pressed at: " << xpos << " " << ypos << std::endl;
-        return true;
-    });
-    inputClient.onMouseReleased([](double xpos, double ypos, int button) 
-    {
-        std::cout << "mouse released at: " << xpos << " " << ypos << std::endl;
-        return true;
-    });
-    window.getInput().addInputClient(inputClient, 0.0f);
-
     Shader3d shader3d;
     shader3d.bind();
 
     Camera camera;
-    camera.position = glm::vec3(-5, 0, 5);
-    camera.dirFront = glm::normalize(glm::vec3(1, 0, -1));
-    camera.dirUp = glm::normalize(glm::vec3(1, 0, 1));
     camera.setPerspective(45.0f, 640.0f / 480.0f, 0.1f, 200.0f);
+    OrbitCameraController cameraController(camera);
+    window.getInput().addInputClient(cameraController.getInputClient(), 0.0f);
+
     //camera.setOrtho(-6.4, 6.4, -4.8, 4.8, 0.1f, 200.0f);
 
     shader3d.setProjectionMatrix(camera.getProjectionMatrix());
@@ -83,8 +56,8 @@ int main()
     
     DirectionalLight light;
     light.ambientColor = glm::vec3(0.3f, 0.3f, 0.3f);
-    light.diffuseColor = glm::vec3(1.0f, 1.0f, 1.0f);
-    light.specularColor = glm::vec3(5.0f, 5.0f, 5.0f);
+    light.diffuseColor = glm::vec3(2.0f, 2.0f, 2.0f);
+    light.specularColor = glm::vec3(0.0f, 0.0f, 0.0f);
     light.direction = glm::normalize(glm::vec3(1, 0, 0));
     
 
@@ -111,23 +84,28 @@ int main()
     
     
     Transform tm;
+    tm.position = glm::vec3(0.0f, 0.0f, 0.0f);
     tm.scale.x = 3;
     tm.scale.y = 3;
     tm.scale.z = 3;
     GeometryDefinition quad(GeometryDefinition::CUBE);
     GeometryDefinition torus(GeometryDefinition::createTorus(100, 1, 0.4));
     //GeometryDefinition sphere(GeometryDefinition::createSphere(100));
-    Mesh mesh(torus);
+    Mesh mesh(quad);
 
     float phase = 0;
 
     while (window.isOpen())
     {
         phase += 0.01f;
-        tm.rotation.x += 30.0f * 1.0f / 60.0f;
-        tm.rotation.y += 20.0f * 1.0f / 60.0f;
-        //tm.rotation.z += 10.0f * 1.0f / 60.0f;
+        //tm.rotation.x += 30.0f * 1.0f / 60.0f;
+        //tm.rotation.y += 20.0f * 1.0f / 60.0f;
+        
+        cameraController.update(0.016f);
+        shader3d.setProjectionMatrix(camera.getProjectionMatrix());
+        shader3d.setViewMatrix(camera.getViewMatrix());
         shader3d.setModelMatrix(tm.getWorldMatrix());
+        shader3d.setEyeDirection(camera.dirFront);
         glm::mat4x4 modelViewMatrix = camera.getViewMatrix() * tm.getWorldMatrix();
         shader3d.setNormalMatrix(glm::transpose(glm::inverse(modelViewMatrix)));
 

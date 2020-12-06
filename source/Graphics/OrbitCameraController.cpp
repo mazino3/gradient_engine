@@ -1,7 +1,8 @@
 #include "OrbitCameraController.h"
 #include "InputClient.h"
 #include "KeyCodes.h"
-#include <math.h>
+#include <cmath>
+#include <algorithm>
 #include <glm/ext.hpp>
 
 struct OrbitCameraControllerImpl
@@ -29,7 +30,7 @@ struct OrbitCameraControllerImpl
 		isDragging(false),
 		prevXpos(0.0),
 		prevYpos(0.0),
-		sensitivity(0.01f),
+		sensitivity(0.5f),
 		rootPosition(0.0f, 0.0f, 0.0f)
 	{}
 };
@@ -72,10 +73,10 @@ OrbitCameraController::OrbitCameraController(Camera& camera)
 			data->prevXpos = xpos;
 			data->prevYpos = ypos;
 
-			float horizontalDelta = deltaX * data->sensitivity;
+			float horizontalDelta = -deltaX * data->sensitivity;
 			float verticalDelta = deltaY * data->sensitivity;
 			data->horizontalAngle += horizontalDelta;
-			data->verticalAngle += verticalDelta;
+			data->verticalAngle = std::max(std::min(data->verticalAngle + verticalDelta, 90.0f), 0.0f);
 
 			return true;
 		}
