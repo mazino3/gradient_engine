@@ -79,6 +79,18 @@ void InputServer::fireMouseReleased(double xpos, double ypos, int button)
 	}
 }
 
+void InputServer::fireMouseScrolled(double xoffset, double yoffset)
+{
+	for (const auto& inputClient : data->inputClients)
+	{
+		bool consumed = inputClient.first->onMouseScrolled(xoffset, yoffset);
+		if (consumed)
+		{
+			break;
+		}
+	}
+}
+
 void InputServer::fireKeyPressed(int key)
 {
 	for (const auto& inputClient : data->inputClients)

@@ -56,6 +56,12 @@ struct RenderWindowImpl
 			renderWindow->inputServer.fireMouseReleased(xpos, ypos, glfwMouseCodeToEngineMouseCode(button));
 		}
 	}
+
+	static void mouseScrolledCallback(GLFWwindow* window, double xoffset, double yoffset)
+	{
+		RenderWindowImpl* renderWindow = (RenderWindowImpl*)glfwGetWindowUserPointer(window);
+		renderWindow->inputServer.fireMouseScrolled(xoffset, yoffset);
+	}
 };
 
 RenderWindow::RenderWindow(int width, int height, const std::string& name)
@@ -99,6 +105,7 @@ bool RenderWindow::init()
 	glfwSetKeyCallback(_data->window, RenderWindowImpl::keyCallback);
 	glfwSetCursorPosCallback(_data->window, RenderWindowImpl::cursorCallback);
 	glfwSetMouseButtonCallback(_data->window, RenderWindowImpl::mousePressedCallback);
+	glfwSetScrollCallback(_data->window, RenderWindowImpl::mouseScrolledCallback);
 
 	_data->initCalled = true;
 	return true;

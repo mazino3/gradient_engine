@@ -4,6 +4,7 @@
 #include <cmath>
 #include <algorithm>
 #include <glm/ext.hpp>
+#include <iostream>
 
 struct OrbitCameraControllerImpl
 {
@@ -13,6 +14,7 @@ struct OrbitCameraControllerImpl
 	float horizontalAngle;
 	float verticalAngle;
 	float sensitivity;
+	float distanceSensitivity;
 	glm::vec3 rootPosition;
 
 	InputClient inputClient;
@@ -31,6 +33,7 @@ struct OrbitCameraControllerImpl
 		prevXpos(0.0),
 		prevYpos(0.0),
 		sensitivity(0.5f),
+		distanceSensitivity(1),
 		rootPosition(0.0f, 0.0f, 0.0f)
 	{}
 };
@@ -40,7 +43,7 @@ OrbitCameraController::OrbitCameraController(Camera& camera)
 	data = std::make_shared<OrbitCameraControllerImpl>(camera);
 	data->inputClient.onMousePressed([this](double xpos, double ypos, int button) 
 	{
-		if (button == KEYCODE_MOUSE_BUTTON_1)
+		if (button == KEYCODE_MOUSE_BUTTON_2)
 		{
 			data->isDragging = true;
 			data->prevXpos = xpos;
@@ -54,7 +57,7 @@ OrbitCameraController::OrbitCameraController(Camera& camera)
 	});
 	data->inputClient.onMouseReleased([this](double xpos, double ypos, int button) 
 	{
-		if (button == KEYCODE_MOUSE_BUTTON_1 && data->isDragging)
+		if (button == KEYCODE_MOUSE_BUTTON_2 && data->isDragging)
 		{
 			data->isDragging = false;
 			return true;
@@ -85,7 +88,11 @@ OrbitCameraController::OrbitCameraController(Camera& camera)
 			return false;
 		}
 	});
-
+	data->inputClient.onMouseScrolled([this](double xoffset, double yoffset) 
+	{
+		data->distance = std::max(1.0, std::min(data->distance - yoffset * data->distanceSensitivity, (double) data->maxDistance));
+		return true;
+	});
 }
 
 static float toRadians(float degrees)

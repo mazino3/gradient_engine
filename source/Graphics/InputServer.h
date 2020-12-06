@@ -16,6 +16,7 @@ struct InputServer
 	void fireMousePressed(double xpos, double ypos, int button);
 	void fireMouseMoved(double xpos, double ypos);
 	void fireMouseReleased(double xpos, double ypos, int button);
+	void fireMouseScrolled(double xoffset, double yoffset);
 	void fireKeyPressed(int key);
 	void fireKeyReleased(int key);
 private:
