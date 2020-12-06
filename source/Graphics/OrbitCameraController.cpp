@@ -117,3 +117,32 @@ InputClientBase& OrbitCameraController::getInputClient()
 	return data->inputClient;
 }
 
+void OrbitCameraController::setDistance(float distance)
+{
+	data->distance = distance;
+}
+
+void OrbitCameraController::setMaxDistance(float maxDistance)
+{
+	data->maxDistance = maxDistance;
+}
+
+void OrbitCameraController::setHorizontalAngle(float horizontalAngle)
+{
+	data->horizontalAngle = horizontalAngle;
+}
+
+void OrbitCameraController::setVerticalAngle(float verticalAngle)
+{
+	data->verticalAngle = verticalAngle;
+}
+
+void OrbitCameraController::setRootPosition(const glm::vec3& position)
+{
+	data->rootPosition = position;
+}
+
+void OrbitCameraController::setSensitivity(float sensitivity)
+{
+	data->sensitivity = sensitivity;
+}
