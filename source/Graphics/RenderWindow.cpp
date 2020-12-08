@@ -100,6 +100,8 @@ bool RenderWindow::init()
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_MULTISAMPLE);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glfwSetWindowUserPointer(_data->window, &(*_data));
 	glfwSetKeyCallback(_data->window, RenderWindowImpl::keyCallback);
