@@ -9,16 +9,41 @@
 
 struct RenderObject
 {
-	Texture& texture;
+	const bool hasNormalTexture;
 	Mesh mesh;
 	Transform transform;
 	Material material;
 
-	RenderObject(Texture& texture, const GeometryDefinition& geometryDefinition, const Material& material) :
-		texture(texture),
+	RenderObject(Texture& diffuseTexture, const GeometryDefinition& geometryDefinition, const Material& material) :
+		diffuseTexture(&diffuseTexture),
+		normalTexture(nullptr),
+		hasNormalTexture(false),
 		mesh(geometryDefinition),
 		material(material)
 	{}
+
+	RenderObject(Texture& diffuseTexture, Texture& normalTexture, const GeometryDefinition& geometryDefinition, const Material& material) :
+		diffuseTexture(&diffuseTexture),
+		normalTexture(&normalTexture),
+		hasNormalTexture(true),
+		mesh(geometryDefinition),
+		material(material)
+	{}
+
+	Texture& getDiffuseTexture()
+	{
+		return *diffuseTexture;
+	}
+
+	Texture& getNormalTexture()
+	{
+		return *normalTexture;
+	}
+
+private:
+
+	Texture* diffuseTexture;
+	Texture* normalTexture;
 };
 
 #endif
