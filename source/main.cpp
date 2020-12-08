@@ -52,6 +52,7 @@ int main()
     material.diffuse = glm::vec3(1, 1, 1);
     material.specular = glm::vec3(1, 1, 1);
     material.shininess = 50;
+    material.alpha = 0.5f;
 
     
     DirectionalLight light;

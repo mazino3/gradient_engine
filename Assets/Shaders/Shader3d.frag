@@ -7,6 +7,7 @@ struct MaterialProperties {
 	vec3 diffuse;
 	vec3 specular;
 	float shininess;
+	float alpha;
 };
 
 struct DirectionalLight {
@@ -91,5 +92,5 @@ void main(void) {
 	}
 	
 	
-	gl_FragColor = vec4(resultColor, 1.0) * texture(diffuseTex, ex_TexCoord);
+	gl_FragColor = vec4(resultColor, materials[materialIndex].alpha) * texture(diffuseTex, ex_TexCoord);
 }

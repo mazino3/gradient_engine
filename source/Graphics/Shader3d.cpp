@@ -50,6 +50,7 @@ void Shader3d::setMaterial(const Material& material, int index)
 	setUniform(uniformPrefix + ".diffuse", material.diffuse);
 	setUniform(uniformPrefix + ".specular", material.specular);
 	setUniform(uniformPrefix + ".shininess", material.shininess);
+	setUniform(uniformPrefix + ".alpha", material.alpha);
 }
 
 void Shader3d::setCurrentMaterialIndex(int index)
