@@ -110,9 +110,16 @@ void Renderer::renderScene()
 	}
 }
 
-RenderObject& Renderer::createRenderObject(Texture& texture, const GeometryDefinition& geometryDefinition, const Material& material)
+RenderObject& Renderer::createRenderObject(Texture& diffuseTexture, const GeometryDefinition& geometryDefinition, const Material& material)
 {
-	auto result = std::make_shared<RenderObject>(texture, geometryDefinition, material);
+	auto result = std::make_shared<RenderObject>(diffuseTexture, geometryDefinition, material);
+	data->renderObjects.push_back(result);
+	return *result;
+}
+
+RenderObject& Renderer::createRenderObject(Texture& diffuseTexture, Texture& normalTexture, const GeometryDefinition& geometryDefinition, const Material& material)
+{
+	auto result = std::make_shared<RenderObject>(diffuseTexture, normalTexture, geometryDefinition, material);
 	data->renderObjects.push_back(result);
 	return *result;
 }
