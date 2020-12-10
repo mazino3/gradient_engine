@@ -4,6 +4,7 @@
 #include <memory>
 #include "Camera.h"
 #include "RenderObject.h"
+#include "SkyboxObject.h"
 #include "Lights.h"
 
 struct RendererImpl;
@@ -18,6 +19,9 @@ struct Renderer
 	RenderObject& createRenderObject(Texture& diffuseTexture, const GeometryDefinition& geometryDefinition, const Material& material);
 	RenderObject& createRenderObject(Texture& diffuseTexture, Texture& normalTexture, const GeometryDefinition& geometryDefinition, const Material& material);
 	void removeRenderObject(RenderObject& renderObject);
+
+	void createSkybox(CubeMap& cubemap);
+	void removeSkybox();
 
 	DirectionalLight& createDirectionalLight();
 	void removeDirectionalLight(DirectionalLight& light);

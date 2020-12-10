@@ -1,5 +1,6 @@
 #include "Renderer.h"
 #include "Shader3d.h"
+#include "SkyboxShader.h"
 #include <vector>
 #include <algorithm>
 
@@ -10,6 +11,9 @@ struct RendererImpl
 	std::vector<std::shared_ptr<DirectionalLight>> directionalLights;
 	std::vector<std::shared_ptr<PositionalLight>> positionalLights;
 	Shader3d shader;
+	SkyboxShader skyboxShader;
+
+	std::shared_ptr<SkyboxObject> skybox;
 
 	void renderObject(std::shared_ptr<RenderObject> obj)
 	{
@@ -77,6 +81,16 @@ void Renderer::renderScene()
 		return distance1 > distance2;
 	});
 
+	if (data->skybox != nullptr)
+	{
+		data->skyboxShader.bind();
+		data->skyboxShader.setProjectionMatrix(data->camera.getProjectionMatrix());
+		data->skyboxShader.setViewMatrix(glm::mat4(glm::mat3(data->camera.getViewMatrix())));
+		data->skyboxShader.setModelMatrix(data->skybox->transform.getWorldMatrix());
+		data->skyboxShader.setSkyboxCubemap(data->skybox->cubemap);
+		data->skybox->mesh.draw();
+	}
+
 	data->shader.bind();
 	data->shader.setProjectionMatrix(data->camera.getProjectionMatrix());
 	data->shader.setViewMatrix(data->camera.getViewMatrix());
@@ -130,6 +144,17 @@ void Renderer::removeRenderObject(RenderObject& objectToRemove)
 	{
 		return &(*renderObject) == &objectToRemove;
 	});
+}
+
+void Renderer::createSkybox(CubeMap& cubemap)
+{
+	removeSkybox();
+	data->skybox = std::make_shared<SkyboxObject>(cubemap);
+}
+
+void Renderer::removeSkybox()
+{
+	data->skybox = nullptr;
 }
 
 DirectionalLight& Renderer::createDirectionalLight()

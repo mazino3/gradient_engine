@@ -13,6 +13,7 @@
 #include "Graphics/InputClient.h"
 #include "Graphics/OrbitCameraController.h"
 #include "Graphics/Renderer.h"
+#include "Graphics/CubeMap.h"
 
 #include <iostream>
 
@@ -60,6 +61,16 @@ int main()
     light.specularColor = glm::vec3(0.0f, 0.0f, 0.0f);
     light.direction = glm::normalize(glm::vec3(1, 0, 0));
     
+    CubeMap skyboxCubemap(
+    {
+        "Assets/Sprites/Skybox/Right.bmp",
+        "Assets/Sprites/Skybox/Left.bmp",
+        "Assets/Sprites/Skybox/Top.bmp",
+        "Assets/Sprites/Skybox/Bottom.bmp",
+        "Assets/Sprites/Skybox/Front.bmp",
+        "Assets/Sprites/Skybox/Back.bmp"
+    });
+    renderer.createSkybox(skyboxCubemap);
 
     float phase = 0;
 

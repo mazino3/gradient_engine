@@ -1,9 +1,10 @@
 #include "CubeMap.h"
 #include <iostream>
-
 #include <GL/glew.h>
+#define STB_IMAGE_STATIC
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
+
 
 struct CubeMapImpl
 {
