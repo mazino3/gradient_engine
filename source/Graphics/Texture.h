@@ -8,6 +8,7 @@ struct TextureImpl;
 
 struct Texture
 {
+	Texture(unsigned int handler, int width, int height); //wrap existing texture
 	Texture(const std::string& filename);
 	~Texture();
 	void bind(int unit);

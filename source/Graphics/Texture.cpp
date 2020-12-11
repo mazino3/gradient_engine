@@ -12,6 +12,14 @@ struct TextureImpl
 	int height;
 };
 
+Texture::Texture(unsigned int handler, int width, int height)
+{
+	_data = std::make_shared<TextureImpl>();
+	_data->textureHandler = handler;
+	_data->width = width;
+	_data->height = height;
+}
+
 Texture::Texture(const std::string& filename)
 {
 	_data = std::make_shared<TextureImpl>();
