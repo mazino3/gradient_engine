@@ -1,21 +1,21 @@
 #include "RenderTexture.h"
-
+#include <memory>
 #include <GL/glew.h>
 #include <iostream>
 
 struct RenderTextureImpl
 {
 	GLuint fbo;
-	GLuint texColorBuffer;
 	GLuint depthStencilRenderbuffer;
 	bool initCalled;
 	int width;
 	int height;
+	std::shared_ptr<Texture> renderedTexture;
 
 	RenderTextureImpl(int width, int height) :
 		initCalled(false),
 		fbo(0),
-		texColorBuffer(0),
+		renderedTexture(nullptr),
 		depthStencilRenderbuffer(0),
 		width(width),
 		height(height)
@@ -44,15 +44,16 @@ bool RenderTexture::init()
 	glBindFramebuffer(GL_FRAMEBUFFER, data->fbo);
 
 	//creating texture to render into
-	glGenTextures(1, &data->texColorBuffer);
-	glBindTexture(GL_TEXTURE_2D, data->texColorBuffer);
+	GLuint texColorBuffer;
+	glGenTextures(1, &texColorBuffer);
+	glBindTexture(GL_TEXTURE_2D, texColorBuffer);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, data->width, data->height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	//setting this texture to framebuffer
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, data->texColorBuffer, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texColorBuffer, 0);
 
 	//creating render buffer for depth and stencil
 	glGenRenderbuffers(1, &data->depthStencilRenderbuffer);
@@ -62,6 +63,9 @@ bool RenderTexture::init()
 
 	//setting renderbuffer to framebuffer
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, data->depthStencilRenderbuffer);
+
+	//creating texture class
+	data->renderedTexture = std::make_shared<Texture>(texColorBuffer, data->width, data->height);
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	{
@@ -83,4 +87,14 @@ void RenderTexture::bind()
 	}
 	
 	glBindFramebuffer(GL_FRAMEBUFFER, data->fbo);
+}
+
+Texture& RenderTexture::getRenderedTexture()
+{
+	if (!data->initCalled)
+	{
+		std::cout << "trying to get rendered texture without calling RenderTexture.init()" << std::endl;
+	}
+
+	return *data->renderedTexture;
 }
