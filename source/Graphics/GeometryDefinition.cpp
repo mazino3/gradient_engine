@@ -65,6 +65,22 @@ GeometryDefinition GeometryDefinition::XY_QUAD(
 	}
 );
 
+GeometryDefinition GeometryDefinition::SCREEN(
+	MeshType::Triangles,
+	std::vector<Vertex>
+	{
+		Vertex(vec3(-1, -1, 0), vec3(), vec4(), vec2(0, 0)),
+		Vertex(vec3(1, -1, 0), vec3(), vec4(), vec2(1, 0)),
+		Vertex(vec3(1, 1, 0), vec3(), vec4(), vec2(1, 1)),
+		Vertex(vec3(-1, 1, 0), vec3(), vec4(), vec2(0, 1))
+	},
+	std::vector<uint32_t>
+	{
+		0, 1, 2,
+		0, 2, 3
+	}
+);
+
 GeometryDefinition GeometryDefinition::CUBE(
 	MeshType::Triangles,
 	std::vector<Vertex>

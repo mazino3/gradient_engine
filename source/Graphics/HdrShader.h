@@ -9,6 +9,9 @@ struct HdrShader : Shader
 	HdrShader();
 
 	void setScreenTexture(Texture& texture);
+	void setToneMappingEnabled(bool enabled);
+	void setGammaCorrectionEnabled(bool enabled);
+	void setGamma(float gamma);
 };
 
 #endif

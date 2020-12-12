@@ -2,8 +2,10 @@
 #include "Shader3d.h"
 #include "SkyboxShader.h"
 #include "HdrShader.h"
+#include "RenderTexture.h"
 #include <vector>
 #include <algorithm>
+#include <iostream>
 
 struct RendererImpl
 {
@@ -17,11 +19,21 @@ struct RendererImpl
 	SkyboxShader skyboxShader;
 	HdrShader hdrShader;
 
+	RenderTexture renderTexture;
+	Mesh screenMesh;
+
 	std::shared_ptr<SkyboxObject> skybox;
 
 	RendererImpl(RenderTarget& baseRenderTarget) :
-		baseRenderTarget(baseRenderTarget)
-	{}
+		baseRenderTarget(baseRenderTarget),
+		renderTexture(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Float),
+		screenMesh(GeometryDefinition::SCREEN)
+	{
+		if (!renderTexture.init())
+		{
+			std::cout << "failed to create render texture inside of Renderer" << std::endl;
+		}
+	}
 
 	void renderObject(std::shared_ptr<RenderObject> obj)
 	{
@@ -89,6 +101,11 @@ void Renderer::renderScene()
 		return distance1 > distance2;
 	});
 
+	//bind render texture
+
+	data->renderTexture.bind();
+	data->renderTexture.clear();
+
 	if (data->skybox != nullptr)
 	{
 		data->skyboxShader.bind();
@@ -126,10 +143,22 @@ void Renderer::renderScene()
 		data->renderObject(obj);
 	}
 
+	//rendering semi-transparent objects
+
 	for (const auto& obj : transparentObjects)
 	{
 		data->renderObject(obj);
 	}
+
+	//binding base render target and applying post-processing
+
+	data->baseRenderTarget.bind();
+	data->hdrShader.bind();
+	data->hdrShader.setScreenTexture(data->renderTexture.getRenderedTexture());
+	data->hdrShader.setToneMappingEnabled(true);
+	data->hdrShader.setGammaCorrectionEnabled(true);
+	data->hdrShader.setGamma(2.2f);
+	data->screenMesh.draw();
 }
 
 RenderObject& Renderer::createRenderObject(Texture& diffuseTexture, const GeometryDefinition& geometryDefinition, const Material& material)

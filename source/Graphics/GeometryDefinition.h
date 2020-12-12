@@ -37,6 +37,7 @@ struct GeometryDefinition
 
 	static GeometryDefinition XY_QUAD;
 	static GeometryDefinition CUBE;
+	static GeometryDefinition SCREEN;
 
 	static GeometryDefinition createSphere(int points);
 	static GeometryDefinition createTorus(int points, float radius, float thickness);

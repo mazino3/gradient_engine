@@ -127,7 +127,7 @@ void RenderWindow::swapBuffers()
 
 void RenderWindow::bind()
 {
-	//todo: unbind framebuffer from RenderTexture
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 int RenderWindow::getWidth()

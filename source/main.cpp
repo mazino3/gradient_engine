@@ -57,7 +57,7 @@ int main()
 
     auto& light = renderer.createDirectionalLight();
     light.ambientColor = glm::vec3(0.3f, 0.3f, 0.3f);
-    light.diffuseColor = glm::vec3(2.0f, 2.0f, 2.0f);
+    light.diffuseColor = glm::vec3(1.0f, 1.0f, 1.0f);
     light.specularColor = glm::vec3(0.0f, 0.0f, 0.0f);
     light.direction = glm::normalize(glm::vec3(1, 0, 0));
     
