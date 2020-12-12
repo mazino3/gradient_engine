@@ -7,9 +7,15 @@
 
 struct RenderTextureImpl;
 
+enum class RenderTextureType
+{
+	Integer,
+	Float
+};
+
 struct RenderTexture : RenderTarget
 {
-	RenderTexture(int width, int height);
+	RenderTexture(int width, int height, RenderTextureType textureType);
 	~RenderTexture();
 	bool init();
 	void bind();

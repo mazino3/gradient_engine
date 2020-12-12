@@ -11,20 +11,22 @@ struct RenderTextureImpl
 	int width;
 	int height;
 	std::shared_ptr<Texture> renderedTexture;
+	RenderTextureType textureType;
 
-	RenderTextureImpl(int width, int height) :
+	RenderTextureImpl(int width, int height, RenderTextureType textureType) :
 		initCalled(false),
 		fbo(0),
 		renderedTexture(nullptr),
 		depthStencilRenderbuffer(0),
 		width(width),
-		height(height)
+		height(height),
+		textureType(textureType)
 	{}
 };
 
-RenderTexture::RenderTexture(int width, int height)
+RenderTexture::RenderTexture(int width, int height, RenderTextureType textureType)
 {
-	data = std::make_shared<RenderTextureImpl>(width, height);
+	data = std::make_shared<RenderTextureImpl>(width, height, textureType);
 }
 
 RenderTexture::~RenderTexture()
@@ -47,7 +49,14 @@ bool RenderTexture::init()
 	GLuint texColorBuffer;
 	glGenTextures(1, &texColorBuffer);
 	glBindTexture(GL_TEXTURE_2D, texColorBuffer);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, data->width, data->height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+	if (data->textureType == RenderTextureType::Float)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, data->width, data->height, 0, GL_RGBA, GL_FLOAT, nullptr);
+	}
+	else
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, data->width, data->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+	}
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glBindTexture(GL_TEXTURE_2D, 0);
