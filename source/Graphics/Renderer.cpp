@@ -1,6 +1,7 @@
 #include "Renderer.h"
 #include "Shader3d.h"
 #include "SkyboxShader.h"
+#include "HdrShader.h"
 #include <vector>
 #include <algorithm>
 
@@ -14,6 +15,7 @@ struct RendererImpl
 	std::vector<std::shared_ptr<PositionalLight>> positionalLights;
 	Shader3d shader;
 	SkyboxShader skyboxShader;
+	HdrShader hdrShader;
 
 	std::shared_ptr<SkyboxObject> skybox;
 
