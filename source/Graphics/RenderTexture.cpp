@@ -98,6 +98,16 @@ void RenderTexture::bind()
 	glBindFramebuffer(GL_FRAMEBUFFER, data->fbo);
 }
 
+int RenderTexture::getWidth()
+{
+	return data->width;
+}
+
+int RenderTexture::getHeight()
+{
+	return data->height;
+}
+
 Texture& RenderTexture::getRenderedTexture()
 {
 	if (!data->initCalled)

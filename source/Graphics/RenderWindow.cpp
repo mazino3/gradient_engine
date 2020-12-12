@@ -130,6 +130,16 @@ void RenderWindow::bind()
 	//todo: unbind framebuffer from RenderTexture
 }
 
+int RenderWindow::getWidth()
+{
+	return _data->width;
+}
+
+int RenderWindow::getHeight()
+{
+	return _data->height;
+}
+
 InputServer& RenderWindow::getInput()
 {
 	return _data->inputServer;

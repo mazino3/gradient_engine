@@ -17,8 +17,10 @@ struct RenderTexture : RenderTarget
 {
 	RenderTexture(int width, int height, RenderTextureType textureType);
 	~RenderTexture();
-	bool init();
-	void bind();
+	bool init() override;
+	void bind() override;
+	int getWidth() override;
+	int getHeight() override;
 	Texture& getRenderedTexture();
 private:
 	std::shared_ptr<RenderTextureImpl> data;

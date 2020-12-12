@@ -14,6 +14,8 @@ struct RenderWindow : RenderTarget
 	~RenderWindow();
 	bool init() override;
 	void bind() override;
+	int getWidth() override;
+	int getHeight() override;
 	bool isOpen();
 	void swapBuffers();
 	InputServer& getInput();

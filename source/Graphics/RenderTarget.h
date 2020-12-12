@@ -14,6 +14,8 @@ struct RenderTarget
 	virtual ~RenderTarget() {}
 	virtual bool init() = 0;
 	virtual void bind() = 0;
+	virtual int getWidth() = 0;
+	virtual int getHeight() = 0;
 	void setClearColor(const glm::vec4& color);
 	void clear();
 
