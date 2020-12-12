@@ -37,6 +37,12 @@ void Shader3d::setNormalTexture(Texture& texture)
 	setUniform("normalTex", 1);
 }
 
+void Shader3d::setEnvironmentMap(CubeMap& envMap)
+{
+	envMap.bind(2);
+	setUniform("envMap", 2);
+}
+
 void Shader3d::setNormalMapEnabled(bool enabled)
 {
 	setUniform("normalMapEnabled", enabled ? 1 : 0);

@@ -121,6 +121,7 @@ void Renderer::renderScene()
 	data->shader.setViewMatrix(data->camera.getViewMatrix());
 	data->shader.setCurrentMaterialIndex(0); //todo: group objects by materials
 	data->shader.setEyeDirection(data->camera.dirFront);
+	data->shader.setEnvironmentMap(data->skybox->cubemap);
 
 	//setting lights to uniforms
 

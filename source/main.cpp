@@ -55,6 +55,11 @@ int main()
     auto& renderObject3 = renderer.createRenderObject(diffuseTexture, normalTexture, quad, material);
     renderObject3.transform.position.x -= 2;
 
+    auto& torus = renderer.createRenderObject(diffuseTexture, GeometryDefinition::createTorus(100, 1, 0.3f), material);
+    torus.transform.position.y += 4;
+    torus.transform.rotation.x = 90.0f;
+    torus.material.alpha = 1.0f;
+
     auto& light = renderer.createDirectionalLight();
     light.ambientColor = glm::vec3(0.3f, 0.3f, 0.3f);
     light.diffuseColor = glm::vec3(1.0f, 1.0f, 1.0f);

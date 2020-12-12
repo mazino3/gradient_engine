@@ -40,6 +40,7 @@ uniform bool normalMapEnabled;
 uniform vec3 eyeDirection;
 uniform sampler2D diffuseTex;
 uniform sampler2D normalTex;
+uniform samplerCube envMap;
 
 in vec4 ex_Color;
 in vec2 ex_TexCoord;
@@ -92,5 +93,17 @@ void main(void) {
 	}
 	
 	
-	gl_FragColor = vec4(resultColor, materials[materialIndex].alpha) * texture(diffuseTex, ex_TexCoord);
+	//gl_FragColor = ;
+	vec4 noreflectColor = vec4(resultColor, materials[materialIndex].alpha) * texture(diffuseTex, ex_TexCoord);
+	vec3 reflectedDir = reflect(eyeDir, normal);
+	vec4 reflection = vec4(texture(envMap, reflectedDir).rgb, 1.0);
+	
+	
+	float cosTheta = -dot(normal, reflectedDir);
+	float fresnel = pow(1 - cosTheta, 5.0);
+	fresnel = max(fresnel, 0.0);
+	fresnel = min(fresnel, 1.0);
+	
+	vec4 combinedColor = noreflectColor * (1.0 - fresnel) + reflection * fresnel;
+	gl_FragColor = combinedColor;
 }

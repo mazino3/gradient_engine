@@ -3,6 +3,7 @@
 
 #include "Shader.h"
 #include "Texture.h"
+#include "CubeMap.h"
 #include "Material.h"
 #include "Lights.h"
 
@@ -17,6 +18,7 @@ struct Shader3d : Shader
 
 	void setDiffuseTexture(Texture& texture);
 	void setNormalTexture(Texture& texture);
+	void setEnvironmentMap(CubeMap& envMap);
 	void setNormalMapEnabled(bool enabled);
 	void setMaterial(const Material& material, int index);
 	void setCurrentMaterialIndex(int index);
