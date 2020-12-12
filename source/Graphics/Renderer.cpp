@@ -6,6 +6,8 @@
 
 struct RendererImpl
 {
+	RenderTarget& baseRenderTarget;
+
 	Camera camera;
 	std::vector<std::shared_ptr<RenderObject>> renderObjects;
 	std::vector<std::shared_ptr<DirectionalLight>> directionalLights;
@@ -14,6 +16,10 @@ struct RendererImpl
 	SkyboxShader skyboxShader;
 
 	std::shared_ptr<SkyboxObject> skybox;
+
+	RendererImpl(RenderTarget& baseRenderTarget) :
+		baseRenderTarget(baseRenderTarget)
+	{}
 
 	void renderObject(std::shared_ptr<RenderObject> obj)
 	{
@@ -36,9 +42,9 @@ struct RendererImpl
 	}
 };
 
-Renderer::Renderer()
+Renderer::Renderer(RenderTarget& baseRenderTarget)
 {
-	data = std::make_shared<RendererImpl>();
+	data = std::make_shared<RendererImpl>(baseRenderTarget);
 }
 
 Camera& Renderer::getCamera()

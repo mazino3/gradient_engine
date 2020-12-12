@@ -28,7 +28,7 @@ int main()
     
     window.setClearColor(glm::vec4(0.1f, 0.0f, 0.2f, 0.0f));
 
-    Renderer renderer;
+    Renderer renderer(window);
     auto& camera = renderer.getCamera();
     camera.setPerspective(45.0f, 640.0f / 480.0f, 0.1f, 200.0f);
     OrbitCameraController cameraController(camera);

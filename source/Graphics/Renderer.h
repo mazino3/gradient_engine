@@ -4,6 +4,7 @@
 #include <memory>
 #include "Camera.h"
 #include "RenderObject.h"
+#include "RenderTarget.h"
 #include "SkyboxObject.h"
 #include "Lights.h"
 
@@ -11,7 +12,7 @@ struct RendererImpl;
 
 struct Renderer
 {
-	Renderer();
+	Renderer(RenderTarget& renderTarget);
 
 	Camera& getCamera();
 	void renderScene();
