@@ -21,6 +21,7 @@ struct RenderTexture : RenderTarget
 	void bind() override;
 	int getWidth() override;
 	int getHeight() override;
+	void updateTexture(bool preserveBinding); //should be called before accessing rendered texture
 	Texture& getRenderedTexture();
 private:
 	std::shared_ptr<RenderTextureImpl> data;

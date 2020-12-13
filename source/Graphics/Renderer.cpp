@@ -26,7 +26,7 @@ struct RendererImpl
 
 	RendererImpl(RenderTarget& baseRenderTarget) :
 		baseRenderTarget(baseRenderTarget),
-		renderTexture(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Float, false),
+		renderTexture(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Float, true),
 		screenMesh(GeometryDefinition::SCREEN)
 	{
 		if (!renderTexture.init())
@@ -150,6 +150,8 @@ void Renderer::renderScene()
 	{
 		data->renderObject(obj);
 	}
+
+	data->renderTexture.updateTexture(false);
 
 	//binding base render target and applying post-processing
 

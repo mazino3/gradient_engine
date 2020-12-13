@@ -19,7 +19,7 @@
 
 int main()
 {
-    RenderWindow window(640, 480, "Hello GLFW!");
+    RenderWindow window(800, 600, "Hello GLFW!");
     if (!window.init())
     {
         std::cerr << "failed to create window";
