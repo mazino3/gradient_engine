@@ -53,6 +53,6 @@ void main(void)
 	}
 	ex_Normal = (normalTm * vec4(in_Normal, 1.0)).xyz;
 	ex_Tangent = (normalTm * vec4(in_Tangent, 1.0)).xyz;
-	ex_Bitangent = (normalTm * vec4(in_Tangent, 1.0)).xyz;
+	ex_Bitangent = (normalTm * vec4(in_Bitangent, 1.0)).xyz;
 	ex_VertPos = (view * model * vec4(in_Position, 1.0)).xyz;
 }
