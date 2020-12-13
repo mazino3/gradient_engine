@@ -159,6 +159,8 @@ void Renderer::renderScene()
 	data->hdrShader.setToneMappingEnabled(true);
 	data->hdrShader.setGammaCorrectionEnabled(true);
 	data->hdrShader.setGamma(2.2f);
+	data->hdrShader.setContrast(0.4f);
+	data->hdrShader.setExposure(2.0f);
 	data->screenMesh.draw();
 }
 

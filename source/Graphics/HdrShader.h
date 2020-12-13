@@ -12,6 +12,8 @@ struct HdrShader : Shader
 	void setToneMappingEnabled(bool enabled);
 	void setGammaCorrectionEnabled(bool enabled);
 	void setGamma(float gamma);
+	void setExposure(float exposure);
+	void setContrast(float contrast);
 };
 
 #endif

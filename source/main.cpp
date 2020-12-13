@@ -43,8 +43,8 @@ int main()
 
     GeometryDefinition quad(GeometryDefinition::CUBE);
 
-    Texture diffuseTexture("Assets/Sprites/Brick2_Color.jpg");
-    Texture normalTexture("Assets/Sprites/Brick2_Normal.jpg");
+    Texture diffuseTexture("Assets/Sprites/Scifi_Color.png");
+    Texture normalTexture("Assets/Sprites/Scifi_Normal.png");
 
     auto& renderObject1 = renderer.createRenderObject(diffuseTexture, normalTexture, quad, material);
 

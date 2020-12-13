@@ -23,3 +23,13 @@ void HdrShader::setGamma(float gamma)
 {
 	setUniform("gamma", gamma);
 }
+
+void HdrShader::setExposure(float exposure)
+{
+	setUniform("exposure", exposure);
+}
+
+void HdrShader::setContrast(float contrast)
+{
+	setUniform("contrast", contrast);
+}

@@ -6,6 +6,8 @@ uniform sampler2D screenTexture;
 uniform bool toneMappingEnabled;
 uniform bool gammaCorrectionEnabled;
 uniform float gamma;
+uniform float contrast;
+uniform float exposure;
 
 void main(void)
 {
@@ -13,6 +15,7 @@ void main(void)
 	
 	if (toneMappingEnabled)
 	{
+		color *= exposure;
 		color = color / (color + vec3(1.0));
 	}
 	
@@ -21,7 +24,7 @@ void main(void)
 		color = pow(color, vec3(1.0 / gamma));
 	}
 	
-	color = (color - 0.5) * (1.4) + 0.5;
+	color = (color - 0.5) * (1.0 + contrast) + 0.5;
 	
 	gl_FragColor = vec4(color, 1.0);
 }
