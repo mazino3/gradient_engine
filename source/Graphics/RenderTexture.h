@@ -15,7 +15,7 @@ enum class RenderTextureType
 
 struct RenderTexture : RenderTarget
 {
-	RenderTexture(int width, int height, RenderTextureType textureType);
+	RenderTexture(int width, int height, RenderTextureType textureType, bool enableAntiAliasing);
 	~RenderTexture();
 	bool init() override;
 	void bind() override;

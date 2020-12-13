@@ -10,19 +10,22 @@ struct TextureImpl
 	GLuint textureHandler;
 	int width;
 	int height;
+	bool multisample;
 };
 
-Texture::Texture(unsigned int handler, int width, int height)
+Texture::Texture(unsigned int handler, int width, int height, bool multisample)
 {
 	_data = std::make_shared<TextureImpl>();
 	_data->textureHandler = handler;
 	_data->width = width;
 	_data->height = height;
+	_data->multisample = multisample;
 }
 
 Texture::Texture(const std::string& filename)
 {
 	_data = std::make_shared<TextureImpl>();
+	_data->multisample = false;
 	
 	glGenTextures(1, &_data->textureHandler);
 	glBindTexture(GL_TEXTURE_2D, _data->textureHandler);
@@ -66,5 +69,12 @@ void Texture::bind()
 void Texture::bind(int unit)
 {
 	glActiveTexture(GL_TEXTURE0 + unit);
-	glBindTexture(GL_TEXTURE_2D, _data->textureHandler);
+	if (_data->multisample)
+	{
+		glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, _data->textureHandler);
+	}
+	else
+	{
+		glBindTexture(GL_TEXTURE_2D, _data->textureHandler);
+	}
 }

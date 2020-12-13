@@ -26,7 +26,7 @@ struct RendererImpl
 
 	RendererImpl(RenderTarget& baseRenderTarget) :
 		baseRenderTarget(baseRenderTarget),
-		renderTexture(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Float),
+		renderTexture(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Float, false),
 		screenMesh(GeometryDefinition::SCREEN)
 	{
 		if (!renderTexture.init())
