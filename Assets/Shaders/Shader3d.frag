@@ -93,7 +93,6 @@ void main(void) {
 	}
 	
 	
-	//gl_FragColor = ;
 	vec4 noreflectColor = vec4(resultColor, materials[materialIndex].alpha) * texture(diffuseTex, ex_TexCoord);
 	vec3 reflectedDir = reflect(eyeDir, normal);
 	vec4 reflection = vec4(texture(envMap, reflectedDir).rgb, 1.0);
@@ -105,5 +104,12 @@ void main(void) {
 	fresnel = min(fresnel, 1.0);
 	
 	vec4 combinedColor = noreflectColor * (1.0 - fresnel) + reflection * fresnel;
-	gl_FragColor = combinedColor;
+	if (dot(eyeDir, normal) < 0.0)
+	{
+		gl_FragColor = vec4(0.0);
+	}
+	else
+	{
+		gl_FragColor = combinedColor;
+	}
 }
