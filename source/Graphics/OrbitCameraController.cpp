@@ -11,7 +11,7 @@ struct OrbitCameraControllerImpl
 	Camera& camera;
 	float distance;
 	float maxDistance;
-	float horizontalAngle;
+	float horizontalAngle; //in degrees
 	float verticalAngle;
 	float sensitivity;
 	float distanceSensitivity;

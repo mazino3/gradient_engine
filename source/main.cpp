@@ -32,12 +32,11 @@ int main()
     Renderer renderer(window);
     auto& camera = renderer.getCamera();
     camera.setPerspective(45.0f, 640.0f / 480.0f, 0.1f, 200.0f);
-    camera.dirFront = glm::normalize(glm::vec3(1, 0, -1));
-    camera.dirUp = glm::normalize(glm::vec3(1, 0, 1));
     camera.position = glm::vec3(-5, 0, 5);
     //OrbitCameraController cameraController(camera);
     FreeCameraController cameraController(camera);
     cameraController.setOnlyRotationMode(false);
+    cameraController.setCameraDirection(glm::normalize(glm::vec3(1, 0, -1)));
     window.getInput().addInputClient(cameraController.getInputClient(), 0.0f);
 
     Material material;

@@ -15,6 +15,7 @@ struct FreeCameraController
 	void setOnlyRotationMode(bool onlyRotationMode);
 	void setSensitivity(float sensitivity);
 	void setSpeed(float speed);
+	void setCameraDirection(const glm::vec3& direction);
 
 	InputClientBase& getInputClient();
 

@@ -1,13 +1,16 @@
 #include <glm/ext.hpp>
+#include <cmath>
 #include "FreeCameraController.h"
 #include "KeyCodes.h"
 #include "InputClient.h"
+
+static const float PI = 3.14159265f;
 
 struct FreeCameraControllerImpl
 {
 	Camera& camera;
 	float sensitivity;
-	float horizontalAngle;
+	float horizontalAngle; //in radians
 	float verticalAngle;
 	float speed;
 	bool onlyRotationMode;
@@ -153,6 +156,17 @@ void FreeCameraController::update(float dt)
 {
 	glm::vec3 movementDir = data->getMovementDirection();
 	data->camera.position += movementDir * data->speed * dt;
+
+	float verticalAngleUp = data->verticalAngle + PI / 2;
+	glm::mat4x4 rotMatrix = glm::rotate(glm::mat4x4(1.0f), data->horizontalAngle, glm::vec3(0.0f, 0.0f, 1.0f));
+	glm::vec4 dirFront = glm::vec4(cosf(data->verticalAngle), 0, sinf(data->verticalAngle), 1.0f);
+	glm::vec4 dirUp = glm::vec4(cosf(verticalAngleUp), 0, sinf(verticalAngleUp), 1.0f);
+
+	dirFront = rotMatrix * dirFront;
+	dirUp = rotMatrix * dirUp;
+
+	data->camera.dirFront = dirFront;
+	data->camera.dirUp = dirUp;
 }
 
 void FreeCameraController::setOnlyRotationMode(bool onlyRotationMode)
@@ -168,6 +182,45 @@ void FreeCameraController::setSensitivity(float sensitivity)
 void FreeCameraController::setSpeed(float speed)
 {
 	data->speed = speed;
+}
+
+static float getAngle(const glm::vec2& direction)
+{
+	static const float EPS = 0.00001f;
+
+	if (std::fabsf(direction.x) < EPS)
+	{
+		return direction.y > 0 ? 0 : PI;
+	}
+
+	if (direction.x < 0)
+	{
+		return std::atanf(direction.y / direction.x) + PI;
+	}
+	else
+	{
+		if (direction.y > 0)
+		{
+			return std::atanf(direction.y / direction.x);
+		}
+		else
+		{
+			return std::atanf(direction.y / direction.x) + PI * 2;
+		}
+	}
+}
+
+void FreeCameraController::setCameraDirection(const glm::vec3& direction)
+{
+	glm::vec2 dirHorizontal(direction.x, direction.y);
+	float horizontalLength = dirHorizontal.length();
+	if (horizontalLength > 0.00001f)
+	{
+		dirHorizontal /= horizontalLength;
+	}
+	data->horizontalAngle = getAngle(dirHorizontal);
+	glm::vec2 dirVertical(horizontalLength, direction.z);
+	data->verticalAngle = getAngle(dirVertical);
 }
 
 InputClientBase& FreeCameraController::getInputClient()
