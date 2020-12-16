@@ -14,6 +14,7 @@ struct FreeCameraController
 	void update(float dt);
 	void setOnlyRotationMode(bool onlyRotationMode);
 	void setSensitivity(float sensitivity);
+	void setSpeed(float speed);
 
 	InputClientBase& getInputClient();
 
