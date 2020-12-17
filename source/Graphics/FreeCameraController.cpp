@@ -1,5 +1,6 @@
 #include <glm/ext.hpp>
 #include <cmath>
+#include <algorithm>
 #include "FreeCameraController.h"
 #include "KeyCodes.h"
 #include "InputClient.h"
@@ -66,7 +67,9 @@ FreeCameraController::FreeCameraController(Camera& camera)
 	{
 		if (button == KEYCODE_MOUSE_BUTTON_2)
 		{
-			//todo: start dragging
+			data->isDragging = true;
+			data->prevXpos = xpos;
+			data->prevYpos = ypos;
 			return true;
 		}
 		else
@@ -79,7 +82,7 @@ FreeCameraController::FreeCameraController(Camera& camera)
 	{
 		if (button == KEYCODE_MOUSE_BUTTON_2 && data->isDragging)
 		{
-			//todo: stop dragging
+			data->isDragging = false;
 			return true;
 		}
 		else
@@ -91,7 +94,15 @@ FreeCameraController::FreeCameraController(Camera& camera)
 	{
 		if (data->isDragging)
 		{
-			//todo: do dragging
+			double deltaX = xpos - data->prevXpos;
+			double deltaY = ypos - data->prevYpos;
+			data->prevXpos = xpos;
+			data->prevYpos = ypos;
+
+			float horizontalDelta = -deltaX * data->sensitivity * PI / 180.0f;
+			float verticalDelta = deltaY * data->sensitivity * PI / 180.0f;
+			data->horizontalAngle += horizontalDelta;
+			data->verticalAngle = std::max(std::min(data->verticalAngle + verticalDelta, PI / 2), -PI / 2);
 			return true;
 		}
 		else
@@ -210,6 +221,23 @@ static float getAngle(const glm::vec2& direction)
 	}
 }
 
+static float getVerticalAngle(const glm::vec2& direction)
+{
+	if (std::fabsf(direction.x) < 0.0001f)
+	{
+		if (direction.y > 0)
+		{
+			return PI / 2;
+		}
+		else
+		{
+			return -PI / 2;
+		}
+	}
+
+	return std::atanf(direction.y / direction.x);
+}
+
 void FreeCameraController::setCameraDirection(const glm::vec3& direction)
 {
 	glm::vec2 dirHorizontal(direction.x, direction.y);
@@ -220,7 +248,7 @@ void FreeCameraController::setCameraDirection(const glm::vec3& direction)
 	}
 	data->horizontalAngle = getAngle(dirHorizontal);
 	glm::vec2 dirVertical(horizontalLength, direction.z);
-	data->verticalAngle = getAngle(dirVertical);
+	data->verticalAngle = getVerticalAngle(dirVertical);
 }
 
 InputClientBase& FreeCameraController::getInputClient()
