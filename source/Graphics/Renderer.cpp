@@ -27,7 +27,8 @@ struct RendererImpl
 	RendererImpl(RenderTarget& baseRenderTarget) :
 		baseRenderTarget(baseRenderTarget),
 		renderTexture(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Float, true),
-		screenMesh(GeometryDefinition::SCREEN)
+		screenMesh(GeometryDefinition::SCREEN),
+		skybox(nullptr)
 	{
 		if (!renderTexture.init())
 		{
@@ -115,6 +116,7 @@ void Renderer::renderScene()
 	data->renderTexture.bind();
 	data->renderTexture.clear();
 
+	
 	if (data->skybox != nullptr)
 	{
 		data->skyboxShader.bind();
@@ -130,7 +132,16 @@ void Renderer::renderScene()
 	data->shader.setViewMatrix(data->camera.getViewMatrix());
 	data->shader.setCurrentMaterialIndex(0); //todo: group objects by materials
 	data->shader.setEyeDirection(data->camera.dirFront);
-	data->shader.setEnvironmentMap(data->skybox->cubemap);
+
+	if (data->skybox != nullptr)
+	{
+		data->shader.setEnvironmentMap(data->skybox->cubemap);
+		data->shader.setEnvironmentMapEnabled(true);
+	}
+	else
+	{
+		data->shader.setEnvironmentMapEnabled(false);
+	}
 
 	//setting lights to uniforms
 

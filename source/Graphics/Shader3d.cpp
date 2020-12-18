@@ -43,6 +43,15 @@ void Shader3d::setEnvironmentMap(CubeMap& envMap)
 	setUniform("envMap", 2);
 }
 
+void Shader3d::setEnvironmentMapEnabled(bool enabled)
+{
+	setUniform("envMapEnabled", enabled ? 1 : 0);
+	if (!enabled)
+	{
+		setUniform("envMap", 2);
+	}
+}
+
 void Shader3d::setNormalMapEnabled(bool enabled)
 {
 	setUniform("normalMapEnabled", enabled ? 1 : 0);

@@ -2,7 +2,9 @@
 #include <glm/ext.hpp>
 
 Transform::Transform() : 
-	scale(1, 1, 1)
+	scale(1, 1, 1),
+	position(0, 0, 0),
+	rotation(0, 0, 0)
 {}
 
 glm::mat4x4 Transform::getWorldMatrix()
