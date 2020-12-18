@@ -14,12 +14,17 @@ struct RenderObject
 	Transform transform;
 	Material material;
 
+	bool textureScalingEnabled;
+	float textureScaleMultiplier;
+
 	RenderObject(Texture& diffuseTexture, const GeometryDefinition& geometryDefinition, const Material& material) :
 		diffuseTexture(&diffuseTexture),
 		normalTexture(nullptr),
 		hasNormalTexture(false),
 		mesh(geometryDefinition),
-		material(material)
+		material(material),
+		textureScalingEnabled(false),
+		textureScaleMultiplier(1.0f)
 	{}
 
 	RenderObject(Texture& diffuseTexture, Texture& normalTexture, const GeometryDefinition& geometryDefinition, const Material& material) :
@@ -27,7 +32,9 @@ struct RenderObject
 		normalTexture(&normalTexture),
 		hasNormalTexture(true),
 		mesh(geometryDefinition),
-		material(material)
+		material(material),
+		textureScalingEnabled(false),
+		textureScaleMultiplier(1.0f)
 	{}
 
 	Texture& getDiffuseTexture()

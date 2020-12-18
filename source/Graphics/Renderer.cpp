@@ -51,6 +51,15 @@ struct RendererImpl
 		{
 			shader.setNormalMapEnabled(false);
 		}
+		if (obj->textureScalingEnabled)
+		{
+			shader.setTextureScalingEnabled(true);
+			shader.setTextureScale(obj->transform.scale * obj->textureScaleMultiplier);
+		}
+		else
+		{
+			shader.setTextureScalingEnabled(false);
+		}
 
 		obj->mesh.draw();
 	}

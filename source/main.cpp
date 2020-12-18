@@ -52,6 +52,9 @@ int main()
     Texture normalTexture("Assets/Sprites/Scifi_Normal.png");
 
     auto& renderObject1 = renderer.createRenderObject(diffuseTexture, normalTexture, quad, material);
+    renderObject1.material.alpha = 1.0f;
+    renderObject1.textureScalingEnabled = true;
+    renderObject1.textureScaleMultiplier = 0.25f;
 
     auto& renderObject2 = renderer.createRenderObject(diffuseTexture, normalTexture, quad, material);
     renderObject2.transform.position.x += 2;
