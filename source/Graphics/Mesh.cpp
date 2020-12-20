@@ -66,7 +66,9 @@ Mesh::Mesh(const GeometryDefinition& geometry)
 
 Mesh::~Mesh()
 {
-	//todo: implement
+	glDeleteBuffers(1, &_data->ebo);
+	glDeleteBuffers(1, &_data->vbo);
+	glDeleteVertexArrays(1, &_data->vao);
 }
 
 void Mesh::draw()
