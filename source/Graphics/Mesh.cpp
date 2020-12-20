@@ -9,7 +9,10 @@ struct MeshImpl
 	GLuint ebo;
 
 	MeshImpl(const GeometryDefinition& geometry) :
-	    geometry(geometry)
+	    geometry(geometry),
+		vao(0),
+		vbo(0),
+		ebo(0)
     {}
 };
 
