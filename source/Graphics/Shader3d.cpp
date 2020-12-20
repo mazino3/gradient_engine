@@ -83,10 +83,11 @@ void Shader3d::setDirectionalLightsCount(int count)
 	setUniform("directionalLightsCount", count);
 }
 
-void Shader3d::setDirectionalLight(const DirectionalLight& light, int index)
+void Shader3d::setDirectionalLight(const DirectionalLight& light, const glm::mat4x4& viewMatrix, int index)
 {
 	std::string uniformPrefix = "directionalLights[" + std::to_string(index) + "]";
-	setUniform(uniformPrefix + ".direction", light.direction);
+	glm::vec3 eyeSpaceDirection = glm::vec3(glm::mat4(glm::mat3(viewMatrix)) * glm::vec4(light.direction, 1.0f));
+	setUniform(uniformPrefix + ".direction", eyeSpaceDirection);
 	setUniform(uniformPrefix + ".ambientColor", light.ambientColor);
 	setUniform(uniformPrefix + ".diffuseColor", light.diffuseColor);
 	setUniform(uniformPrefix + ".specularColor", light.specularColor);

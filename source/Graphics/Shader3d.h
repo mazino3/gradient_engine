@@ -26,7 +26,7 @@ struct Shader3d : Shader
 	void setEyeDirection(const glm::vec3& eyeDirection);
 
 	void setDirectionalLightsCount(int count);
-	void setDirectionalLight(const DirectionalLight& light, int index);
+	void setDirectionalLight(const DirectionalLight& light, const glm::mat4x4& viewMatrix, int index);
 	void setPositionalLightsCount(int count);
 	void setPositionalLight(const PositionalLight& light, int index);
 

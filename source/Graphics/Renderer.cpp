@@ -148,7 +148,7 @@ void Renderer::renderScene()
 	data->shader.setDirectionalLightsCount(data->directionalLights.size());
 	for (int i = 0; i < data->directionalLights.size(); i++)
 	{
-		data->shader.setDirectionalLight(*data->directionalLights[i], i);
+		data->shader.setDirectionalLight(*data->directionalLights[i], data->camera.getViewMatrix(), i);
 	}
 
 	data->shader.setPositionalLightsCount(data->positionalLights.size());

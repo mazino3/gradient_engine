@@ -59,6 +59,8 @@ int main()
     auto& renderObject2 = renderer.createRenderObject(diffuseTexture, normalTexture, quad, material);
     renderObject2.transform.position.x += 2;
     renderObject2.material.alpha = 1.0f;
+    renderObject2.material.ambient = glm::vec3(0.2, 1.0, 0.2);
+    renderObject2.material.diffuse = glm::vec3(0.2, 1.0, 0.2);
 
     auto& renderObject3 = renderer.createRenderObject(diffuseTexture, normalTexture, quad, material);
     renderObject3.transform.position.x -= 2;
@@ -67,12 +69,14 @@ int main()
     torus.transform.position.y += 4;
     torus.transform.rotation.x = 90.0f;
     torus.material.alpha = 1.0f;
+    torus.material.ambient = glm::vec3(1.0, 0.2, 0.2);
+    torus.material.diffuse = glm::vec3(1.0, 0.2, 0.2);
 
     auto& light = renderer.createDirectionalLight();
     light.ambientColor = glm::vec3(0.3f, 0.3f, 0.3f);
     light.diffuseColor = glm::vec3(1.0f, 1.0f, 1.0f);
     light.specularColor = glm::vec3(0.0f, 0.0f, 0.0f);
-    light.direction = glm::normalize(glm::vec3(1, 0, 0));
+    light.direction = glm::normalize(glm::vec3(1, 0, 1));
     
     CubeMap skyboxCubemap(
     {

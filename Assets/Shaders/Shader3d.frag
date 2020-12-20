@@ -100,7 +100,7 @@ void main(void) {
 	if (envMapEnabled)
 	{
 		vec3 reflectedDir = reflect(eyeDir, normal);
-		vec4 reflection = vec4(texture(envMap, reflectedDir).rgb, 1.0);
+		vec4 reflection = vec4(texture(envMap, -reflectedDir).rgb, 1.0);
 		
 		float cosTheta = -dot(normal, reflectedDir);
 		float fresnel = pow(1 - cosTheta, 5.0);
