@@ -8,7 +8,6 @@ struct RenderTextureImpl
 	GLuint fbo;
 	GLuint fboIntermediate;
 	GLuint depthStencilRbo;
-	GLuint depthStencilRboMultisampled;
 	bool initCalled;
 	int width;
 	int height;
@@ -23,7 +22,6 @@ struct RenderTextureImpl
 		fboIntermediate(0),
 		renderedTexture(nullptr),
 		depthStencilRbo(0),
-		depthStencilRboMultisampled(0),
 		width(width),
 		height(height),
 		textureType(textureType),
@@ -34,7 +32,7 @@ struct RenderTextureImpl
 	{
 		//creating frame buffer
 		initCalled = true;
-		glGenBuffers(1, &fbo);
+		glGenFramebuffers(1, &fbo);
 		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
 		//creating multisample texture
@@ -55,13 +53,13 @@ struct RenderTextureImpl
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, texColorBufferMultisample, 0);
 
 		//creating multisampled rbo
-		glGenRenderbuffers(1, &depthStencilRboMultisampled);
-		glBindRenderbuffer(GL_RENDERBUFFER, depthStencilRboMultisampled);
+		glGenRenderbuffers(1, &depthStencilRbo);
+		glBindRenderbuffer(GL_RENDERBUFFER, depthStencilRbo);
 		glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_DEPTH24_STENCIL8, width, height);
 		glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
 		//setting rbo to fbo
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, depthStencilRboMultisampled);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, depthStencilRbo);
 
 		//creating texture class
 		renderedTextureMultisample = std::make_shared<Texture>(texColorBufferMultisample, width, height, true);
@@ -171,7 +169,13 @@ RenderTexture::~RenderTexture()
 	{
 		return;
 	}
-	//todo: implement
+	
+	glDeleteRenderbuffers(1, &data->depthStencilRbo);
+	glDeleteFramebuffers(1, &data->fbo);
+	if (data->enableAntiAliasing)
+	{
+		glDeleteFramebuffers(1, &data->fboIntermediate);
+	}
 }
 
 bool RenderTexture::init()
