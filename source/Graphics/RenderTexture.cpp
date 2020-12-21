@@ -156,6 +156,35 @@ struct RenderTextureImpl
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		return true;
 	}
+	
+	bool initDepth()
+	{
+		initCalled = true;
+		glGenFramebuffers(1, &fbo);
+		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+		GLuint texDepth;
+		glGenTextures(1, &texDepth);
+		glBindTexture(GL_TEXTURE_2D, texDepth);
+		glTexImage2D(texDepth, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, nullptr);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texDepth, 0);
+
+		renderedTexture = std::make_shared<Texture>(texDepth, width, height, false);
+
+		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		{
+			std::cout << "failed to initialize depth framebuffer" << std::endl;
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			return false;
+		}
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		return true;
+	}
 };
 
 RenderTexture::RenderTexture(int width, int height, RenderTextureType textureType ,bool enableAntiAliasing)
@@ -170,23 +199,34 @@ RenderTexture::~RenderTexture()
 		return;
 	}
 	
-	glDeleteRenderbuffers(1, &data->depthStencilRbo);
-	glDeleteFramebuffers(1, &data->fbo);
-	if (data->enableAntiAliasing)
+	if (data->textureType != RenderTextureType::IntegerDepth)
 	{
-		glDeleteFramebuffers(1, &data->fboIntermediate);
+		glDeleteRenderbuffers(1, &data->depthStencilRbo);
+		if (data->enableAntiAliasing)
+		{
+			glDeleteFramebuffers(1, &data->fboIntermediate);
+		}
 	}
+	glDeleteFramebuffers(1, &data->fbo);
+	
 }
 
 bool RenderTexture::init()
 {
-	if (data->enableAntiAliasing)
+	if (data->textureType == RenderTextureType::IntegerDepth)
 	{
-		return data->initWithAA();
+		return data->initDepth();
 	}
 	else
 	{
-		return data->initWithoutAA();
+		if (data->enableAntiAliasing)
+		{
+			return data->initWithAA();
+		}
+		else
+		{
+			return data->initWithoutAA();
+		}
 	}
 }
 
@@ -217,6 +257,11 @@ void RenderTexture::updateTexture(bool preserveBinding)
 	if (!data->initCalled)
 	{
 		std::cout << "trying to update texture without calling RenderTexture.init()" << std::endl;
+		return;
+	}
+
+	if (data->textureType == RenderTextureType::IntegerDepth)
+	{
 		return;
 	}
 

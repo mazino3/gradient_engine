@@ -10,7 +10,8 @@ struct RenderTextureImpl;
 enum class RenderTextureType
 {
 	Integer,
-	Float
+	Float,
+	IntegerDepth
 };
 
 struct RenderTexture : RenderTarget
