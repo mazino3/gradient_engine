@@ -29,6 +29,8 @@ struct Camera
 	glm::mat4x4 getProjectionMatrix();
 	glm::mat4x4 getViewMatrix();
 
+	Camera getDirectionalLightCamera(const glm::vec3& lightDirection);
+
 private:
 
 	std::shared_ptr<CameraImpl> _data;
