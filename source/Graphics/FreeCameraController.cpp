@@ -241,7 +241,7 @@ static float getVerticalAngle(const glm::vec2& direction)
 void FreeCameraController::setCameraDirection(const glm::vec3& direction)
 {
 	glm::vec2 dirHorizontal(direction.x, direction.y);
-	float horizontalLength = dirHorizontal.length();
+	float horizontalLength = glm::length(dirHorizontal);
 	if (horizontalLength > 0.00001f)
 	{
 		dirHorizontal /= horizontalLength;
