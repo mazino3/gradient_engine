@@ -21,6 +21,7 @@ struct Camera
 	glm::vec3 dirUp;
 
 	Camera();
+	Camera& operator=(const Camera& other);
 
 	void setPerspective(float fov, float ratio, float nearPlane, float farPlane);
 	void setOrtho(float left, float right, float bottom, float top, float nearPlane, float farPlane);

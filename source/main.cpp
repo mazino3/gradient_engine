@@ -37,6 +37,12 @@ int main()
     FreeCameraController cameraController(camera);
     cameraController.setOnlyRotationMode(false);
     cameraController.setCameraDirection(glm::normalize(glm::vec3(1, 0, -1)));
+    //cameraController.update(0.016f);
+    //auto lightCamera = camera.getDirectionalLightCamera(glm::normalize(glm::vec3(1, 1, -1)), 20.0f);
+    //camera = lightCamera;
+
+    std::cout << "camera position: " << camera.position.x << " " << camera.position.y << " " << camera.position.z << std::endl;
+
     window.getInput().addInputClient(cameraController.getInputClient(), 0.0f);
 
     Material material;

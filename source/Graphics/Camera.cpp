@@ -3,6 +3,8 @@
 #include <vector>
 #include <iostream>
 #include <cmath>
+#include <limits>
+#include <algorithm>
 
 struct CameraImpl
 {
@@ -13,8 +15,6 @@ struct CameraImpl
 		type(CameraType::None),
 		projectionMatrix(1.0f)
 	{}
-
-	glm::vec3 frustumPoints[8] = {};
 
 	struct PerspectiveParams
 	{
@@ -31,6 +31,15 @@ struct CameraImpl
 Camera::Camera()
 {
 	_data = std::make_shared<CameraImpl>();
+}
+
+Camera& Camera::operator=(const Camera& other)
+{
+	position = other.position;
+	dirFront = other.dirFront;
+	dirUp = other.dirUp;
+	*_data = *other._data;
+	return *this;
 }
 
 void Camera::setPerspective(float fov, float ratio, float nearPlane, float farPlane)
@@ -78,7 +87,7 @@ static glm::vec3 getLightDirUp(const glm::vec3& lightDirection)
 Camera Camera::getDirectionalLightCamera(const glm::vec3& lightDirection, float shadowDistance)
 {
 	static glm::vec3 frustumPoints[8];
-	Camera result;
+	Camera resultLightCamera;
 	
 	//computing frustum points
 	
@@ -101,7 +110,44 @@ Camera Camera::getDirectionalLightCamera(const glm::vec3& lightDirection, float 
 	frustumPoints[6] = position + dirFront * shadowDistance + dirUp * yFar - dirRight * xFar;
 	frustumPoints[7] = position + dirFront * shadowDistance + dirUp * yFar + dirRight * xFar;
 
-	//todo: transform frustum points to eye space of light
+	glm::vec3 cameraRight = glm::cross(lightDirection, glm::vec3(0, 0, 1));
+	if (glm::length(cameraRight) < 0.00001) //light is straight up or straight down
+	{
+		cameraRight = glm::vec3(1, 0, 0);
+	}
+	resultLightCamera.dirFront = lightDirection;
+	resultLightCamera.dirUp = glm::normalize(glm::cross(lightDirection, cameraRight));
+	resultLightCamera.position = glm::vec3(0, 0, 0);
+	
+	glm::mat4x4 lightViewMatrix = resultLightCamera.getViewMatrix();
 
-	return result;
+	float minX = std::numeric_limits<float>::infinity();
+	float minY = std::numeric_limits<float>::infinity();
+	float minZ = std::numeric_limits<float>::infinity();
+	float maxX = -std::numeric_limits<float>::infinity();
+	float maxY = -std::numeric_limits<float>::infinity();
+	float maxZ = -std::numeric_limits<float>::infinity();
+
+	for (int i = 0; i < 8; i++)
+	{
+		frustumPoints[i] = lightViewMatrix * glm::vec4(frustumPoints[i], 1.0f);
+	}
+
+	for (const auto& point : frustumPoints)
+	{
+		minX = std::fminf(minX, point.x);
+		minY = std::fminf(minY, point.y);
+		minZ = std::fminf(minZ, point.z);
+		maxX = std::fmaxf(maxX, point.x);
+		maxY = std::fmaxf(maxY, point.y);
+		maxZ = std::fmaxf(maxZ, point.z);
+	}
+
+	glm::vec3 size(maxX - minX, maxY - minY, maxZ - minZ);
+
+	glm::mat4x4 inverseLightView = glm::inverse(lightViewMatrix);
+	resultLightCamera.position = inverseLightView * glm::vec4((minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2, 1.0f);
+	resultLightCamera.setOrtho(-size.x / 2, size.x / 2, -size.y / 2, size.y / 2, -size.z / 2, size.z / 2);
+
+	return resultLightCamera;
 }
