@@ -15,6 +15,7 @@ struct RenderObject
 	Material material;
 
 	bool textureScalingEnabled;
+	bool castsShadows;
 	float textureScaleMultiplier;
 
 	RenderObject(Texture& diffuseTexture, const GeometryDefinition& geometryDefinition, const Material& material) :
@@ -24,7 +25,8 @@ struct RenderObject
 		mesh(geometryDefinition),
 		material(material),
 		textureScalingEnabled(false),
-		textureScaleMultiplier(1.0f)
+		textureScaleMultiplier(1.0f),
+		castsShadows(true)
 	{}
 
 	RenderObject(Texture& diffuseTexture, Texture& normalTexture, const GeometryDefinition& geometryDefinition, const Material& material) :
@@ -34,7 +36,8 @@ struct RenderObject
 		mesh(geometryDefinition),
 		material(material),
 		textureScalingEnabled(false),
-		textureScaleMultiplier(1.0f)
+		textureScaleMultiplier(1.0f),
+		castsShadows(true)
 	{}
 
 	Texture& getDiffuseTexture()
