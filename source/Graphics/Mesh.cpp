@@ -74,7 +74,7 @@ Mesh::~Mesh()
 	glDeleteVertexArrays(1, &_data->vao);
 }
 
-void Mesh::draw()
+void Mesh::draw() const
 {
 	int glPrimitiveType = GL_TRIANGLES;
 	switch (_data->geometry.type)

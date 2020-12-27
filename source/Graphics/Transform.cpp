@@ -7,7 +7,7 @@ Transform::Transform() :
 	rotation(0, 0, 0)
 {}
 
-glm::mat4x4 Transform::getWorldMatrix()
+glm::mat4x4 Transform::getWorldMatrix() const
 {
 	glm::mat4x4 matScale = glm::scale(glm::mat4x4(1.0f), scale);
 	glm::mat4x4 matRotateX = glm::rotate(glm::mat4x4(1.0f), glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));

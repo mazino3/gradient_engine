@@ -36,34 +36,7 @@ struct RendererImpl
 		}
 	}
 
-	void renderObject(std::shared_ptr<RenderObject> obj)
-	{
-		shader.setModelMatrix(obj->transform.getWorldMatrix());
-		glm::mat4x4 modelViewMatrix = camera.getViewMatrix() * obj->transform.getWorldMatrix();
-		shader.setNormalMatrix(glm::transpose(glm::inverse(modelViewMatrix)));
-		shader.setMaterial(obj->material, 0);
-		shader.setDiffuseTexture(obj->getDiffuseTexture());
-		if (obj->hasNormalTexture)
-		{
-			shader.setNormalMapEnabled(true);
-			shader.setNormalTexture(obj->getNormalTexture());
-		}
-		else
-		{
-			shader.setNormalMapEnabled(false);
-		}
-		if (obj->textureScalingEnabled)
-		{
-			shader.setTextureScalingEnabled(true);
-			shader.setTextureScale(obj->transform.scale * obj->textureScaleMultiplier);
-		}
-		else
-		{
-			shader.setTextureScalingEnabled(false);
-		}
-
-		obj->mesh.draw();
-	}
+	void renderObject(RenderObject& obj);
 };
 
 Renderer::Renderer(RenderTarget& baseRenderTarget)
@@ -74,6 +47,35 @@ Renderer::Renderer(RenderTarget& baseRenderTarget)
 Camera& Renderer::getCamera()
 {
 	return data->camera;
+}
+
+void RendererImpl::renderObject(RenderObject& obj)
+{
+	shader.setModelMatrix(obj.transform.getWorldMatrix());
+	glm::mat4x4 modelViewMatrix = camera.getViewMatrix() * obj.transform.getWorldMatrix();
+	shader.setNormalMatrix(glm::transpose(glm::inverse(modelViewMatrix)));
+	shader.setMaterial(obj.material, 0);
+	shader.setDiffuseTexture(obj.getDiffuseTexture());
+	if (obj.hasNormalTexture)
+	{
+		shader.setNormalMapEnabled(true);
+		shader.setNormalTexture(obj.getNormalTexture());
+	}
+	else
+	{
+		shader.setNormalMapEnabled(false);
+	}
+	if (obj.textureScalingEnabled)
+	{
+		shader.setTextureScalingEnabled(true);
+		shader.setTextureScale(obj.transform.scale * obj.textureScaleMultiplier);
+	}
+	else
+	{
+		shader.setTextureScalingEnabled(false);
+	}
+
+	obj.mesh.draw();
 }
 
 void Renderer::renderScene()
@@ -161,14 +163,14 @@ void Renderer::renderScene()
 
 	for (const auto& obj : opaqueObjects)
 	{
-		data->renderObject(obj);
+		data->renderObject(*obj);
 	}
 
 	//rendering semi-transparent objects
 
 	for (const auto& obj : transparentObjects)
 	{
-		data->renderObject(obj);
+		data->renderObject(*obj);
 	}
 
 	data->renderTexture.updateTexture(false);

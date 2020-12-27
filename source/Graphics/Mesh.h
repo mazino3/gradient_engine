@@ -10,7 +10,7 @@ struct Mesh
 {
 	Mesh(const GeometryDefinition& geometry);
 	~Mesh();
-	void draw();
+	void draw() const;
 
 private:
 

@@ -12,7 +12,7 @@ struct Transform
 
 	Transform();
 
-	glm::mat4x4 getWorldMatrix();
+	glm::mat4x4 getWorldMatrix() const;
 };
 
 #endif
