@@ -37,6 +37,7 @@ struct RendererImpl
 	}
 
 	void renderObject(RenderObject& obj);
+	void renderGameObjects(bool forShadows, const Camera& camera);
 };
 
 Renderer::Renderer(RenderTarget& baseRenderTarget)
@@ -78,46 +79,64 @@ void RendererImpl::renderObject(RenderObject& obj)
 	obj.mesh.draw();
 }
 
-void Renderer::renderScene()
+void RendererImpl::renderGameObjects(bool forShadows, const Camera& camera)
 {
 	static const float eps = 0.00001f;
 	std::vector<std::shared_ptr<RenderObject>> opaqueObjects;
 	std::vector<std::shared_ptr<RenderObject>> transparentObjects;
-	for (const auto& renderObject : data->renderObjects)
+	for (const auto& renderObject : renderObjects)
 	{
 		if (abs(renderObject->material.alpha - 1.0f) < eps)
 		{
-			opaqueObjects.push_back(renderObject);
+			if (!forShadows || renderObject->castsShadows)
+			{
+				opaqueObjects.push_back(renderObject);
+			}
 		}
 		else
 		{
-			transparentObjects.push_back(renderObject);
+			if (!forShadows)
+			{
+				transparentObjects.push_back(renderObject);
+			}
 		}
 	}
-	
-	//sorting opaque objects by distance to the camera (from near to far)
 
-	std::sort(opaqueObjects.begin(), opaqueObjects.end(), [this](const auto& obj1, const auto obj2) 
+	std::sort(opaqueObjects.begin(), opaqueObjects.end(), [&camera](const auto& obj1, const auto obj2)
+		{
+			float distance1 = glm::distance(obj1->transform.position, camera.position);
+			float distance2 = glm::distance(obj2->transform.position, camera.position);
+			return distance1 < distance2;
+		});
+
+	std::sort(transparentObjects.begin(), transparentObjects.end(), [&camera](const auto& obj1, const auto obj2)
 	{
-		float distance1 = glm::distance(obj1->transform.position, data->camera.position);
-		float distance2 = glm::distance(obj2->transform.position, data->camera.position);
-		return distance1 < distance2;
-	});
-
-	//sorting transparent objects by distance to the camera (from far to near)
-
-	std::sort(transparentObjects.begin(), transparentObjects.end(), [this](const auto& obj1, const auto obj2)
-	{
-		float distance1 = glm::distance(obj1->transform.position, data->camera.position);
-		float distance2 = glm::distance(obj2->transform.position, data->camera.position);
+		float distance1 = glm::distance(obj1->transform.position, camera.position);
+		float distance2 = glm::distance(obj2->transform.position, camera.position);
 		return distance1 > distance2;
 	});
 
+	//rendering opaque objects first
+
+	for (const auto& obj : opaqueObjects)
+	{
+		renderObject(*obj);
+	}
+
+	//rendering semi-transparent objects
+
+	for (const auto& obj : transparentObjects)
+	{
+		renderObject(*obj);
+	}
+}
+
+void Renderer::renderScene()
+{
 	//bind render texture
 
 	data->renderTexture.bind();
 	data->renderTexture.clear();
-
 	
 	if (data->skybox != nullptr)
 	{
@@ -159,19 +178,7 @@ void Renderer::renderScene()
 		data->shader.setPositionalLight(*data->positionalLights[i], i);
 	}
 
-	//rendering opaque objects first
-
-	for (const auto& obj : opaqueObjects)
-	{
-		data->renderObject(*obj);
-	}
-
-	//rendering semi-transparent objects
-
-	for (const auto& obj : transparentObjects)
-	{
-		data->renderObject(*obj);
-	}
+	data->renderGameObjects(false, data->camera);
 
 	data->renderTexture.updateTexture(false);
 
