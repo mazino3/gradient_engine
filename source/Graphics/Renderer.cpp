@@ -1,6 +1,7 @@
 #include "Renderer.h"
 #include "Shader3d.h"
 #include "SkyboxShader.h"
+#include "ShadowShader.h"
 #include "HdrShader.h"
 #include "RenderTexture.h"
 #include <vector>
@@ -18,6 +19,7 @@ struct RendererImpl
 	Shader3d shader;
 	SkyboxShader skyboxShader;
 	HdrShader hdrShader;
+	ShadowShader shadowShader;
 
 	RenderTexture renderTexture;
 	Mesh screenMesh;
@@ -37,6 +39,7 @@ struct RendererImpl
 	}
 
 	void renderObject(RenderObject& obj);
+	void renderObjectShadow(RenderObject& obj);
 	void renderGameObjects(bool forShadows, const Camera& camera);
 };
 
@@ -48,6 +51,12 @@ Renderer::Renderer(RenderTarget& baseRenderTarget)
 Camera& Renderer::getCamera()
 {
 	return data->camera;
+}
+
+void RendererImpl::renderObjectShadow(RenderObject& obj)
+{
+	shadowShader.setModelMatrix(obj.transform.getWorldMatrix());
+	obj.mesh.draw();
 }
 
 void RendererImpl::renderObject(RenderObject& obj)
@@ -120,14 +129,24 @@ void RendererImpl::renderGameObjects(bool forShadows, const Camera& camera)
 
 	for (const auto& obj : opaqueObjects)
 	{
-		renderObject(*obj);
+		if (forShadows)
+		{
+			renderObjectShadow(*obj);
+		}
+		else
+		{
+			renderObject(*obj);
+		}
 	}
 
 	//rendering semi-transparent objects
 
-	for (const auto& obj : transparentObjects)
+	if (!forShadows)
 	{
-		renderObject(*obj);
+		for (const auto& obj : transparentObjects)
+		{
+			renderObject(*obj);
+		}
 	}
 }
 
