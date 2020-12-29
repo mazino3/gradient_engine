@@ -172,6 +172,8 @@ struct RenderTextureImpl
 		glBindTexture(GL_TEXTURE_2D, 0);
 
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texDepth, 0);
+		glDrawBuffer(GL_NONE);
+		glReadBuffer(GL_NONE);
 
 		renderedTexture = std::make_shared<Texture>(texDepth, width, height, false);
 
