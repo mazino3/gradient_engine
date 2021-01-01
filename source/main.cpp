@@ -97,6 +97,15 @@ int main()
 
     float phase = 0;
 
+    if (!renderer.isValid())
+    {
+        std::cout << "renderer is not configured properly" << std::endl;
+    }
+    else
+    {
+        std::cout << "renderer is valid" << std::endl;
+    }
+
     while (window.isOpen())
     {
         phase += 0.01f;

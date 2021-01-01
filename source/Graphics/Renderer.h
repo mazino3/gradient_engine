@@ -17,6 +17,11 @@ struct Renderer
 	Camera& getCamera();
 	void renderScene();
 
+	int getMaxLightsWithShadows();
+	int getMaxLightsWithoutShadows();
+
+	bool isValid();
+
 	RenderObject& createRenderObject(Texture& diffuseTexture, const GeometryDefinition& geometryDefinition, const Material& material);
 	RenderObject& createRenderObject(Texture& diffuseTexture, Texture& normalTexture, const GeometryDefinition& geometryDefinition, const Material& material);
 	void removeRenderObject(RenderObject& renderObject);

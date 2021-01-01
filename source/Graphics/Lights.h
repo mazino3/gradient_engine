@@ -27,6 +27,8 @@ struct PositionalLight
 	float constantAttenuation;
 	float linearAttenuation;
 	float quadraticAttenuation;
+
+	bool shadowsEnabled;
 };
 
 #endif

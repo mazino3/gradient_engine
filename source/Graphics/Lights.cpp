@@ -15,5 +15,6 @@ PositionalLight::PositionalLight() :
 	position(0, 0, 0),
 	constantAttenuation(0.0f),
 	linearAttenuation(0.0f),
-	quadraticAttenuation(0.0f)
+	quadraticAttenuation(0.0f),
+	shadowsEnabled(false)
 {}

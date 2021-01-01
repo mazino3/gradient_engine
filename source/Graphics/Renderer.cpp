@@ -10,6 +10,9 @@
 
 struct RendererImpl
 {
+	static const int MAX_LIGHTS_WITH_SHADOWS = 4;
+	static const int MAX_LIGHTS_WITHOUT_SHADOWS = 16;
+
 	RenderTarget& baseRenderTarget;
 
 	Camera camera;
@@ -245,6 +248,55 @@ void Renderer::createSkybox(CubeMap& cubemap)
 void Renderer::removeSkybox()
 {
 	data->skybox = nullptr;
+}
+
+int Renderer::getMaxLightsWithShadows()
+{
+	return RendererImpl::MAX_LIGHTS_WITH_SHADOWS;
+}
+
+int Renderer::getMaxLightsWithoutShadows()
+{
+	return RendererImpl::MAX_LIGHTS_WITHOUT_SHADOWS;
+}
+
+bool Renderer::isValid()
+{
+	int dirLightsWithShadows = 0;
+	int dirLightsWithoutShadows = 0;
+	int pointLightsWithShadows = 0;
+	int pointLightsWithoutShadows = 0;
+
+	for (const auto& dirLight : data->directionalLights)
+	{
+		if (dirLight->shadowsEnabled)
+		{
+			dirLightsWithShadows++;
+		}
+		else
+		{
+			dirLightsWithoutShadows++;
+		}
+	}
+
+	for (const auto& pointLight : data->positionalLights)
+	{
+		if (pointLight->shadowsEnabled)
+		{
+			pointLightsWithShadows++;
+		}
+		else
+		{
+			pointLightsWithoutShadows++;
+		}
+	}
+
+	if (dirLightsWithShadows > RendererImpl::MAX_LIGHTS_WITH_SHADOWS) return false;
+	if (dirLightsWithoutShadows > RendererImpl::MAX_LIGHTS_WITHOUT_SHADOWS) return false;
+	if (pointLightsWithShadows > RendererImpl::MAX_LIGHTS_WITH_SHADOWS) return false;
+	if (pointLightsWithoutShadows > RendererImpl::MAX_LIGHTS_WITHOUT_SHADOWS) return false;
+	
+	return true;
 }
 
 DirectionalLight& Renderer::createDirectionalLight()
