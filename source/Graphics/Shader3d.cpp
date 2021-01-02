@@ -5,6 +5,11 @@
 Shader3d::Shader3d() : Shader(ShaderInitType::Filename, "Assets/Shaders/Shader3d.vert", "Assets/Shaders/Shader3d.frag")
 {}
 
+static const int DIFFUSE_TEXTURE_UNIT = 0;
+static const int NORMAL_TEXTURE_UNIT = 1;
+static const int ENV_MAP_TEXTURE_UNIT = 2;
+static const int DEPTH_TEXTURE_UNIT = 3;
+
 void Shader3d::setModelMatrix(const glm::mat4x4& matrix)
 {
 	setUniform("model", matrix);
@@ -27,20 +32,20 @@ void Shader3d::setNormalMatrix(const glm::mat4x4& matrix)
 
 void Shader3d::setDiffuseTexture(Texture& texture)
 {
-	texture.bind(0);
-	setUniform("diffuseTex", 0);
+	texture.bind(DIFFUSE_TEXTURE_UNIT);
+	setUniform("diffuseTex", DIFFUSE_TEXTURE_UNIT);
 }
 
 void Shader3d::setNormalTexture(Texture& texture)
 {
-	texture.bind(1);
-	setUniform("normalTex", 1);
+	texture.bind(NORMAL_TEXTURE_UNIT);
+	setUniform("normalTex", NORMAL_TEXTURE_UNIT);
 }
 
 void Shader3d::setEnvironmentMap(CubeMap& envMap)
 {
-	envMap.bind(2);
-	setUniform("envMap", 2);
+	envMap.bind(ENV_MAP_TEXTURE_UNIT);
+	setUniform("envMap", ENV_MAP_TEXTURE_UNIT);
 }
 
 void Shader3d::setEnvironmentMapEnabled(bool enabled)
@@ -91,6 +96,25 @@ void Shader3d::setDirectionalLight(const DirectionalLight& light, const glm::mat
 	setUniform(uniformPrefix + ".ambientColor", light.ambientColor);
 	setUniform(uniformPrefix + ".diffuseColor", light.diffuseColor);
 	setUniform(uniformPrefix + ".specularColor", light.specularColor);
+}
+
+void Shader3d::setDirectionalLightsWithShadowsCount(int count)
+{
+	setUniform("directionalLightsWithShadowsCount", count);
+}
+
+void Shader3d::setDirectionalLightWithShadow(const DirectionalLight& light, const glm::mat4x4 viewMatrix, Texture& depthTexture, int index)
+{
+	std::string uniformPrefix = "directionalLightsWithShadows[" + std::to_string(index) + "]";
+	glm::vec3 eyeSpaceDirection = glm::vec3(glm::mat4(glm::mat3(viewMatrix)) * glm::vec4(light.direction, 1.0f));
+	setUniform(uniformPrefix + ".direction", eyeSpaceDirection);
+	setUniform(uniformPrefix + ".ambientColor", light.ambientColor);
+	setUniform(uniformPrefix + ".diffuseColor", light.diffuseColor);
+	setUniform(uniformPrefix + ".specularColor", light.specularColor);
+
+	int textureUnit = DEPTH_TEXTURE_UNIT + index;
+	depthTexture.bind(textureUnit);
+	setUniform("depthTextures[" + std::to_string(index) + "]", textureUnit);
 }
 
 void Shader3d::setPositionalLightsCount(int count)
