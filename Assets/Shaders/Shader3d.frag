@@ -33,6 +33,7 @@ uniform DirectionalLight directionalLights[16];
 uniform int directionalLightsWithShadowsCount;
 uniform DirectionalLight directionalLightsWithShadows[4];
 uniform sampler2D depthTextures[4];
+uniform mat4 shadowDirLightVP[4];
 
 uniform int positionalLightsCount;
 uniform PositionalLight positionalLights[16];
@@ -79,6 +80,17 @@ void main(void) {
 		vec3 diffuse = directionalLights[i].diffuseColor * materials[materialIndex].diffuse * max(cosTheta, 0.0);
 		vec3 specular = directionalLights[i].specularColor * materials[materialIndex].specular * pow(max(cosPhi, 0.0), materials[materialIndex].shininess);
 		vec3 ambient = directionalLights[i].ambientColor * materials[materialIndex].ambient;
+		resultColor += diffuse + specular + ambient;
+	}
+	
+	//directional lights with shadows
+	for (int i = 0; i < directionalLightsWithShadowsCount; i++) {
+		vec3 reflection = normalize(reflect(-directionalLightsWithShadows[i].direction, normal));
+		float cosTheta = dot(directionalLightsWithShadows[i].direction, normal);
+		float cosPhi = dot(eyeDir, reflection);
+		vec3 diffuse = directionalLightsWithShadows[i].diffuseColor * materials[materialIndex].diffuse * max(cosTheta, 0.0);
+		vec3 specular = directionalLightsWithShadows[i].specularColor * materials[materialIndex].specular * pow(max(cosPhi, 0.0), materials[materialIndex].shininess);
+		vec3 ambient = directionalLightsWithShadows[i].ambientColor * materials[materialIndex].ambient;
 		resultColor += diffuse + specular + ambient;
 	}
 	

@@ -103,6 +103,11 @@ void Shader3d::setDirectionalLightsWithShadowsCount(int count)
 	setUniform("directionalLightsWithShadowsCount", count);
 }
 
+void Shader3d::setShadowDirLightViewProjection(const glm::mat4x4& matrix, int index)
+{
+	setUniform("shadowDirLightVP[" + std::to_string(index) + "]", matrix);
+}
+
 void Shader3d::setDirectionalLightWithShadow(const DirectionalLight& light, const glm::mat4x4 viewMatrix, Texture& depthTexture, int index)
 {
 	std::string uniformPrefix = "directionalLightsWithShadows[" + std::to_string(index) + "]";

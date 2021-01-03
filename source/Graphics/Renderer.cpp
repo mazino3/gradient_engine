@@ -168,11 +168,17 @@ void Renderer::renderScene()
 {
 	//rendering depth textures
 	std::vector<std::shared_ptr<DirectionalLight>> lightsWithShadows;
+	std::vector<std::shared_ptr<DirectionalLight>> lightsWithoutShadows;
+	std::vector<Camera> lightCameras;
 	for (const auto& dirLight : data->directionalLights)
 	{
 		if (dirLight->shadowsEnabled)
 		{
 			lightsWithShadows.push_back(dirLight);
+		}
+		else
+		{
+			lightsWithoutShadows.push_back(dirLight);
 		}
 	}
 	if (lightsWithShadows.size() > RendererImpl::MAX_LIGHTS_WITH_SHADOWS)
@@ -186,10 +192,10 @@ void Renderer::renderScene()
 		data->dirLightDepthTextures[i]->clear();
 		data->shadowShader.bind();
 		
-		Camera lightCamera = data->camera.getDirectionalLightCamera(-lightsWithShadows[i]->direction, 20.0f);
-		data->shadowShader.setViewMatrix(lightCamera.getViewMatrix());
-		data->shadowShader.setProjectionMatrix(lightCamera.getProjectionMatrix());
-		data->renderGameObjects(true, lightCamera);
+		lightCameras.push_back(data->camera.getDirectionalLightCamera(-lightsWithShadows[i]->direction, 20.0f));
+		data->shadowShader.setViewMatrix(lightCameras.back().getViewMatrix());
+		data->shadowShader.setProjectionMatrix(lightCameras.back().getProjectionMatrix());
+		data->renderGameObjects(true, lightCameras.back());
 	}
 
 	//bind render texture
@@ -217,6 +223,7 @@ void Renderer::renderScene()
 	for (int i = 0; i < lightsWithShadows.size(); i++)
 	{
 		data->shader.setDirectionalLightWithShadow(*lightsWithShadows[i], data->camera.getViewMatrix(), data->dirLightDepthTextures[i]->getRenderedTexture(), i);
+		data->shader.setShadowDirLightViewProjection(lightCameras[i].getProjectionMatrix() * lightCameras[i].getViewMatrix(), i);
 	}
 
 	if (data->skybox != nullptr)
@@ -231,10 +238,10 @@ void Renderer::renderScene()
 
 	//setting lights to uniforms
 
-	data->shader.setDirectionalLightsCount(data->directionalLights.size());
-	for (int i = 0; i < data->directionalLights.size(); i++)
+	data->shader.setDirectionalLightsCount(lightsWithoutShadows.size());
+	for (int i = 0; i < lightsWithoutShadows.size(); i++)
 	{
-		data->shader.setDirectionalLight(*data->directionalLights[i], data->camera.getViewMatrix(), i);
+		data->shader.setDirectionalLight(*lightsWithoutShadows[i], data->camera.getViewMatrix(), i);
 	}
 
 	data->shader.setPositionalLightsCount(data->positionalLights.size());

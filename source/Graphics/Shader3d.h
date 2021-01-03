@@ -27,8 +27,11 @@ struct Shader3d : Shader
 
 	void setDirectionalLightsWithShadowsCount(int count);
 	void setDirectionalLightWithShadow(const DirectionalLight& light, const glm::mat4x4 viewMatrix, Texture& depthTexture, int index);
+	void setShadowDirLightViewProjection(const glm::mat4x4& matrix, int index);
+
 	void setDirectionalLightsCount(int count);
 	void setDirectionalLight(const DirectionalLight& light, const glm::mat4x4& viewMatrix, int index);
+	
 	void setPositionalLightsCount(int count);
 	void setPositionalLight(const PositionalLight& light, int index);
 
