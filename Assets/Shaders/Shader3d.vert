@@ -20,6 +20,7 @@ out vec3 ex_Normal;
 out vec3 ex_Tangent;
 out vec3 ex_Bitangent;
 out vec3 ex_VertPos;
+out vec3 ex_VertPosWorld;
 
 
 void main(void) 
@@ -55,4 +56,5 @@ void main(void)
 	ex_Tangent = (normalTm * vec4(in_Tangent, 1.0)).xyz;
 	ex_Bitangent = (normalTm * vec4(in_Bitangent, 1.0)).xyz;
 	ex_VertPos = (view * model * vec4(in_Position, 1.0)).xyz;
+	ex_VertPosWorld = (model * vec4(in_Position, 1.0)).xyz;
 }

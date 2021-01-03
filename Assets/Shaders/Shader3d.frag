@@ -55,6 +55,7 @@ in vec3 ex_Normal;
 in vec3 ex_Tangent;
 in vec3 ex_Bitangent;
 in vec3 ex_VertPos;
+in vec3 ex_VertPosWorld;
 out vec4 gl_FragColor;
 
 void main(void) {
@@ -91,7 +92,16 @@ void main(void) {
 		vec3 diffuse = directionalLightsWithShadows[i].diffuseColor * materials[materialIndex].diffuse * max(cosTheta, 0.0);
 		vec3 specular = directionalLightsWithShadows[i].specularColor * materials[materialIndex].specular * pow(max(cosPhi, 0.0), materials[materialIndex].shininess);
 		vec3 ambient = directionalLightsWithShadows[i].ambientColor * materials[materialIndex].ambient;
-		resultColor += diffuse + specular + ambient;
+		
+		vec4 lightTexCoord4 = shadowDirLightVP[i] * vec4(ex_VertPosWorld, 1.0);
+		vec3 lightTexCoord = lightTexCoord4.xyz / lightTexCoord4.w;
+		lightTexCoord = lightTexCoord * 0.5 + 0.5;
+		float closestDepth = texture(depthTextures[i], lightTexCoord.xy).r;
+		float currentDepth = lightTexCoord.z;
+		float shadow = currentDepth - 0.01 >= closestDepth ? 0.0 : 1.0;
+		
+		resultColor += (diffuse + specular) * shadow + ambient;
+		//resultColor += 1.0 - shadow + ambient;
 	}
 	
 	//positional lights

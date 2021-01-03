@@ -44,7 +44,7 @@ struct RendererImpl
 		for (int i = 0; i < MAX_LIGHTS_WITH_SHADOWS; i++)
 		{
 			dirLightDepthTextures[i] = std::make_shared<RenderTexture>
-				(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::IntegerDepth, false);
+				(2048, 2048, RenderTextureType::IntegerDepth, false);
 			if (!dirLightDepthTextures[i]->init())
 			{
 				std::cout << "failed to create depth texture inside of Renderer" << std::endl;
@@ -192,7 +192,11 @@ void Renderer::renderScene()
 		data->dirLightDepthTextures[i]->clear();
 		data->shadowShader.bind();
 		
-		lightCameras.push_back(data->camera.getDirectionalLightCamera(-lightsWithShadows[i]->direction, 20.0f));
+		//Camera dirLightCamera = data->camera.getDirectionalLightCamera(-lightsWithShadows[i]->direction, 100.0f);
+		//dirLightCamera.setOrtho(-50, 50, -50, 50, -50, 50);
+		//dirLightCamera.position = glm::vec3(0, 0, 0);
+		//lightCameras.push_back(dirLightCamera);
+		lightCameras.push_back(data->camera.getDirectionalLightCamera(-lightsWithShadows[i]->direction, 10.0f));
 		data->shadowShader.setViewMatrix(lightCameras.back().getViewMatrix());
 		data->shadowShader.setProjectionMatrix(lightCameras.back().getProjectionMatrix());
 		data->renderGameObjects(true, lightCameras.back());
@@ -259,6 +263,7 @@ void Renderer::renderScene()
 	data->baseRenderTarget.bind();
 	data->hdrShader.bind();
 	data->hdrShader.setScreenTexture(data->renderTexture.getRenderedTexture());
+	//data->hdrShader.setScreenTexture(data->dirLightDepthTextures[0]->getRenderedTexture());
 	data->hdrShader.setToneMappingEnabled(true);
 	data->hdrShader.setGammaCorrectionEnabled(true);
 	data->hdrShader.setGamma(2.2f);

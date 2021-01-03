@@ -50,7 +50,7 @@ int main()
     material.diffuse = glm::vec3(1, 1, 1);
     material.specular = glm::vec3(1, 1, 1);
     material.shininess = 50;
-    material.alpha = 0.5f;
+    material.alpha = 1.0f;
 
     GeometryDefinition quad(GeometryDefinition::CUBE);
 
@@ -60,10 +60,14 @@ int main()
     auto& renderObject1 = renderer.createRenderObject(diffuseTexture, normalTexture, quad, material);
     renderObject1.material.alpha = 1.0f;
     renderObject1.textureScalingEnabled = true;
-    renderObject1.textureScaleMultiplier = 0.25f;
+    //renderObject1.textureScaleMultiplier = 0.25f;
 
     auto& renderObject2 = renderer.createRenderObject(diffuseTexture, normalTexture, quad, material);
-    renderObject2.transform.position.x += 2;
+    renderObject2.transform.scale.z = 0.1;
+    renderObject2.transform.scale.x = 20;
+    renderObject2.transform.scale.y = 20;
+    renderObject2.transform.position.z -= 0.4;
+    renderObject2.textureScalingEnabled = true;
     renderObject2.material.alpha = 1.0f;
     renderObject2.material.ambient = glm::vec3(0.2, 1.0, 0.2);
     renderObject2.material.diffuse = glm::vec3(0.2, 1.0, 0.2);
@@ -82,7 +86,7 @@ int main()
     light.ambientColor = glm::vec3(0.3f, 0.3f, 0.3f);
     light.diffuseColor = glm::vec3(1.0f, 1.0f, 1.0f);
     light.specularColor = glm::vec3(0.0f, 0.0f, 0.0f);
-    light.direction = glm::normalize(glm::vec3(1, 0, 1));
+    light.direction = glm::normalize(glm::vec3(1, 0.3, 0.2));
     light.shadowsEnabled = true;
     
     CubeMap skyboxCubemap(
