@@ -30,6 +30,10 @@ struct PositionalLight {
 uniform int directionalLightsCount;
 uniform DirectionalLight directionalLights[16];
 
+uniform int directionalLightsWithShadowsCount;
+uniform DirectionalLight directionalLightsWithShadows[4];
+uniform sampler2D depthTextures[4];
+
 uniform int positionalLightsCount;
 uniform PositionalLight positionalLights[16];
 

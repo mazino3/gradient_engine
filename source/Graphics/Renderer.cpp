@@ -28,6 +28,7 @@ struct RendererImpl
 	Mesh screenMesh;
 
 	std::shared_ptr<SkyboxObject> skybox;
+	std::shared_ptr<RenderTexture> dirLightDepthTextures[MAX_LIGHTS_WITH_SHADOWS];
 
 	RendererImpl(RenderTarget& baseRenderTarget) :
 		baseRenderTarget(baseRenderTarget),
@@ -38,6 +39,16 @@ struct RendererImpl
 		if (!renderTexture.init())
 		{
 			std::cout << "failed to create render texture inside of Renderer" << std::endl;
+		}
+
+		for (int i = 0; i < MAX_LIGHTS_WITH_SHADOWS; i++)
+		{
+			dirLightDepthTextures[i] = std::make_shared<RenderTexture>
+				(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::IntegerDepth, false);
+			if (!dirLightDepthTextures[i]->init())
+			{
+				std::cout << "failed to create depth texture inside of Renderer" << std::endl;
+			}
 		}
 	}
 
@@ -155,6 +166,32 @@ void RendererImpl::renderGameObjects(bool forShadows, const Camera& camera)
 
 void Renderer::renderScene()
 {
+	//rendering depth textures
+	std::vector<std::shared_ptr<DirectionalLight>> lightsWithShadows;
+	for (const auto& dirLight : data->directionalLights)
+	{
+		if (dirLight->shadowsEnabled)
+		{
+			lightsWithShadows.push_back(dirLight);
+		}
+	}
+	if (lightsWithShadows.size() > RendererImpl::MAX_LIGHTS_WITH_SHADOWS)
+	{
+		std::cout << "error! too much directional lights with shadows: " << lightsWithShadows.size() << std::endl;
+	}
+
+	for (int i = 0; i < lightsWithShadows.size(); i++)
+	{
+		data->dirLightDepthTextures[i]->bind();
+		data->dirLightDepthTextures[i]->clear();
+		data->shadowShader.bind();
+		
+		Camera lightCamera = data->camera.getDirectionalLightCamera(-lightsWithShadows[i]->direction, 20.0f);
+		data->shadowShader.setViewMatrix(lightCamera.getViewMatrix());
+		data->shadowShader.setProjectionMatrix(lightCamera.getProjectionMatrix());
+		data->renderGameObjects(true, lightCamera);
+	}
+
 	//bind render texture
 
 	data->renderTexture.bind();
@@ -175,6 +212,12 @@ void Renderer::renderScene()
 	data->shader.setViewMatrix(data->camera.getViewMatrix());
 	data->shader.setCurrentMaterialIndex(0); //todo: group objects by materials
 	data->shader.setEyeDirection(data->camera.dirFront);
+
+	data->shader.setDirectionalLightsWithShadowsCount(lightsWithShadows.size());
+	for (int i = 0; i < lightsWithShadows.size(); i++)
+	{
+		data->shader.setDirectionalLightWithShadow(*lightsWithShadows[i], data->camera.getViewMatrix(), data->dirLightDepthTextures[i]->getRenderedTexture(), i);
+	}
 
 	if (data->skybox != nullptr)
 	{

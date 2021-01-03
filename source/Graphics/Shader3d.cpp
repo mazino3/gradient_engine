@@ -2,13 +2,13 @@
 #include <string>
 
 
-Shader3d::Shader3d() : Shader(ShaderInitType::Filename, "Assets/Shaders/Shader3d.vert", "Assets/Shaders/Shader3d.frag")
-{}
-
 static const int DIFFUSE_TEXTURE_UNIT = 0;
 static const int NORMAL_TEXTURE_UNIT = 1;
 static const int ENV_MAP_TEXTURE_UNIT = 2;
 static const int DEPTH_TEXTURE_UNIT = 3;
+
+Shader3d::Shader3d() : Shader(ShaderInitType::Filename, "Assets/Shaders/Shader3d.vert", "Assets/Shaders/Shader3d.frag")
+{}
 
 void Shader3d::setModelMatrix(const glm::mat4x4& matrix)
 {
@@ -142,4 +142,13 @@ void Shader3d::setTextureScalingEnabled(bool textureScalingEnabled)
 void Shader3d::setTextureScale(const glm::vec3& textureScale)
 {
 	setUniform("textureScale", textureScale);
+}
+
+void Shader3d::bind()
+{
+	Shader::bind();
+	for (int i = 0; i < 4; i++)
+	{
+		setUniform("depthTextures[" + std::to_string(i) + "]", DEPTH_TEXTURE_UNIT + i);
+	}
 }

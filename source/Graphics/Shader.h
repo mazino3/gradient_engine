@@ -16,7 +16,9 @@ enum class ShaderInitType
 struct Shader
 {
 	Shader(ShaderInitType initType, std::string vertexShader, std::string fragmentShader);
-	void bind();
+	virtual ~Shader() {}
+
+	virtual void bind();
 	//todo: add more uniform setters
 	void setUniform(const std::string& name, const glm::mat4x4& mat);
 	void setUniform(const std::string& name, const glm::vec3& vec3);
