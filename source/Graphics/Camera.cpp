@@ -147,7 +147,7 @@ Camera Camera::getDirectionalLightCamera(const glm::vec3& lightDirection, float 
 
 	glm::mat4x4 inverseLightView = glm::inverse(lightViewMatrix);
 	resultLightCamera.position = inverseLightView * glm::vec4((minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2, 1.0f);
-	resultLightCamera.setOrtho(-size.x / 2, size.x / 2, -size.y / 2, size.y / 2, -size.z / 2, size.z / 2);
+	resultLightCamera.setOrtho(-size.x / 2, size.x / 2, -size.y / 2, size.y / 2, -size.z / 2 - 10, size.z / 2);
 
 	return resultLightCamera;
 }

@@ -98,7 +98,7 @@ void main(void) {
 		lightTexCoord = lightTexCoord * 0.5 + 0.5;
 		float closestDepth = texture(depthTextures[i], lightTexCoord.xy).r;
 		float currentDepth = lightTexCoord.z;
-		float shadow = currentDepth - 0.01 >= closestDepth ? 0.0 : 1.0;
+		float shadow = currentDepth - 0.00025 >= closestDepth ? 0.0 : 1.0;
 		
 		resultColor += (diffuse + specular) * shadow + ambient;
 		//resultColor += 1.0 - shadow + ambient;
