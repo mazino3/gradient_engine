@@ -61,6 +61,7 @@ out vec4 gl_FragColor;
 void main(void) {
 	vec3 resultColor = vec3(0.0, 0.0, 0.0);
 	vec3 normal = ex_Normal;
+	vec3 vertexNormal = ex_Normal;
 	if (normalMapEnabled)
 	{
 		vec4 normalColor = texture(normalTex, ex_TexCoord);
@@ -120,7 +121,6 @@ void main(void) {
 		resultColor += (diffuse + specular) * attenuation + ambient;
 	}
 	
-	
 	vec4 noreflectColor = vec4(resultColor, materials[materialIndex].alpha) * texture(diffuseTex, ex_TexCoord);
 	
 	if (envMapEnabled)
@@ -134,7 +134,7 @@ void main(void) {
 		fresnel = min(fresnel, 1.0);
 		
 		vec4 combinedColor = noreflectColor * (1.0 - fresnel) + reflection * fresnel;
-		if (dot(eyeDir, normal) < 0.0)
+		if (dot(eyeDir, vertexNormal) < 0.0)
 		{
 			gl_FragColor = vec4(0.0);
 		}
@@ -145,7 +145,7 @@ void main(void) {
 	}
 	else
 	{
-		if (dot(eyeDir, normal) < 0.0)
+		if (dot(eyeDir, vertexNormal) < 0.0)
 		{
 			gl_FragColor = vec4(0.0);
 		}

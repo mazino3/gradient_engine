@@ -196,7 +196,7 @@ void Renderer::renderScene()
 		//dirLightCamera.setOrtho(-50, 50, -50, 50, -50, 50);
 		//dirLightCamera.position = glm::vec3(0, 0, 0);
 		//lightCameras.push_back(dirLightCamera);
-		lightCameras.push_back(data->camera.getDirectionalLightCamera(-lightsWithShadows[i]->direction, 10.0f));
+		lightCameras.push_back(data->camera.getDirectionalLightCamera(-lightsWithShadows[i]->direction, 12.0f));
 		data->shadowShader.setViewMatrix(lightCameras.back().getViewMatrix());
 		data->shadowShader.setProjectionMatrix(lightCameras.back().getProjectionMatrix());
 		data->renderGameObjects(true, lightCameras.back());
