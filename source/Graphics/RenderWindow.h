@@ -20,6 +20,9 @@ struct RenderWindow : RenderTarget
 	void swapBuffers();
 	InputServer& getInput();
 
+	//todo: this class should not rely on glfw
+	GLFWwindow* getWindowPointer();
+
 private:
 
 	std::shared_ptr<RenderWindowImpl> _data;

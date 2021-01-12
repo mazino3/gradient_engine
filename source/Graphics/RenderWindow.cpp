@@ -146,3 +146,8 @@ InputServer& RenderWindow::getInput()
 	return _data->inputServer;
 }
 
+GLFWwindow* RenderWindow::getWindowPointer()
+{
+	return _data->window;
+}
+

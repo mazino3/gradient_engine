@@ -17,9 +17,22 @@ add_library(Graphics ${GRAPHICS_FILES})
 target_link_libraries(Graphics libglew_static)
 target_link_libraries(Graphics glfw)
 
+file(GLOB IMGUI_FILES ${PROJECT_SOURCE_DIR}/imgui-1.79/*.cpp ${PROJECT_SOURCE_DIR}/imgui-1.79/*.h)
+add_library(ImGui ${IMGUI_FILES})
+target_link_libraries(ImGui glfw)
+target_link_libraries(ImGui libglew_static)
+
 add_executable(ogl2020 source/main.cpp)
 add_dependencies(ogl2020 Graphics)
 target_link_libraries(ogl2020 Graphics)
+
+file(GLOB GRAPHICS_TEST_FILES ${PROJECT_SOURCE_DIR}/source/GraphicsTest/*.cpp ${PROJECT_SOURCE_DIR}/source/GraphicsTest/*.h)
+add_executable(GraphicsTest ${GRAPHICS_TEST_FILES})
+target_link_libraries(GraphicsTest Graphics)
+target_link_libraries(GraphicsTest ImGui)
+target_include_directories(GraphicsTest PUBLIC ${PROJECT_SOURCE_DIR}/imgui-1.79)
+target_include_directories(GraphicsTest PUBLIC ${PROJECT_SOURCE_DIR}/source)
+add_dependencies(GraphicsTest Graphics)
 
 add_custom_command(
         TARGET ogl2020 POST_BUILD
