@@ -8,6 +8,21 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include <iostream>
+#include "TestSceneFactory.h"
+
+bool getNextSceneWithButtons(TestSceneId& outId)
+{
+    for (const auto& id : TestSceneFactory::getSceneIds())
+    {
+        auto sceneName = TestSceneFactory::getSceneName(id);
+        if (ImGui::Button(sceneName.c_str()))
+        {
+            outId = id;
+            return true;
+        }
+    }
+    return false;
+}
 
 int main()
 {
@@ -22,8 +37,6 @@ int main()
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
@@ -35,7 +48,7 @@ int main()
     
     window.setClearColor(glm::vec4(0.1f, 0.0f, 0.2f, 0.0f));
 
-    bool isOpen = true;
+    std::shared_ptr<TestSceneBase> currentScene;
 
     while (window.isOpen())
     {
@@ -49,7 +62,24 @@ int main()
         ImGui::Begin("test window", nullptr, windowFlags);
         ImGui::SetWindowSize(ImVec2(200.0f, 100.0f));
         ImGui::SetWindowPos(ImVec2(0, 0));
-        ImGui::Button("test button");
+
+        TestSceneId nextSceneId;
+        if (getNextSceneWithButtons(nextSceneId))
+        {
+            currentScene = TestSceneFactory::createScene(nextSceneId);
+            if (currentScene != nullptr)
+            {
+                std::cout << "opening scene with id: " << nextSceneId << std::endl;
+                auto inputClient = currentScene->getInputClient();
+                window.getInput().addInputClient(*inputClient, 0.0f);
+                currentScene->onDestroy([&window, &currentScene, inputClient]() 
+                {
+                    window.getInput().removeInputClient(*inputClient);
+                    std::cout << "closing scene" << std::endl;
+                });
+            }
+        }
+
         ImGui::End();
 
         ImGui::Render();

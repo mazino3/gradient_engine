@@ -9,7 +9,7 @@ struct TestSceneImGuiImpl;
 struct TestSceneImGui : TestSceneBase
 {
 	TestSceneImGui();
-	InputClientBase& getInputClient() override;
+	std::shared_ptr<InputClientBase> getInputClient() override;
 	void render(RenderTarget& renderTarget, float dt) override;
 	void renderUi() override;
 private:

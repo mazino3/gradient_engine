@@ -3,7 +3,12 @@
 
 struct TestSceneImGuiImpl
 {
-	InputClient inputClient;
+	std::shared_ptr<InputClient> inputClient;
+
+	TestSceneImGuiImpl()
+	{
+		inputClient = std::make_shared<InputClient>();
+	}
 };
 
 TestSceneImGui::TestSceneImGui()
@@ -11,7 +16,7 @@ TestSceneImGui::TestSceneImGui()
 	data = std::make_shared<TestSceneImGuiImpl>();
 }
 
-InputClientBase& TestSceneImGui::getInputClient()
+std::shared_ptr<InputClientBase> TestSceneImGui::getInputClient()
 {
 	return data->inputClient;
 }

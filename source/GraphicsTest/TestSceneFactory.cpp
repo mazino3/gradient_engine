@@ -13,6 +13,7 @@ std::vector<TestSceneId> TestSceneFactory::getSceneIds()
 	{
 		IMGUI_TEST
 	};
+	return sceneIds;
 }
 
 std::string TestSceneFactory::getSceneName(TestSceneId id)

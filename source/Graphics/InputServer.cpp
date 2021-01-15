@@ -37,10 +37,10 @@ void InputServer::addInputClient(InputClientBase& inputClient, float priority)
 
 void InputServer::removeInputClient(InputClientBase& inputClient)
 {
-	std::remove_if(data->inputClients.begin(), data->inputClients.end(), [&](const auto& pair) 
+	data->inputClients.erase(std::remove_if(data->inputClients.begin(), data->inputClients.end(), [&](const auto& pair)
 	{
 		return pair.first == &inputClient;
-	});
+	}));
 }
 
 void InputServer::fireMousePressed(double xpos, double ypos, int button)
