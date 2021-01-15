@@ -1,18 +1,19 @@
 #include "TestSceneImGui.h"
+#include "Graphics/InputClient.h"
 
 struct TestSceneImGuiImpl
 {
-
+	InputClient inputClient;
 };
 
 TestSceneImGui::TestSceneImGui()
 {
-	//todo: implement
+	data = std::make_shared<TestSceneImGuiImpl>();
 }
 
 InputClientBase& TestSceneImGui::getInputClient()
 {
-	//todo: implement
+	return data->inputClient;
 }
 
 void TestSceneImGui::render(RenderTarget& renderTarget, float dt)
