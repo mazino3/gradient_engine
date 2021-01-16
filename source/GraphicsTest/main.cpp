@@ -53,6 +53,12 @@ int main()
     while (window.isOpen())
     {
         window.clear();
+
+        if (currentScene != nullptr)
+        {
+            currentScene->render(window, 0.016f);
+        }
+
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
@@ -81,6 +87,13 @@ int main()
         }
 
         ImGui::End();
+
+        if (currentScene != nullptr)
+        {
+            currentScene->renderUi(window);
+        }
+
+        
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
