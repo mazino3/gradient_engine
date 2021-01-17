@@ -36,9 +36,10 @@ void TestSceneImGui::renderUi(RenderTarget& renderTarget)
 	ImGui::Begin("scene window", nullptr, windowFlags);
 	if (data->firstFrame)
 	{
-		data->firstFrame = false;
 		ImGui::SetWindowSize(ImVec2(200.0f, 100.0f));
 		ImGui::SetWindowPos(ImVec2(renderTarget.getWidth() / 2.0f, renderTarget.getHeight() / 2.0f));
 	}
 	ImGui::End();
+
+	data->firstFrame = false;
 }

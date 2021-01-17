@@ -72,7 +72,7 @@ int main()
         TestSceneId nextSceneId;
         if (getNextSceneWithButtons(nextSceneId))
         {
-            currentScene = TestSceneFactory::createScene(nextSceneId);
+            currentScene = TestSceneFactory::createScene(nextSceneId, window);
             if (currentScene != nullptr)
             {
                 std::cout << "opening scene with id: " << nextSceneId << std::endl;
