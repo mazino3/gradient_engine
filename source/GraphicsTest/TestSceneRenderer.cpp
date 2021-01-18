@@ -24,6 +24,8 @@ TestSceneRenderer::TestSceneRenderer(RenderTarget& renderTarget)
 	data = std::make_shared<TestSceneRendererImpl>();
 	data->renderer = std::make_unique<Renderer>(renderTarget);
 	auto& camera = data->renderer->getCamera();
+    camera.setPerspective(45.0f, 640.0f / 480.0f, 0.1f, 200.0f);
+    camera.position = glm::vec3(-5, 0, 5);
 	data->cameraController = std::make_unique<FreeCameraController>(camera);
 	data->cameraController->setOnlyRotationMode(false);
 	data->cameraController->setCameraDirection(glm::normalize(glm::vec3(1, 0, -1)));
@@ -81,6 +83,7 @@ std::shared_ptr<InputClientBase> TestSceneRenderer::getInputClient()
 void TestSceneRenderer::render(RenderTarget& renderTarget, float dt)
 {
     data->cameraController->update(dt);
+    renderTarget.bind();
     data->renderer->renderScene();
 }
 
