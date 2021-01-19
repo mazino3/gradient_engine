@@ -5,19 +5,11 @@
 
 struct TestSceneRendererImpl
 {
-	std::shared_ptr<InputClient> inputClient;
 	std::unique_ptr<Renderer> renderer;
 	std::unique_ptr<FreeCameraController> cameraController;
     std::unique_ptr<Texture> diffuseTexture;
     std::unique_ptr<Texture> normalTexture;
-
-	TestSceneRendererImpl();
 };
-
-TestSceneRendererImpl::TestSceneRendererImpl()
-{
-	inputClient = std::make_shared<InputClient>();
-}
 
 TestSceneRenderer::TestSceneRenderer(RenderTarget& renderTarget)
 {
@@ -75,9 +67,9 @@ TestSceneRenderer::TestSceneRenderer(RenderTarget& renderTarget)
     light.shadowsEnabled = true;
 }
 
-std::shared_ptr<InputClientBase> TestSceneRenderer::getInputClient()
+InputClientBase& TestSceneRenderer::getInputClient()
 {
-	return data->inputClient;
+    return data->cameraController->getInputClient();
 }
 
 void TestSceneRenderer::render(RenderTarget& renderTarget, float dt)
