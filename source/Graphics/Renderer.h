@@ -7,6 +7,7 @@
 #include "RenderTarget.h"
 #include "SkyboxObject.h"
 #include "Lights.h"
+#include "RendererSettings.h"
 
 struct RendererImpl;
 
@@ -15,6 +16,8 @@ struct Renderer
 	Renderer(RenderTarget& renderTarget);
 
 	Camera& getCamera();
+	RendererSettings& getSettings();
+
 	void renderScene();
 
 	int getMaxLightsWithShadows();

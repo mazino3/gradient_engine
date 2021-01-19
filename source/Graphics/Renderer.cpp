@@ -16,6 +16,7 @@ struct RendererImpl
 	RenderTarget& baseRenderTarget;
 
 	Camera camera;
+	RendererSettings settings;
 	std::vector<std::shared_ptr<RenderObject>> renderObjects;
 	std::vector<std::shared_ptr<DirectionalLight>> directionalLights;
 	std::vector<std::shared_ptr<PositionalLight>> positionalLights;
@@ -264,11 +265,11 @@ void Renderer::renderScene()
 	data->hdrShader.bind();
 	data->hdrShader.setScreenTexture(data->renderTexture.getRenderedTexture());
 	//data->hdrShader.setScreenTexture(data->dirLightDepthTextures[0]->getRenderedTexture());
-	data->hdrShader.setToneMappingEnabled(true);
-	data->hdrShader.setGammaCorrectionEnabled(true);
-	data->hdrShader.setGamma(2.2f);
-	data->hdrShader.setContrast(0.4f);
-	data->hdrShader.setExposure(2.0f);
+	data->hdrShader.setToneMappingEnabled(data->settings.toneMappingEnabled);
+	data->hdrShader.setGammaCorrectionEnabled(data->settings.gammaCorrectionEnabled);
+	data->hdrShader.setGamma(data->settings.gamma);
+	data->hdrShader.setContrast(data->settings.contrast);
+	data->hdrShader.setExposure(data->settings.exposure);
 	data->screenMesh.draw();
 }
 
