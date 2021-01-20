@@ -68,6 +68,11 @@ Camera& Renderer::getCamera()
 	return data->camera;
 }
 
+RendererSettings& Renderer::getSettings()
+{
+	return data->settings;
+}
+
 void RendererImpl::renderObjectShadow(RenderObject& obj)
 {
 	shadowShader.setModelMatrix(obj.transform.getWorldMatrix());

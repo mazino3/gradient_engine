@@ -2,6 +2,7 @@
 #include "Graphics/InputClient.h"
 #include "Graphics/Renderer.h"
 #include "Graphics/FreeCameraController.h"
+#include "imgui.h"
 
 struct TestSceneRendererImpl
 {
@@ -9,11 +10,14 @@ struct TestSceneRendererImpl
 	std::unique_ptr<FreeCameraController> cameraController;
     std::unique_ptr<Texture> diffuseTexture;
     std::unique_ptr<Texture> normalTexture;
+
+    bool firstFrame;
 };
 
 TestSceneRenderer::TestSceneRenderer(RenderTarget& renderTarget)
 {
 	data = std::make_shared<TestSceneRendererImpl>();
+    data->firstFrame = true;
 	data->renderer = std::make_unique<Renderer>(renderTarget);
 	auto& camera = data->renderer->getCamera();
     camera.setPerspective(45.0f, 640.0f / 480.0f, 0.1f, 200.0f);
@@ -81,5 +85,26 @@ void TestSceneRenderer::render(RenderTarget& renderTarget, float dt)
 
 void TestSceneRenderer::renderUi(RenderTarget& renderTarget)
 {
-	//todo: implement
+    static RendererSettings initialSettings;
+    ImGui::Begin("Renderer config");
+    if (data->firstFrame)
+    {
+        data->firstFrame = false;
+        ImGui::SetWindowSize(ImVec2(300.0f, 200.0f));
+        ImGui::SetWindowPos(ImVec2(renderTarget.getWidth() / 2.0f, renderTarget.getHeight() - 250.0f));
+        initialSettings = data->renderer->getSettings();
+    }
+
+    ImGui::Checkbox("gamma correction", &data->renderer->getSettings().gammaCorrectionEnabled);
+    ImGui::Checkbox("tone mapping", &data->renderer->getSettings().toneMappingEnabled);
+    ImGui::SliderFloat("gamma", &data->renderer->getSettings().gamma, 0.5f, 10.0f);
+    ImGui::SliderFloat("contrast", &data->renderer->getSettings().contrast, -1.0f, 1.0f);
+    ImGui::SliderFloat("exposure", &data->renderer->getSettings().exposure, 0.5f, 5.0f);
+
+    if (ImGui::Button("reset"))
+    {
+        data->renderer->getSettings() = initialSettings;
+    }
+
+    ImGui::End();
 }
