@@ -26,6 +26,7 @@ struct RendererImpl
 	ShadowShader shadowShader;
 
 	RenderTexture renderTexture;
+	RenderTexture renderTexture2;
 	Mesh screenMesh;
 
 	std::shared_ptr<SkyboxObject> skybox;
