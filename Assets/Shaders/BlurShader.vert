@@ -17,11 +17,11 @@ void main(void)
 	{
 		if (isHorizontal)
 		{
-			texCoords[i + 5] = centerTexCoords + vec2(pixelSize, 0.0);
+			texCoords[i + 5] = centerTexCoords + vec2(pixelSize, 0.0) * i;
 		}
 		else
 		{
-			texCoords[i + 5] = centerTexCoords + vec2(0.0, pixelSize);
+			texCoords[i + 5] = centerTexCoords + vec2(0.0, pixelSize) * i;
 		}
 		
 	}

@@ -8,7 +8,7 @@ struct TestSceneBlurImpl;
 
 struct TestSceneBlur : TestSceneBase
 {
-	TestSceneBlur();
+	TestSceneBlur(RenderTarget& renderTarget);
 	void render(RenderTarget& renderTarget, float dt);
 	void renderUi(RenderTarget& renderTarget);
 private:

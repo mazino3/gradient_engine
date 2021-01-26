@@ -48,7 +48,7 @@ std::shared_ptr<TestSceneBase> TestSceneFactory::createScene(TestSceneId id, Ren
 	case RENDERER_TEST:
 		return std::make_shared<TestSceneRenderer>(renderTarget);
 	case BLUR_TEST:
-		return std::make_shared<TestSceneBlur>();
+		return std::make_shared<TestSceneBlur>(renderTarget);
 	default:
 		return std::shared_ptr<TestSceneBase>();
 	}

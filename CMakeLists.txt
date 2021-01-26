@@ -35,7 +35,7 @@ target_include_directories(GraphicsTest PUBLIC ${PROJECT_SOURCE_DIR}/source)
 add_dependencies(GraphicsTest Graphics)
 
 add_custom_command(
-        TARGET ogl2020 POST_BUILD
+        TARGET GraphicsTest POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
                 ${PROJECT_SOURCE_DIR}/Assets
                  $<TARGET_FILE_DIR:ogl2020>/Assets)
