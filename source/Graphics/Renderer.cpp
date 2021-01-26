@@ -35,6 +35,7 @@ struct RendererImpl
 	RendererImpl(RenderTarget& baseRenderTarget) :
 		baseRenderTarget(baseRenderTarget),
 		renderTexture(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Float, true),
+		renderTexture2(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Float, true),
 		screenMesh(GeometryDefinition::SCREEN),
 		skybox(nullptr)
 	{

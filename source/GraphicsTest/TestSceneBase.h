@@ -13,7 +13,7 @@ struct TestSceneBase
 	TestSceneBase();
 
 	virtual ~TestSceneBase();
-	virtual InputClientBase& getInputClient() = 0;
+	virtual InputClientBase& getInputClient();
 	virtual void render(RenderTarget& renderTarget, float dt) = 0;
 	virtual void renderUi(RenderTarget& renderTarget) = 0;
 

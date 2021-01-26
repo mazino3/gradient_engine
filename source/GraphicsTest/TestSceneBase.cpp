@@ -1,8 +1,11 @@
 #include "TestSceneBase.h"
+#include "Graphics/InputClient.h"
 
 struct TestSceneBaseImpl
 {
 	std::function<void(void)> onDestroyCallback;
+
+	InputClient inputClient;
 
 	TestSceneBaseImpl() : 
 		onDestroyCallback([](){})
@@ -17,6 +20,11 @@ TestSceneBase::TestSceneBase()
 TestSceneBase::~TestSceneBase()
 {
 	data->onDestroyCallback();
+}
+
+InputClientBase& TestSceneBase::getInputClient()
+{
+	return data->inputClient;
 }
 
 void TestSceneBase::onDestroy(std::function<void(void)> onDestroyCallback)
