@@ -49,15 +49,26 @@ void TestSceneBlur::render(RenderTarget& renderTarget, float dt)
 	data->quadMesh.draw();
 	data->renderTexture.updateTexture(false);
 	
-	data->renderTexture2.bind();
-	data->renderTexture2.setClearColor(glm::vec4(0.1f, 0.0f, 0.2f, 1.0f));
-	data->renderTexture2.clear();
 	data->blurShader.bind();
 	data->blurShader.setPixelSize(1.0f / (float)renderTarget.getWidth());
-	data->blurShader.setHorizontal(true);
-	data->blurShader.setScreenTexture(data->renderTexture.getRenderedTexture());
-	data->screenMesh.draw();
-	data->renderTexture2.updateTexture(false);
+
+	for (int i = 0; i < 8; i++)
+	{
+		auto& textureToBind = i % 2 == 0 ? data->renderTexture2 : data->renderTexture;
+		auto& textureUniform = i % 2 == 0 ? data->renderTexture : data->renderTexture2;
+
+		textureToBind.bind();
+		if (i <= 2)
+		{
+			textureToBind.setClearColor(glm::vec4(0.1f, 0.0f, 0.2f, 1.0f));
+			textureToBind.clear();
+		}
+
+		data->blurShader.setHorizontal(i % 2 == 0);
+		data->blurShader.setScreenTexture(textureUniform.getRenderedTexture());
+		data->screenMesh.draw();
+		textureToBind.updateTexture(false);
+	}
 
 	renderTarget.bind();
 	data->hdrShader.bind();
@@ -66,7 +77,7 @@ void TestSceneBlur::render(RenderTarget& renderTarget, float dt)
 	data->hdrShader.setGamma(1);
 	data->hdrShader.setGammaCorrectionEnabled(false);
 	data->hdrShader.setToneMappingEnabled(false);
-	data->hdrShader.setScreenTexture(data->renderTexture2.getRenderedTexture());
+	data->hdrShader.setScreenTexture(data->renderTexture.getRenderedTexture());
 	data->screenMesh.draw();
 }
 
