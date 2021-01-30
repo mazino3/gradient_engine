@@ -4,6 +4,7 @@
 #include "Graphics/BypassShader.h"
 #include "Graphics/HdrShader.h"
 #include <iostream>
+#include "imgui.h"
 
 struct TestSceneBlurImpl
 {
@@ -16,6 +17,8 @@ struct TestSceneBlurImpl
 	Mesh quadMesh;
 	Mesh screenMesh;
 
+	int numberOfPasses;
+
 	TestSceneBlurImpl(int width, int height);
 };
 
@@ -23,7 +26,8 @@ TestSceneBlurImpl::TestSceneBlurImpl(int width, int height) :
 	renderTexture(width, height, RenderTextureType::Integer, false),
 	renderTexture2(width, height, RenderTextureType::Integer, false),
 	quadMesh(GeometryDefinition::XY_QUAD),
-	screenMesh(GeometryDefinition::SCREEN)
+	screenMesh(GeometryDefinition::SCREEN),
+	numberOfPasses(1)
 {
 	if (!renderTexture.init())
 	{
@@ -52,7 +56,7 @@ void TestSceneBlur::render(RenderTarget& renderTarget, float dt)
 	data->blurShader.bind();
 	data->blurShader.setPixelSize(1.0f / (float)renderTarget.getWidth());
 
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < data->numberOfPasses * 2; i++)
 	{
 		auto& textureToBind = i % 2 == 0 ? data->renderTexture2 : data->renderTexture;
 		auto& textureUniform = i % 2 == 0 ? data->renderTexture : data->renderTexture2;
@@ -83,5 +87,15 @@ void TestSceneBlur::render(RenderTarget& renderTarget, float dt)
 
 void TestSceneBlur::renderUi(RenderTarget& renderTarget)
 {
-	//todo: implement
+	static bool firstFrame = true;
+
+	ImGui::Begin("Blur settings");
+	if (firstFrame)
+	{
+		firstFrame = false;
+		ImGui::SetWindowSize(ImVec2(400.0f, 200.0f));
+		ImGui::SetWindowPos(ImVec2(renderTarget.getWidth() / 2.0f, renderTarget.getHeight() - 250.0f));
+	}	
+	ImGui::SliderInt("number of passes", &data->numberOfPasses, 1, 10);
+	ImGui::End();
 }

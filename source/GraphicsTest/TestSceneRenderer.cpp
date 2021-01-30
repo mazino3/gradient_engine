@@ -10,14 +10,11 @@ struct TestSceneRendererImpl
 	std::unique_ptr<FreeCameraController> cameraController;
     std::unique_ptr<Texture> diffuseTexture;
     std::unique_ptr<Texture> normalTexture;
-
-    bool firstFrame;
 };
 
 TestSceneRenderer::TestSceneRenderer(RenderTarget& renderTarget)
 {
 	data = std::make_shared<TestSceneRendererImpl>();
-    data->firstFrame = true;
 	data->renderer = std::make_unique<Renderer>(renderTarget);
 	auto& camera = data->renderer->getCamera();
     camera.setPerspective(45.0f, 640.0f / 480.0f, 0.1f, 200.0f);
@@ -86,10 +83,11 @@ void TestSceneRenderer::render(RenderTarget& renderTarget, float dt)
 void TestSceneRenderer::renderUi(RenderTarget& renderTarget)
 {
     static RendererSettings initialSettings;
+    static bool firstFrame = true;
     ImGui::Begin("Renderer config");
-    if (data->firstFrame)
+    if (firstFrame)
     {
-        data->firstFrame = false;
+        firstFrame = false;
         ImGui::SetWindowSize(ImVec2(300.0f, 200.0f));
         ImGui::SetWindowPos(ImVec2(renderTarget.getWidth() / 2.0f, renderTarget.getHeight() - 250.0f));
         initialSettings = data->renderer->getSettings();
