@@ -13,5 +13,4 @@ void main(void)
 	{
 		gl_FragColor += texture(screenTexture, texCoords[i]) * kernel[i];
 	}
-	
 }
