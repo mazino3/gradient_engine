@@ -3,6 +3,7 @@
 #include "Graphics/RenderTexture.h"
 #include "Graphics/BypassShader.h"
 #include "Graphics/HdrShader.h"
+#include "Graphics/BlurEffectRenderer.h"
 #include <iostream>
 #include "imgui.h"
 
@@ -10,7 +11,7 @@ struct TestSceneBlurImpl
 {
 	RenderTexture renderTexture;
 	RenderTexture renderTexture2;
-	BlurShader blurShader;
+	BlurEffectRenderer blurEffectRenderer;
 	BypassShader bypassShader;
 	HdrShader hdrShader;
 
@@ -27,7 +28,8 @@ TestSceneBlurImpl::TestSceneBlurImpl(int width, int height) :
 	renderTexture2(width, height, RenderTextureType::Integer, false),
 	quadMesh(GeometryDefinition::XY_QUAD),
 	screenMesh(GeometryDefinition::SCREEN),
-	numberOfPasses(1)
+	numberOfPasses(1),
+	blurEffectRenderer(renderTexture2)
 {
 	if (!renderTexture.init())
 	{
@@ -53,26 +55,8 @@ void TestSceneBlur::render(RenderTarget& renderTarget, float dt)
 	data->quadMesh.draw();
 	data->renderTexture.updateTexture(false);
 	
-	data->blurShader.bind();
-	data->blurShader.setPixelSize(1.0f / (float)renderTarget.getWidth());
-
-	for (int i = 0; i < data->numberOfPasses * 2; i++)
-	{
-		auto& textureToBind = i % 2 == 0 ? data->renderTexture2 : data->renderTexture;
-		auto& textureUniform = i % 2 == 0 ? data->renderTexture : data->renderTexture2;
-
-		textureToBind.bind();
-		if (i <= 2)
-		{
-			textureToBind.setClearColor(glm::vec4(0.1f, 0.0f, 0.2f, 1.0f));
-			textureToBind.clear();
-		}
-
-		data->blurShader.setHorizontal(i % 2 == 0);
-		data->blurShader.setScreenTexture(textureUniform.getRenderedTexture());
-		data->screenMesh.draw();
-		textureToBind.updateTexture(false);
-	}
+	data->blurEffectRenderer.setNumberOfPasses(data->numberOfPasses);
+	data->blurEffectRenderer.render(data->renderTexture);
 
 	renderTarget.bind();
 	data->hdrShader.bind();
