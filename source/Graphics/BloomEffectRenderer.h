@@ -9,7 +9,7 @@ struct BloomEffectRendererImpl;
 struct BloomEffectRenderer
 {
 	BloomEffectRenderer(RenderTexture& additionalTexture1, RenderTexture& additionalTexture2);
-	void render(RenderTarget& target);
+	void render(RenderTexture& target);
 	void setNumberOfBlurPasses(int numberOfPasses);
 	void setBrightnessThreshold(float threshold);
 	RenderTexture& getOutputTexture();

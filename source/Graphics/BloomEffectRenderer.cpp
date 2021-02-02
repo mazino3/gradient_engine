@@ -10,6 +10,7 @@ struct BloomEffectRendererImpl
 	BlurEffectRenderer blurEffectRenderer;
 	AddShader addShader;
 	FilterBrightShader filterBrightShader;
+	Mesh screenMesh;
 	int numberOfBlurPasses;
 	float brightnessThreshold;
 
@@ -21,7 +22,8 @@ BloomEffectRendererImpl::BloomEffectRendererImpl(RenderTexture& texture1, Render
 	texture2(texture2),
 	blurEffectRenderer(texture2),
 	numberOfBlurPasses(3),
-	brightnessThreshold(0.7f)
+	brightnessThreshold(0.7f),
+	screenMesh(GeometryDefinition::SCREEN)
 {
 }
 
@@ -40,12 +42,27 @@ void BloomEffectRenderer::setNumberOfBlurPasses(int numberOfPasses)
 	data->numberOfBlurPasses = numberOfPasses;
 }
 
-void BloomEffectRenderer::render(RenderTarget& target)
+void BloomEffectRenderer::render(RenderTexture& target)
 {
-	//todo: implement
+	data->texture1.bind();
+	data->filterBrightShader.bind();
+	data->filterBrightShader.setScreenTexture(target.getRenderedTexture());
+	data->filterBrightShader.setBrightnessThreshold(data->brightnessThreshold);
+	data->screenMesh.draw();
+	data->texture1.updateTexture(false);
+
+	data->blurEffectRenderer.setNumberOfPasses(data->numberOfBlurPasses);
+	data->blurEffectRenderer.render(data->texture1);
+
+	data->texture2.bind();
+	data->addShader.bind();
+	data->addShader.setTexture1(target.getRenderedTexture());
+	data->addShader.setTexture2(data->texture1.getRenderedTexture());
+	data->screenMesh.draw();
+	data->texture2.updateTexture(false);
 }
 
 RenderTexture& BloomEffectRenderer::getOutputTexture()
 {
-	return data->texture1;
+	return data->texture2;
 }
