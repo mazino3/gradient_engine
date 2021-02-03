@@ -3,6 +3,7 @@
 #include "Graphics/BloomEffectRenderer.h"
 #include "Graphics/BypassShader.h"
 #include "Graphics/HdrShader.h"
+#include "Graphics/Colors.h"
 #include <vector>
 #include <iostream>
 
@@ -22,9 +23,9 @@ struct TestSceneBloomImpl
 };
 
 TestSceneBloomImpl::TestSceneBloomImpl(int width, int height) :
-	renderTexture1(width, height, RenderTextureType::Integer, false),
-	renderTexture2(width, height, RenderTextureType::Integer, false),
-	renderTexture3(width, height, RenderTextureType::Integer, false),
+	renderTexture1(width, height, RenderTextureType::Float, false),
+	renderTexture2(width, height, RenderTextureType::Float, false),
+	renderTexture3(width, height, RenderTextureType::Float, false),
 	screenMesh(GeometryDefinition::SCREEN),
 	numberOfBlurPasses(5),
 	bloomEffectRenderer(renderTexture2, renderTexture3)
@@ -38,7 +39,8 @@ TestSceneBloomImpl::TestSceneBloomImpl(int width, int height) :
 		std::vector<Vertex> vertices;
 		for (auto& vertex : GeometryDefinition::XY_QUAD.vertices)
 		{
-			vertices.push_back(Vertex(vertex.pos));
+			vertices.push_back(Vertex(vertex));
+			vertices.back().color = glm::vec4(0.1f * i, 0.1f * i, 0.1f * i, 1.0f);
 			vertices.back().pos.x = vertices.back().pos.x * 0.1f + (i - 5) * 0.1f;
 		}
 		GeometryDefinition quadDef(MeshType::Triangles, vertices, GeometryDefinition::XY_QUAD.indices);
@@ -71,9 +73,9 @@ void TestSceneBloom::render(RenderTarget& renderTarget, float dt)
 	data->hdrShader.bind();
 	data->hdrShader.setContrast(0);
 	data->hdrShader.setExposure(1);
-	data->hdrShader.setGamma(1);
-	data->hdrShader.setGammaCorrectionEnabled(false);
-	data->hdrShader.setToneMappingEnabled(false);
+	data->hdrShader.setGamma(2.2f);
+	data->hdrShader.setGammaCorrectionEnabled(true);
+	data->hdrShader.setToneMappingEnabled(true);
 	data->hdrShader.setScreenTexture(data->bloomEffectRenderer.getOutputTexture().getRenderedTexture());
 	data->screenMesh.draw();
 }
