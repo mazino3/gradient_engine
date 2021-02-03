@@ -49,7 +49,7 @@ TestSceneBloomImpl::TestSceneBloomImpl(int width, int height) :
 
 TestSceneBloom::TestSceneBloom(RenderTarget& renderTarget)
 {
-	data = std::make_shared<TestSceneBloomImpl>();
+	data = std::make_shared<TestSceneBloomImpl>(renderTarget.getWidth(), renderTarget.getHeight());
 }
 
 void TestSceneBloom::render(RenderTarget& renderTarget, float dt)
