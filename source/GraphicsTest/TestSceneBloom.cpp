@@ -4,6 +4,7 @@
 #include "Graphics/BypassShader.h"
 #include "Graphics/HdrShader.h"
 #include "Graphics/Colors.h"
+#include "imgui.h"
 #include <vector>
 #include <iostream>
 
@@ -82,6 +83,16 @@ void TestSceneBloom::render(RenderTarget& renderTarget, float dt)
 
 void TestSceneBloom::renderUi(RenderTarget& renderTarget)
 {
-	//todo: implement
+	static bool firstFrame = true;
+
+	ImGui::Begin("Blur settings");
+	if (firstFrame)
+	{
+		firstFrame = false;
+		ImGui::SetWindowSize(ImVec2(400.0f, 200.0f));
+		ImGui::SetWindowPos(ImVec2(renderTarget.getWidth() / 2.0f, renderTarget.getHeight() - 250.0f));
+	}
+	ImGui::SliderInt("number of passes", &data->numberOfBlurPasses, 1, 10);
+	ImGui::End();
 }
 
