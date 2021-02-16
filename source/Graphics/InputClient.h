@@ -17,6 +17,7 @@ struct InputClient : InputClientBase
 	bool onMouseScrolled(double xoffset, double yoffset);
 	bool onKeyPressed(int key);
 	bool onKeyReleased(int key);
+	bool onWindowSizeChanged(int width, int height);
 
 	InputClient& onMousePressed(std::function<bool(double, double, int)> callback);
 	InputClient& onMouseMoved(std::function<bool(double, double)> callback);
@@ -24,6 +25,7 @@ struct InputClient : InputClientBase
 	InputClient& onMouseScrolled(std::function<bool(double, double)> callback);
 	InputClient& onKeyPressed(std::function<bool(int)> callback);
 	InputClient& onKeyReleased(std::function<bool(int)> callback);
+	InputClient& onWindowSizeChanged(std::function<bool(int, int)> callback);
 private: 
 	std::shared_ptr<InputClientImpl> data;
 };

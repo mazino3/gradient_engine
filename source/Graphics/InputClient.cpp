@@ -8,6 +8,7 @@ struct InputClientImpl
 	std::function<bool(double, double)> mouseScrolledCallback;
 	std::function<bool(int)> keyPressedCallback;
 	std::function<bool(int)> keyReleasedCallback;
+	std::function<bool(int, int)> windowResizedCallback;
 
 	InputClientImpl() :
 		mousePressedCallback([](double, double, int) { return false; }),
@@ -15,7 +16,8 @@ struct InputClientImpl
 		mouseReleasedCallback([](double, double, int) { return false; }),
 		mouseScrolledCallback([](double, double) { return false; }),
 		keyPressedCallback([](int) { return false; }),
-		keyReleasedCallback([](int) { return false; })
+		keyReleasedCallback([](int) { return false; }),
+		windowResizedCallback([](int, int) { return false; })
 	{}
 };
 
@@ -54,6 +56,11 @@ bool InputClient::onKeyReleased(int key)
 	return data->keyReleasedCallback(key);
 }
 
+bool InputClient::onWindowSizeChanged(int width, int height)
+{
+	return data->windowResizedCallback(width, height);
+}
+
 InputClient& InputClient::onMousePressed(std::function<bool(double, double, int)> callback)
 {
 	data->mousePressedCallback = callback;
@@ -87,5 +94,11 @@ InputClient& InputClient::onKeyPressed(std::function<bool(int)> callback)
 InputClient& InputClient::onKeyReleased(std::function<bool(int)> callback)
 {
 	data->keyReleasedCallback = callback;
+	return *this;
+}
+
+InputClient& InputClient::onWindowSizeChanged(std::function<bool(int, int)> callback)
+{
+	data->windowResizedCallback = callback;
 	return *this;
 }

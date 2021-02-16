@@ -10,6 +10,7 @@ struct InputClientBase
 	virtual bool onMouseScrolled(double xoffset, double yoffset) = 0;
 	virtual bool onKeyPressed(int key) = 0;
 	virtual bool onKeyReleased(int key) = 0;
+	virtual bool onWindowSizeChanged(int width, int height) = 0;
 };
 
 #endif
