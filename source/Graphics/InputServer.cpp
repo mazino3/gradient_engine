@@ -114,3 +114,15 @@ void InputServer::fireKeyReleased(int key)
 		}
 	}
 }
+
+void InputServer::fireWindowSizeChanged(int width, int height)
+{
+	for (const auto& inputClient : data->inputClients)
+	{
+		bool consumed = inputClient.first->onWindowSizeChanged(width, height);
+		if (consumed)
+		{
+			break;
+		}
+	}
+}

@@ -19,6 +19,7 @@ struct InputServer
 	void fireMouseScrolled(double xoffset, double yoffset);
 	void fireKeyPressed(int key);
 	void fireKeyReleased(int key);
+	void fireWindowSizeChanged(int width, int height);
 private:
 	std::shared_ptr<InputServerImpl> data;
 };
