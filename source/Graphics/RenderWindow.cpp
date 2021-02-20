@@ -66,6 +66,8 @@ struct RenderWindowImpl
 	static void windowResizedCallback(GLFWwindow* window, int width, int height)
 	{
 		RenderWindowImpl* renderWindow = (RenderWindowImpl*)glfwGetWindowUserPointer(window);
+		renderWindow->width = width;
+		renderWindow->height = height;
 		renderWindow->inputServer.fireWindowSizeChanged(width, height);
 	}
 };
