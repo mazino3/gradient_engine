@@ -32,6 +32,8 @@ struct Renderer
 	void createSkybox(CubeMap& cubemap);
 	void removeSkybox();
 
+	void updateRenderTargetSize(int width, int height);
+
 	DirectionalLight& createDirectionalLight();
 	void removeDirectionalLight(DirectionalLight& light);
 	PositionalLight& createPositionalLight();

@@ -30,7 +30,17 @@ int main()
     window.setClearColor(glm::vec4(0.1f, 0.0f, 0.2f, 0.0f));
 
     Renderer renderer(window);
+    InputClient windowResizeInput;
     auto& camera = renderer.getCamera();
+    windowResizeInput.onWindowSizeChanged([&renderer](int width, int height)
+    {
+        renderer.updateRenderTargetSize(width, height);
+        renderer.getCamera().setPerspective(45.0f, (float)width / (float)height, 0.1f, 200.0f);
+        return false;
+    });
+    window.getInput().addInputClient(windowResizeInput, 0.0f);
+
+    
     camera.setPerspective(45.0f, 640.0f / 480.0f, 0.1f, 200.0f);
     camera.position = glm::vec3(-5, 0, 5);
     //OrbitCameraController cameraController(camera);

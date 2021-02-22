@@ -25,8 +25,8 @@ struct RendererImpl
 	HdrShader hdrShader;
 	ShadowShader shadowShader;
 
-	RenderTexture renderTexture;
-	RenderTexture renderTexture2;
+	std::shared_ptr<RenderTexture> renderTexture;
+	std::shared_ptr<RenderTexture> renderTexture2;
 	Mesh screenMesh;
 
 	std::shared_ptr<SkyboxObject> skybox;
@@ -34,12 +34,13 @@ struct RendererImpl
 
 	RendererImpl(RenderTarget& baseRenderTarget) :
 		baseRenderTarget(baseRenderTarget),
-		renderTexture(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Float, true),
-		renderTexture2(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Float, true),
 		screenMesh(GeometryDefinition::SCREEN),
 		skybox(nullptr)
 	{
-		if (!renderTexture.init())
+		renderTexture = std::make_shared<RenderTexture>(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Float, true);
+		renderTexture2 = std::make_shared <RenderTexture>(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Float, true);
+
+		if (!renderTexture->init() || !renderTexture2->init())
 		{
 			std::cout << "failed to create render texture inside of Renderer" << std::endl;
 		}
@@ -63,6 +64,16 @@ struct RendererImpl
 Renderer::Renderer(RenderTarget& baseRenderTarget)
 {
 	data = std::make_shared<RendererImpl>(baseRenderTarget);
+}
+
+void Renderer::updateRenderTargetSize(int width, int height)
+{
+	data->renderTexture = std::make_shared<RenderTexture>(width, height, RenderTextureType::Float, true);
+	data->renderTexture2 = std::make_shared <RenderTexture>(width, height, RenderTextureType::Float, true);
+	if (!data->renderTexture->init() || !data->renderTexture->init())
+	{
+		std::cout << "failed to re-init render textures after resize" << std::endl;
+	}
 }
 
 Camera& Renderer::getCamera()
@@ -212,8 +223,8 @@ void Renderer::renderScene()
 
 	//bind render texture
 
-	data->renderTexture.bind();
-	data->renderTexture.clear();
+	data->renderTexture->bind();
+	data->renderTexture->clear();
 	
 	if (data->skybox != nullptr)
 	{
@@ -264,13 +275,13 @@ void Renderer::renderScene()
 
 	data->renderGameObjects(false, data->camera);
 
-	data->renderTexture.updateTexture(false);
+	data->renderTexture->updateTexture(false);
 
 	//binding base render target and applying post-processing
 
 	data->baseRenderTarget.bind();
 	data->hdrShader.bind();
-	data->hdrShader.setScreenTexture(data->renderTexture.getRenderedTexture());
+	data->hdrShader.setScreenTexture(data->renderTexture->getRenderedTexture());
 	//data->hdrShader.setScreenTexture(data->dirLightDepthTextures[0]->getRenderedTexture());
 	data->hdrShader.setToneMappingEnabled(data->settings.toneMappingEnabled);
 	data->hdrShader.setGammaCorrectionEnabled(data->settings.gammaCorrectionEnabled);
