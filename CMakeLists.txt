@@ -12,10 +12,15 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/glew-cmake-2.1.0)
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
+file (GLOB MATH_FILES ${PROJECT_SOURCE_DIR}/source/Math/*.cpp ${PROJECT_SOURCE_DIR}/source/Math/*.h)
+add_library(Math ${MATH_FILES})
+
 file(GLOB GRAPHICS_FILES ${PROJECT_SOURCE_DIR}/source/Graphics/*.cpp ${PROJECT_SOURCE_DIR}/source/Graphics/*.h)
 add_library(Graphics ${GRAPHICS_FILES})
 target_link_libraries(Graphics libglew_static)
 target_link_libraries(Graphics glfw)
+target_link_libraries(Graphics Math)
+add_dependencies(Graphics Math)
 
 file(GLOB IMGUI_FILES ${PROJECT_SOURCE_DIR}/imgui-1.79/*.cpp ${PROJECT_SOURCE_DIR}/imgui-1.79/*.h)
 add_library(ImGui ${IMGUI_FILES})
