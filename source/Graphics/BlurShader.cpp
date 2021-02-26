@@ -3,6 +3,13 @@
 BlurShader::BlurShader() : Shader(ShaderInitType::Filename, "Assets/Shaders/BlurShader.vert", "Assets/Shaders/BlurShader.frag") 
 {}
 
+BlurShader::BlurShader(float radius)
+{
+	float sigma = radius / 3.0f;
+
+	//todo: generate shader code...
+}
+
 void BlurShader::setScreenTexture(Texture& texture)
 {
 	texture.bind(0);

@@ -7,6 +7,7 @@
 struct BlurShader : Shader
 {
 	BlurShader();
+	BlurShader(float radius);
 
 	void setScreenTexture(Texture& texture);
 	void setPixelSize(float pixelSize);

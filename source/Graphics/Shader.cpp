@@ -8,14 +8,28 @@
 struct ShaderImpl
 {
 	GLuint program;
+	bool initCalled;
 
 	static GLuint currentProgram;
 
+	ShaderImpl() :
+		initCalled(false),
+		program(0)
+	{}
+	
 	void checkProgram()
 	{
 		if (program != currentProgram)
 		{
 			std::cout << "error: setUniform is called without bind" << std::endl;
+		}
+	}
+
+	void checkInit()
+	{
+		if (!initCalled)
+		{
+			std::cout << "error: trying to use shader without initializing" << std::endl;
 		}
 	}
 };
@@ -60,7 +74,15 @@ GLuint createShader(GLenum shaderType, const std::string& source)
 
 Shader::Shader(ShaderInitType initType, std::string vertexShader, std::string fragmentShader)
 {
-    _data = std::make_shared<ShaderImpl>();
+	init(initType, vertexShader, fragmentShader);
+}
+
+Shader::Shader() {}
+
+void Shader::init(ShaderInitType initType, std::string vertexShader, std::string fragmentShader)
+{
+	_data = std::make_shared<ShaderImpl>();
+	_data->initCalled = true;
 
 	if (initType == ShaderInitType::Filename)
 	{
@@ -91,12 +113,14 @@ Shader::Shader(ShaderInitType initType, std::string vertexShader, std::string fr
 
 void Shader::bind()
 {
+	_data->checkInit();
 	ShaderImpl::currentProgram = _data->program;
 	glUseProgram(_data->program);
 }
 
 void Shader::setUniform(const std::string& name, const glm::mat4x4& mat)
 {
+	_data->checkInit();
 	_data->checkProgram();
 	GLint location = glGetUniformLocation(_data->program, name.c_str());
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(mat));
@@ -104,6 +128,7 @@ void Shader::setUniform(const std::string& name, const glm::mat4x4& mat)
 
 void Shader::setUniform(const std::string& name, const glm::vec3& vec3)
 {
+	_data->checkInit();
 	_data->checkProgram();
 	GLint location = glGetUniformLocation(_data->program, name.c_str());
 	glUniform3f(location, vec3.x, vec3.y, vec3.z);
@@ -111,6 +136,7 @@ void Shader::setUniform(const std::string& name, const glm::vec3& vec3)
 
 void Shader::setUniform(const std::string& name, float value)
 {
+	_data->checkInit();
 	_data->checkProgram();
 	GLint location = glGetUniformLocation(_data->program, name.c_str());
 	glUniform1f(location, value);
@@ -118,6 +144,7 @@ void Shader::setUniform(const std::string& name, float value)
 
 void Shader::setUniform(const std::string& name, int value)
 {
+	_data->checkInit();
 	_data->checkProgram();
 	GLint location = glGetUniformLocation(_data->program, name.c_str());
 	glUniform1i(location, value);
