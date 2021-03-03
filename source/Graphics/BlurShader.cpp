@@ -1,7 +1,46 @@
 #include "BlurShader.h"
+#include "../Math/GaussianHelper.h"
+#include <string>
 
 BlurShader::BlurShader() : Shader(ShaderInitType::Filename, "Assets/Shaders/BlurShader.vert", "Assets/Shaders/BlurShader.frag") 
 {}
+
+static std::string vertexShaderHeader =
+"#version 130\n"
+"in vec3 in_Position;\n"
+"in vec4 in_Color;\n"
+"in vec2 in_TexCoords;\n"
+"uniform float pixelSize;\n"
+"uniform bool isHorizontal;\n";
+
+static std::string generateVertexShader(float sigma)
+{
+	auto kernel = GaussianHelper::computeGaussianKernel(sigma);
+	std::string halfSize = std::to_string(kernel.size() / 2);
+	std::string size = std::to_string(kernel.size());
+
+	std::string shaderCode = vertexShaderHeader;
+	shaderCode +=
+		"out vec2 texCoords[" + size + "]\n"
+		"void main(void)\n"
+		"{\n"
+		"	gl_Position = vec4(in_Position, 1.0);\n"
+		"	vec2 centerTexCoords = in_Position.xy / 2 + 0.5;\n"
+		"	for(int i = -" + halfSize + "; i <= " + halfSize + "; i++)\n"
+		"	{\n"
+		"		if (isHorizontal)\n"
+		"		{\n"
+		"			texCoords[i + " + halfSize + "] = centerTexCoords + vec2(pixelSize, 0.0) * i;\n"
+		"		}\n"
+		"		else\n"
+		"		{\n"
+		"			texCoords[i + " + halfSize + "] = centerTexCoords + vec2(0.0, pixelSize) * i;\n"
+		"		}\n"
+		"	}\n"
+		"}\n";
+
+	return shaderCode;
+}
 
 BlurShader::BlurShader(float radius)
 {
