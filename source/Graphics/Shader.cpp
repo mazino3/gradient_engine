@@ -61,6 +61,7 @@ GLuint createShader(GLenum shaderType, const std::string& source)
 	glShaderSource(shader, 1, &shaderCodePtr, &shaderCodeSize);
 	glCompileShader(shader);
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &compileResult);
+	std::cout << "shader type: " << ((shaderType == GL_FRAGMENT_SHADER) ? "fragment" : "vertex") << std::endl;
 	if (compileResult == GL_FALSE)
 	{
 		int infoLogLength = 0;
@@ -68,6 +69,10 @@ GLuint createShader(GLenum shaderType, const std::string& source)
 		std::vector<char> shaderLog(infoLogLength);
 		glGetShaderInfoLog(shader, infoLogLength, NULL, &shaderLog[0]);
 		std::cout << "Error compiling shader: " << &shaderLog[0] << std::endl;
+	}
+	else
+	{
+		std::cout << "shader compiled successfully" << std::endl;
 	}
 	return shader;
 }

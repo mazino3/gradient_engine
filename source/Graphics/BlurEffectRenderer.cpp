@@ -10,7 +10,8 @@ struct BlurEffectRendererImpl
 	BlurEffectRendererImpl(RenderTexture& additionalTexture) :
 		additionalTexture(additionalTexture),
 		numberOfPasses(1),
-		screenMesh(GeometryDefinition::SCREEN)
+		screenMesh(GeometryDefinition::SCREEN),
+		blurShader(12.0f)
 	{}
 };
 

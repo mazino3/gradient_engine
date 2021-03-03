@@ -1,6 +1,7 @@
 #include "BlurShader.h"
 #include "../Math/GaussianHelper.h"
 #include <string>
+#include <iostream>
 
 BlurShader::BlurShader() : Shader(ShaderInitType::Filename, "Assets/Shaders/BlurShader.vert", "Assets/Shaders/BlurShader.frag") 
 {}
@@ -20,7 +21,7 @@ static std::string generateVertexShader(const std::vector<float>& kernel)
 
 	std::string shaderCode = vertexShaderHeader;
 	shaderCode +=
-		"out vec2 texCoords[" + size + "]\n"
+		"out vec2 texCoords[" + size + "];\n"
 		"void main(void)\n"
 		"{\n"
 		"	gl_Position = vec4(in_Position, 1.0);\n"
@@ -46,13 +47,13 @@ static std::string generateFragmentShader(const std::vector<float>& kernel)
 	std::string halfSize = std::to_string(kernel.size() / 2);
 	std::string size = std::to_string(kernel.size());
 
-	std::string kernelStr = "float kernel[" + size + "](";
+	std::string kernelStr = "float kernel[" + size + "] = float[" + size + "](";
 	for (int i = 0; i < kernel.size(); i++)
 	{
 		kernelStr += std::to_string(kernel[i]);
 		if (i != kernel.size() - 1)
 		{
-			kernelStr += ",";
+			kernelStr += ", ";
 		}
 	}
 	kernelStr += ");";
@@ -80,6 +81,10 @@ BlurShader::BlurShader(float radius)
 	auto kernel = GaussianHelper::computeGaussianKernel(sigma);
 	auto vertexCode = generateVertexShader(kernel);
 	auto fragmentCode = generateFragmentShader(kernel);
+
+	std::cout << "vertex code: " << vertexCode << std::endl;
+	std::cout << "fragment code: " << fragmentCode << std::endl;
+
 	init(ShaderInitType::Code, vertexCode, fragmentCode);
 }
 
