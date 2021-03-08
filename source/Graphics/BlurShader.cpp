@@ -42,9 +42,22 @@ static std::string generateVertexShader(const std::vector<float>& kernel)
 	return shaderCode;
 }
 
-static std::string generateFragmentShader(const std::vector<float>& kernel)
+static std::string generateVertexShaderBigRadius()
 {
-	std::string halfSize = std::to_string(kernel.size() / 2);
+	std::string result;
+	result += vertexShaderHeader;
+	result +=
+		"out vec2 texCoords;\n"
+		"void main(void)\n"
+		"{\n"
+		"	gl_Position = vec4(in_Position, 1.0);\n"
+		"	texCoords = in_Position.xy / 2 + 0.5;\n"
+		"}\n";
+	return result;
+}
+
+static std::string getKernelDeclarationStr(const std::vector<float>& kernel)
+{
 	std::string size = std::to_string(kernel.size());
 
 	std::string kernelStr = "float kernel[" + size + "] = float[" + size + "](";
@@ -58,13 +71,52 @@ static std::string generateFragmentShader(const std::vector<float>& kernel)
 	}
 	kernelStr += ");";
 
+	return kernelStr;
+}
+
+static std::string generateFragmentShaderBigRadius(const std::vector<float>& kernel)
+{
+	std::string halfSize = std::to_string(kernel.size() / 2);
+	std::string size = std::to_string(kernel.size());
+
+	std::string shaderCode =
+		"#version 130\n"
+		"in vec2 texCoords;\n"
+		"uniform sampler2D screenTexture;\n"
+		"uniform float pixelSize;\n"
+		"uniform bool isHorizontal;\n"
+		"void main(void)\n"
+		"{\n" +
+		getKernelDeclarationStr(kernel) + "\n"
+		"	gl_FragColor = vec4(0.0);\n"
+		"	for(int i = -" + halfSize + "; i <= " + halfSize + "; i++)\n"
+		"	{\n"
+		"		if (isHorizontal)\n"
+		"		{\n"
+		"			gl_FragColor += texture(screenTexture, texCoords + vec2(pixelSize, 0.0) * i) * kernel[i + " + halfSize + "];\n"
+		"		}\n"
+		"		else\n"
+		"		{\n"
+		"			gl_FragColor += texture(screenTexture, texCoords + vec2(0.0, pixelSize) * i) * kernel[i + " + halfSize + "];\n"
+		"		}\n"
+		"	}\n"
+		"}\n";
+
+	return shaderCode;
+}
+
+static std::string generateFragmentShader(const std::vector<float>& kernel)
+{
+	std::string halfSize = std::to_string(kernel.size() / 2);
+	std::string size = std::to_string(kernel.size());
+
 	std::string shaderCode =
 		"#version 130\n"
 		"in vec2 texCoords[" + size + "];\n"
 		"uniform sampler2D screenTexture;\n"
 		"void main(void)\n"
 		"{\n" + 
-			kernelStr + "\n"
+			getKernelDeclarationStr(kernel) + "\n"
 		"	gl_FragColor = vec4(0.0);\n"
 		"	for (int i = 0; i < " + size + "; i++)\n"
 		"	{\n"
@@ -79,8 +131,11 @@ BlurShader::BlurShader(float radius)
 {
 	float sigma = radius / 3.0f;
 	auto kernel = GaussianHelper::computeGaussianKernel(sigma);
-	auto vertexCode = generateVertexShader(kernel);
-	auto fragmentCode = generateFragmentShader(kernel);
+	bool bigRadius = kernel.size() > 11;
+	auto vertexCode = bigRadius ? generateVertexShaderBigRadius() : generateVertexShader(kernel);
+	auto fragmentCode = bigRadius ? generateFragmentShaderBigRadius(kernel) : generateFragmentShader(kernel);
+
+	std::cout << "big radius: " << (bigRadius ? "yes" : "no") << std::endl;
 
 	std::cout << "vertex code: " << vertexCode << std::endl;
 	std::cout << "fragment code: " << fragmentCode << std::endl;
