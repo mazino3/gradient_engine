@@ -2,6 +2,7 @@
 #include "TestSceneImGui.h"
 #include "TestSceneRenderer.h"
 #include "TestSceneBlur.h"
+#include "TestSceneBlurGroup.h"
 #include "TestSceneBloom.h"
 #include <unordered_map>
 
@@ -10,6 +11,7 @@ enum SceneIds
 	IMGUI_TEST,
 	RENDERER_TEST,
 	BLUR_TEST,
+	BLUR_GROUP_TEST,
 	BLOOM_TEST,
 	SCENE_COUNT
 };
@@ -31,6 +33,7 @@ std::string TestSceneFactory::getSceneName(TestSceneId id)
 		{IMGUI_TEST, "ImGui test"},
 		{RENDERER_TEST, "Renderer test"},
 		{BLUR_TEST, "Blur test"},
+		{BLUR_GROUP_TEST, "Blur group test"},
 		{BLOOM_TEST, "Bloom test"}
 	};
 
@@ -52,6 +55,8 @@ std::shared_ptr<TestSceneBase> TestSceneFactory::createScene(TestSceneId id, Ren
 		return std::make_shared<TestSceneRenderer>(renderTarget);
 	case BLUR_TEST:
 		return std::make_shared<TestSceneBlur>(renderTarget);
+	case BLUR_GROUP_TEST:
+		return std::make_shared<TestSceneBlurGroup>(renderTarget);
 	case BLOOM_TEST:
 		return std::make_shared<TestSceneBloom>(renderTarget);
 	default:
