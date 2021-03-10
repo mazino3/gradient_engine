@@ -49,7 +49,12 @@ BlurShaderGroup::BlurShaderGroup(float minRadius, float maxRadius, float step)
 	}
 }
 
-void BlurShaderGroup::bind()
+void BlurShaderGroup::setRadius(float radius)
+{
+	data->radius = radius;
+}
+
+void BlurShaderGroup::bind(Texture& screenTexture, float pixelSize, bool isHorizontal)
 {
 	if (data->blurShaders.size() == 0)
 	{
@@ -67,10 +72,10 @@ void BlurShaderGroup::bind()
 		}
 	}
 	currentShaderData.shader->bind();
-}
 
-void BlurShaderGroup::setRadius(float radius)
-{
-	data->radius = radius;
+	auto shader = currentShaderData.shader;
+	shader->setScreenTexture(screenTexture);
+	shader->setPixelSize(pixelSize);
+	shader->setHorizontal(isHorizontal);
 }
 
