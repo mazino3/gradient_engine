@@ -10,6 +10,8 @@ struct BlurEffectRendererImpl;
 struct BlurEffectRenderer
 {
 	BlurEffectRenderer(RenderTexture& additionalTexture);
+	BlurEffectRenderer(RenderTexture& additionalTexture, float radius);
+
 	void setNumberOfPasses(int passes);
 	void render(RenderTexture& renderTarget);
 private:

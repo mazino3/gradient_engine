@@ -13,11 +13,23 @@ struct BlurEffectRendererImpl
 		screenMesh(GeometryDefinition::SCREEN),
 		blurShader(24.0f)
 	{}
+
+	BlurEffectRendererImpl(RenderTexture& additionalTexture, float radius) :
+		additionalTexture(additionalTexture),
+		numberOfPasses(1),
+		screenMesh(GeometryDefinition::SCREEN),
+		blurShader(radius)
+	{}
 };
 
 BlurEffectRenderer::BlurEffectRenderer(RenderTexture& additionalTexture)
 {
 	data = std::make_shared<BlurEffectRendererImpl>(additionalTexture);
+}
+
+BlurEffectRenderer::BlurEffectRenderer(RenderTexture& additionalTexture, float radius)
+{
+	data = std::make_shared<BlurEffectRendererImpl>(additionalTexture, radius);
 }
 
 void BlurEffectRenderer::setNumberOfPasses(int passes)
