@@ -10,6 +10,7 @@ struct TestSceneRendererImpl
 	std::unique_ptr<FreeCameraController> cameraController;
     std::unique_ptr<Texture> diffuseTexture;
     std::unique_ptr<Texture> normalTexture;
+    std::unique_ptr<CubeMap> skybox;
 };
 
 TestSceneRenderer::TestSceneRenderer(RenderTarget& renderTarget)
@@ -66,6 +67,17 @@ TestSceneRenderer::TestSceneRenderer(RenderTarget& renderTarget)
     light.specularColor = glm::vec3(0.0f, 0.0f, 0.0f);
     light.direction = glm::normalize(glm::vec3(1, 0.3, 1));
     light.shadowsEnabled = true;
+
+    data->skybox = std::make_unique<CubeMap>(std::vector<std::string>(
+    {
+        "Assets/Sprites/Skybox/Right.bmp",
+        "Assets/Sprites/Skybox/Left.bmp",
+        "Assets/Sprites/Skybox/Top.bmp",
+        "Assets/Sprites/Skybox/Bottom.bmp",
+        "Assets/Sprites/Skybox/Front.bmp",
+        "Assets/Sprites/Skybox/Back.bmp"
+    }));
+    data->renderer->createSkybox(*data->skybox);
 }
 
 InputClientBase& TestSceneRenderer::getInputClient()
