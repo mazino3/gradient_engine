@@ -4,6 +4,7 @@
 #include "ShadowShader.h"
 #include "HdrShader.h"
 #include "RenderTexture.h"
+#include "BloomEffectRenderer.h"
 #include <vector>
 #include <algorithm>
 #include <iostream>
@@ -24,9 +25,11 @@ struct RendererImpl
 	SkyboxShader skyboxShader;
 	HdrShader hdrShader;
 	ShadowShader shadowShader;
+	std::shared_ptr<BloomEffectRenderer> bloomEffectRenderer;
 
 	std::shared_ptr<RenderTexture> renderTexture;
 	std::shared_ptr<RenderTexture> renderTexture2;
+	std::shared_ptr<RenderTexture> renderTexture3;
 	Mesh screenMesh;
 
 	std::shared_ptr<SkyboxObject> skybox;
@@ -38,12 +41,15 @@ struct RendererImpl
 		skybox(nullptr)
 	{
 		renderTexture = std::make_shared<RenderTexture>(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Float, true);
-		renderTexture2 = std::make_shared <RenderTexture>(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Float, true);
+		renderTexture2 = std::make_shared<RenderTexture>(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Float, true);
+		renderTexture3 = std::make_shared<RenderTexture>(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Float, true);
 
-		if (!renderTexture->init() || !renderTexture2->init())
+		if (!renderTexture->init() || !renderTexture2->init() || !renderTexture3->init())
 		{
 			std::cout << "failed to create render texture inside of Renderer" << std::endl;
 		}
+
+		bloomEffectRenderer = std::make_shared<BloomEffectRenderer>(*renderTexture2, *renderTexture3);
 
 		for (int i = 0; i < MAX_LIGHTS_WITH_SHADOWS; i++)
 		{
@@ -277,11 +283,14 @@ void Renderer::renderScene()
 
 	data->renderTexture->updateTexture(false);
 
+	//applying bloom
+	data->bloomEffectRenderer->render(*data->renderTexture);
+
 	//binding base render target and applying post-processing
 
 	data->baseRenderTarget.bind();
 	data->hdrShader.bind();
-	data->hdrShader.setScreenTexture(data->renderTexture->getRenderedTexture());
+	data->hdrShader.setScreenTexture(data->bloomEffectRenderer->getOutputTexture().getRenderedTexture());
 	//data->hdrShader.setScreenTexture(data->dirLightDepthTextures[0]->getRenderedTexture());
 	data->hdrShader.setToneMappingEnabled(data->settings.toneMappingEnabled);
 	data->hdrShader.setGammaCorrectionEnabled(data->settings.gammaCorrectionEnabled);

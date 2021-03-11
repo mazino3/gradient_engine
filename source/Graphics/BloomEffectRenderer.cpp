@@ -20,7 +20,7 @@ struct BloomEffectRendererImpl
 BloomEffectRendererImpl::BloomEffectRendererImpl(RenderTexture& texture1, RenderTexture& texture2) :
 	texture1(texture1),
 	texture2(texture2),
-	blurEffectRenderer(texture2),
+	blurEffectRenderer(texture2, 24.0f),
 	numberOfBlurPasses(3),
 	brightnessThreshold(0.7f),
 	screenMesh(GeometryDefinition::SCREEN)
