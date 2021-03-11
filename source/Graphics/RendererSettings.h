@@ -9,12 +9,17 @@ struct RendererSettings
 	float contrast;
 	float exposure;
 
+	bool bloomEnabled;
+	float bloomThreshold;
+
 	RendererSettings() :
 		toneMappingEnabled(true),
 		gammaCorrectionEnabled(true),
 		gamma(2.2f),
 		contrast(0.4f),
-		exposure(2.0f) 
+		exposure(2.0f),
+		bloomEnabled(true),
+		bloomThreshold(0.7f)
 	{}
 };
 

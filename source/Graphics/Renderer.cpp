@@ -284,13 +284,24 @@ void Renderer::renderScene()
 	data->renderTexture->updateTexture(false);
 
 	//applying bloom
-	data->bloomEffectRenderer->render(*data->renderTexture);
+	if (data->settings.bloomEnabled)
+	{
+		data->bloomEffectRenderer->setBrightnessThreshold(data->settings.bloomThreshold);
+		data->bloomEffectRenderer->render(*data->renderTexture);
+	}
 
 	//binding base render target and applying post-processing
 
 	data->baseRenderTarget.bind();
 	data->hdrShader.bind();
-	data->hdrShader.setScreenTexture(data->bloomEffectRenderer->getOutputTexture().getRenderedTexture());
+	if (data->settings.bloomEnabled)
+	{
+		data->hdrShader.setScreenTexture(data->bloomEffectRenderer->getOutputTexture().getRenderedTexture());
+	}
+	else
+	{
+		data->hdrShader.setScreenTexture(data->renderTexture->getRenderedTexture());
+	}
 	//data->hdrShader.setScreenTexture(data->dirLightDepthTextures[0]->getRenderedTexture());
 	data->hdrShader.setToneMappingEnabled(data->settings.toneMappingEnabled);
 	data->hdrShader.setGammaCorrectionEnabled(data->settings.gammaCorrectionEnabled);

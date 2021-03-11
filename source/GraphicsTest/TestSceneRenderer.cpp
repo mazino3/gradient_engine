@@ -98,6 +98,8 @@ void TestSceneRenderer::renderUi(RenderTarget& renderTarget)
     ImGui::SliderFloat("gamma", &data->renderer->getSettings().gamma, 0.5f, 10.0f);
     ImGui::SliderFloat("contrast", &data->renderer->getSettings().contrast, -1.0f, 1.0f);
     ImGui::SliderFloat("exposure", &data->renderer->getSettings().exposure, 0.5f, 5.0f);
+    ImGui::Checkbox("bloom", &data->renderer->getSettings().bloomEnabled);
+    ImGui::SliderFloat("bloom threshold", &data->renderer->getSettings().bloomThreshold, 0.0f, 2.0f);
 
     if (ImGui::Button("reset"))
     {
