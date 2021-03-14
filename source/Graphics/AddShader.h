@@ -10,6 +10,9 @@ struct AddShader : Shader
 
 	void setTexture1(Texture& texture);
 	void setTexture2(Texture& texture);
+
+	void setMultiplier1(float multiplier);
+	void setMultiplier2(float multiplier);
 };
 
 #endif

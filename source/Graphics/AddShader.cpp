@@ -15,3 +15,13 @@ void AddShader::setTexture2(Texture& texture)
 	texture.bind(1);
 	setUniform("texture2", 1);
 }
+
+void AddShader::setMultiplier1(float multiplier)
+{
+	setUniform("multiplier1", multiplier);
+}
+
+void AddShader::setMultiplier2(float multiplier)
+{
+	setUniform("multiplier2", multiplier);
+}

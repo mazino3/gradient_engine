@@ -58,6 +58,8 @@ void BloomEffectRenderer::render(RenderTexture& target)
 	data->addShader.bind();
 	data->addShader.setTexture1(target.getRenderedTexture());
 	data->addShader.setTexture2(data->texture1.getRenderedTexture());
+	data->addShader.setMultiplier1(1.0f);
+	data->addShader.setMultiplier2(1.0f);
 	data->screenMesh.draw();
 	data->texture2.updateTexture(false);
 }
