@@ -1,5 +1,6 @@
 #include "Renderer.h"
 #include "Shader3d.h"
+#include "SimpleShader3d.h"
 #include "SkyboxShader.h"
 #include "ShadowShader.h"
 #include "HdrShader.h"
@@ -8,6 +9,14 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
+
+
+enum class RenderObjectsType
+{
+	Normal,
+	Shadows,
+	Outline
+};
 
 struct RendererImpl
 {
@@ -22,6 +31,7 @@ struct RendererImpl
 	std::vector<std::shared_ptr<DirectionalLight>> directionalLights;
 	std::vector<std::shared_ptr<PositionalLight>> positionalLights;
 	Shader3d shader;
+	SimpleShader3d simpleShader3d;
 	SkyboxShader skyboxShader;
 	HdrShader hdrShader;
 	ShadowShader shadowShader;
@@ -64,7 +74,8 @@ struct RendererImpl
 
 	void renderObject(RenderObject& obj);
 	void renderObjectShadow(RenderObject& obj);
-	void renderGameObjects(bool forShadows, const Camera& camera);
+	void renderObjectOutline(RenderObject& obj);
+	void renderGameObjects(RenderObjectsType renderType, const Camera& camera);
 };
 
 Renderer::Renderer(RenderTarget& baseRenderTarget)
@@ -127,7 +138,16 @@ void RendererImpl::renderObject(RenderObject& obj)
 	obj.mesh.draw();
 }
 
-void RendererImpl::renderGameObjects(bool forShadows, const Camera& camera)
+
+
+void RendererImpl::renderObjectOutline(RenderObject& obj)
+{
+	simpleShader3d.setModelMatrix(obj.transform.getWorldMatrix());
+	glm::mat4x4 modelViewMatrix = camera.getViewMatrix() * obj.transform.getWorldMatrix();
+	simpleShader3d.setNormalMatrix(glm::transpose(glm::inverse(modelViewMatrix)));
+}
+
+void RendererImpl::renderGameObjects(RenderObjectsType renderType, const Camera& camera)
 {
 	static const float eps = 0.00001f;
 	std::vector<std::shared_ptr<RenderObject>> opaqueObjects;
@@ -136,14 +156,14 @@ void RendererImpl::renderGameObjects(bool forShadows, const Camera& camera)
 	{
 		if (abs(renderObject->material.alpha - 1.0f) < eps)
 		{
-			if (!forShadows || renderObject->castsShadows)
+			if (renderType != RenderObjectsType::Shadows || renderObject->castsShadows)
 			{
 				opaqueObjects.push_back(renderObject);
 			}
 		}
 		else
 		{
-			if (!forShadows)
+			if (renderType != RenderObjectsType::Shadows)
 			{
 				transparentObjects.push_back(renderObject);
 			}
@@ -168,6 +188,7 @@ void RendererImpl::renderGameObjects(bool forShadows, const Camera& camera)
 
 	for (const auto& obj : opaqueObjects)
 	{
+		/*
 		if (forShadows)
 		{
 			renderObjectShadow(*obj);
@@ -176,15 +197,36 @@ void RendererImpl::renderGameObjects(bool forShadows, const Camera& camera)
 		{
 			renderObject(*obj);
 		}
+		*/
+		switch (renderType)
+		{
+		case RenderObjectsType::Normal:
+			renderObject(*obj);
+			break;
+		case RenderObjectsType::Shadows:
+			renderObjectShadow(*obj);
+			break;
+		case RenderObjectsType::Outline:
+			renderObjectOutline(*obj);
+			break;
+		}
 	}
 
 	//rendering semi-transparent objects
 
-	if (!forShadows)
+	if (renderType != RenderObjectsType::Shadows)
 	{
 		for (const auto& obj : transparentObjects)
 		{
-			renderObject(*obj);
+			switch (renderType)
+			{
+			case RenderObjectsType::Normal:
+				renderObject(*obj);
+				break;
+			case RenderObjectsType::Outline:
+				renderObjectOutline(*obj);
+				break;
+			}
 		}
 	}
 }
@@ -224,7 +266,7 @@ void Renderer::renderScene()
 		lightCameras.push_back(data->camera.getDirectionalLightCamera(-lightsWithShadows[i]->direction, 12.0f));
 		data->shadowShader.setViewMatrix(lightCameras.back().getViewMatrix());
 		data->shadowShader.setProjectionMatrix(lightCameras.back().getProjectionMatrix());
-		data->renderGameObjects(true, lightCameras.back());
+		data->renderGameObjects(RenderObjectsType::Shadows, lightCameras.back());
 	}
 
 	//bind render texture
@@ -279,7 +321,7 @@ void Renderer::renderScene()
 		data->shader.setPositionalLight(*data->positionalLights[i], i);
 	}
 
-	data->renderGameObjects(false, data->camera);
+	data->renderGameObjects(RenderObjectsType::Normal, data->camera);
 
 	data->renderTexture->updateTexture(false);
 
