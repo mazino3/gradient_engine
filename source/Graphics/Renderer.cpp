@@ -6,6 +6,7 @@
 #include "HdrShader.h"
 #include "RenderTexture.h"
 #include "BloomEffectRenderer.h"
+#include "BypassPostprocessingShader.h"
 #include <vector>
 #include <algorithm>
 #include <iostream>
@@ -32,6 +33,7 @@ struct RendererImpl
 	std::vector<std::shared_ptr<PositionalLight>> positionalLights;
 	Shader3d shader;
 	SimpleShader3d simpleShader3d;
+	BypassPostprocessingShader bypassPPShader;
 	SkyboxShader skyboxShader;
 	HdrShader hdrShader;
 	ShadowShader shadowShader;
@@ -40,6 +42,8 @@ struct RendererImpl
 	std::shared_ptr<RenderTexture> renderTexture;
 	std::shared_ptr<RenderTexture> renderTexture2;
 	std::shared_ptr<RenderTexture> renderTexture3;
+	std::shared_ptr<RenderTexture> textureForOutline;
+	std::shared_ptr<RenderTexture> textureForOutline2;
 	Mesh screenMesh;
 
 	std::shared_ptr<SkyboxObject> skybox;
@@ -53,8 +57,10 @@ struct RendererImpl
 		renderTexture = std::make_shared<RenderTexture>(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Float, true);
 		renderTexture2 = std::make_shared<RenderTexture>(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Float, true);
 		renderTexture3 = std::make_shared<RenderTexture>(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Float, true);
+		textureForOutline = std::make_shared<RenderTexture>(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Float, true);
+		textureForOutline2 = std::make_shared<RenderTexture>(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Float, true);
 
-		if (!renderTexture->init() || !renderTexture2->init() || !renderTexture3->init())
+		if (!renderTexture->init() || !renderTexture2->init() || !renderTexture3->init() || !textureForOutline->init() || !textureForOutline2->init())
 		{
 			std::cout << "failed to create render texture inside of Renderer" << std::endl;
 		}
@@ -145,6 +151,7 @@ void RendererImpl::renderObjectOutline(RenderObject& obj)
 	simpleShader3d.setModelMatrix(obj.transform.getWorldMatrix());
 	glm::mat4x4 modelViewMatrix = camera.getViewMatrix() * obj.transform.getWorldMatrix();
 	simpleShader3d.setNormalMatrix(glm::transpose(glm::inverse(modelViewMatrix)));
+	obj.mesh.draw();
 }
 
 void RendererImpl::renderGameObjects(RenderObjectsType renderType, const Camera& camera)
@@ -188,16 +195,6 @@ void RendererImpl::renderGameObjects(RenderObjectsType renderType, const Camera&
 
 	for (const auto& obj : opaqueObjects)
 	{
-		/*
-		if (forShadows)
-		{
-			renderObjectShadow(*obj);
-		}
-		else
-		{
-			renderObject(*obj);
-		}
-		*/
 		switch (renderType)
 		{
 		case RenderObjectsType::Normal:
@@ -322,8 +319,19 @@ void Renderer::renderScene()
 	}
 
 	data->renderGameObjects(RenderObjectsType::Normal, data->camera);
-
 	data->renderTexture->updateTexture(false);
+
+	data->textureForOutline->bind();
+	data->textureForOutline->setClearColor(glm::vec4(0.1f, 0.0f, 0.2f, 0.0f));
+	data->textureForOutline->clear();
+
+	data->simpleShader3d.bind();
+	data->simpleShader3d.setProjectionMatrix(data->camera.getProjectionMatrix());
+	data->simpleShader3d.setViewMatrix(data->camera.getViewMatrix());
+	data->simpleShader3d.setEyeDirection(data->camera.dirFront);
+
+	data->renderGameObjects(RenderObjectsType::Outline, data->camera);
+	data->textureForOutline->updateTexture(false);
 
 	//applying bloom
 	if (data->settings.bloomEnabled)
@@ -335,6 +343,7 @@ void Renderer::renderScene()
 	//binding base render target and applying post-processing
 
 	data->baseRenderTarget.bind();
+	
 	data->hdrShader.bind();
 	if (data->settings.bloomEnabled)
 	{
@@ -350,6 +359,11 @@ void Renderer::renderScene()
 	data->hdrShader.setGamma(data->settings.gamma);
 	data->hdrShader.setContrast(data->settings.contrast);
 	data->hdrShader.setExposure(data->settings.exposure);
+	data->screenMesh.draw();
+	
+
+	data->bypassPPShader.bind();
+	data->bypassPPShader.setScreenTexture(data->textureForOutline->getRenderedTexture());
 	data->screenMesh.draw();
 }
 

@@ -91,6 +91,7 @@ bool RenderWindow::init()
 	}
 
 	glfwWindowHint(GLFW_SAMPLES, 4);
+	glfwWindowHint(GLFW_ALPHA_BITS, 8);
 	_data->window = glfwCreateWindow(_data->width, _data->height, _data->name.c_str(), nullptr, nullptr);
 	if (_data->window == nullptr)
 	{
