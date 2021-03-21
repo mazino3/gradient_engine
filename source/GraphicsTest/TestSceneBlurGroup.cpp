@@ -1,7 +1,7 @@
 #include "TestSceneBlurGroup.h"
 #include "imgui.h"
 #include "Graphics/RenderTexture.h"
-#include "Graphics/BypassShader.h"
+#include "Graphics/Shaders/BypassShader.h"
 #include "Graphics/BlurShaderGroup.h"
 #include <iostream>
 

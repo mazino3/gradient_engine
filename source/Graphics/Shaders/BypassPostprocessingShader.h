@@ -2,7 +2,7 @@
 #define GRAPHICS_BYPASS_POSTPROCESSING_SHADER_H
 
 #include "Shader.h"
-#include "Texture.h"
+#include "../Texture.h"
 
 struct BypassPostprocessingShader : Shader
 {

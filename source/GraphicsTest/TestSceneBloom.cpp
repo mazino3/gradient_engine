@@ -1,8 +1,8 @@
 #include "TestSceneBloom.h"
 #include "Graphics/RenderTexture.h"
 #include "Graphics/BloomEffectRenderer.h"
-#include "Graphics/BypassShader.h"
-#include "Graphics/HdrShader.h"
+#include "Graphics/Shaders/BypassShader.h"
+#include "Graphics/Shaders/HdrShader.h"
 #include "Graphics/Colors.h"
 #include "imgui.h"
 #include <vector>

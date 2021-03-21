@@ -2,7 +2,7 @@
 #define GRAPHICS_OUTLINE_ADD_SHADER_H
 
 #include "Shader.h"
-#include "Texture.h"
+#include "../Texture.h"
 
 struct OutlineAddShader : Shader
 {

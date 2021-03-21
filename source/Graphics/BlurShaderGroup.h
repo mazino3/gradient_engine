@@ -1,7 +1,7 @@
 #ifndef GRAPHICS_BLUR_SHADER_GROUP_H
 #define GRAPHICS_BLUR_SHADER_GROUP_H
 
-#include "BlurShader.h"
+#include "Shaders/BlurShader.h"
 #include "RenderTexture.h"
 #include <memory>
 

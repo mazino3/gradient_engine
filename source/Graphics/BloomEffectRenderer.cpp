@@ -1,7 +1,7 @@
 #include "BloomEffectRenderer.h"
 #include "BlurEffectRenderer.h"
-#include "AddShader.h"
-#include "FilterBrightShader.h"
+#include "Shaders/AddShader.h"
+#include "Shaders/FilterBrightShader.h"
 
 struct BloomEffectRendererImpl
 {

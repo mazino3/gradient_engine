@@ -1,8 +1,8 @@
 #include "TestSceneBlur.h"
-#include "Graphics/BlurShader.h"
+#include "Graphics/Shaders/BlurShader.h"
 #include "Graphics/RenderTexture.h"
-#include "Graphics/BypassShader.h"
-#include "Graphics/HdrShader.h"
+#include "Graphics/Shaders/BypassShader.h"
+#include "Graphics/Shaders/HdrShader.h"
 #include "Graphics/BlurEffectRenderer.h"
 #include <iostream>
 #include "imgui.h"

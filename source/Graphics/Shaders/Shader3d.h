@@ -2,10 +2,10 @@
 #define GRAPHICS_SHADER_3D
 
 #include "Shader.h"
-#include "Texture.h"
-#include "CubeMap.h"
-#include "Material.h"
-#include "Lights.h"
+#include "../Texture.h"
+#include "../CubeMap.h"
+#include "../Material.h"
+#include "../Lights.h"
 
 struct Shader3d : Shader
 {

@@ -4,8 +4,8 @@
 #include <glm/vec3.hpp>
 
 #include "Graphics/RenderWindow.h"
-#include "Graphics/BypassShader.h"
-#include "Graphics/Shader3d.h"
+#include "Graphics/Shaders/BypassShader.h"
+#include "Graphics/Shaders/Shader3d.h"
 #include "Graphics/Mesh.h"
 #include "Graphics/Transform.h"
 #include "Graphics/Camera.h"

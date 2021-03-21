@@ -4,7 +4,7 @@
 #include <glm/vec4.hpp>
 #include <memory>
 #include "Mesh.h"
-#include "Shader.h"
+#include "Shaders/Shader.h"
 
 struct RenderTargetImpl;
 
