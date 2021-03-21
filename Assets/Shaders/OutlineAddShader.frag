@@ -9,5 +9,6 @@ uniform vec3 outlineColor;
 
 void main(void)
 {	
-	gl_FragColor = outlineColor * texture(outlineTexture, texCoords).r + screenTexture * (1.0 - texture(outlineTexture, texCoords).r);
+	float outlineValue = texture(outlineTexture, texCoords).r;
+	gl_FragColor = vec4(outlineColor, 1.0) * outlineValue + texture(screenTexture, texCoords) * (1.0 - outlineValue);
 }

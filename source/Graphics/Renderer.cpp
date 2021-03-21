@@ -44,6 +44,7 @@ struct RendererImpl
 	HdrShader hdrShader;
 	ShadowShader shadowShader;
 	AddShader addShader;
+	OutlineAddShader outlineAddShader;
 
 	std::shared_ptr<BloomEffectRenderer> bloomEffectRenderer;
 
@@ -80,6 +81,7 @@ struct RendererImpl
 
 		bloomEffectRenderer = std::make_shared<BloomEffectRenderer>(*renderTexture2, *renderTexture3);
 		outlineBlurRenderer = std::make_shared<BlurEffectRenderer>(*textureForOutline3, 10.0f);
+		outlineBlurRenderer->setNumberOfPasses(3);
 
 		for (int i = 0; i < MAX_LIGHTS_WITH_SHADOWS; i++)
 		{
@@ -377,11 +379,11 @@ void Renderer::renderScene()
 	data->screenMesh.draw();
 	data->textureForOutline3->updateTexture(false);
 
-	//binding base render target and applying post-processing
+	//mixing outline with rendered scene
 
-	data->baseRenderTarget.bind();
-	
-	/*
+	data->textureForOutline2->bind();
+	data->textureForOutline2->clear();
+
 	data->hdrShader.bind();
 	if (data->settings.bloomEnabled)
 	{
@@ -391,19 +393,21 @@ void Renderer::renderScene()
 	{
 		data->hdrShader.setScreenTexture(data->renderTexture->getRenderedTexture());
 	}
-	//data->hdrShader.setScreenTexture(data->dirLightDepthTextures[0]->getRenderedTexture());
 	data->hdrShader.setToneMappingEnabled(data->settings.toneMappingEnabled);
 	data->hdrShader.setGammaCorrectionEnabled(data->settings.gammaCorrectionEnabled);
 	data->hdrShader.setGamma(data->settings.gamma);
 	data->hdrShader.setContrast(data->settings.contrast);
 	data->hdrShader.setExposure(data->settings.exposure);
 	data->screenMesh.draw();
-	*/
-
-	data->bypassPPShader.bind();
-	data->bypassPPShader.setScreenTexture(data->textureForOutline3->getRenderedTexture());
+	data->textureForOutline2->updateTexture(false);
+	
+	data->baseRenderTarget.bind();
+	
+	data->outlineAddShader.bind();
+	data->outlineAddShader.setOutlineColor(glm::vec3(1.0f, 0.5f, 0.0f));
+	data->outlineAddShader.setOutlineTexture(data->textureForOutline3->getRenderedTexture());
+	data->outlineAddShader.setScreenTexture(data->textureForOutline2->getRenderedTexture());
 	data->screenMesh.draw();
-
 }
 
 RenderObject& Renderer::createRenderObject(Texture& diffuseTexture, const GeometryDefinition& geometryDefinition, const Material& material)

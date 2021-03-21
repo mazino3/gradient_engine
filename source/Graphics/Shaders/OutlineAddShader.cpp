@@ -13,7 +13,7 @@ void OutlineAddShader::setOutlineTexture(Texture& texture)
 void OutlineAddShader::setScreenTexture(Texture& texture)
 {
 	texture.bind(1);
-	setUniform("screenTexture", 0);
+	setUniform("screenTexture", 1);
 }
 
 void OutlineAddShader::setOutlineColor(const glm::vec3& outlineColor)
