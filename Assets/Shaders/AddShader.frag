@@ -10,5 +10,5 @@ uniform float multiplier2;
 
 void main(void)
 {	
-	gl_FragColor = texture(texture1, texCoords) * multiplier1 + texture(texture2, texCoords) * multiplier2;
+	gl_FragColor = vec4(texture(texture1, texCoords).xyz * multiplier1 + texture(texture2, texCoords).xyz * multiplier2, 1.0);
 }

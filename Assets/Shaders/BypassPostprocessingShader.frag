@@ -6,5 +6,5 @@ uniform sampler2D screenTexture;
 
 void main(void)
 {	
-	gl_FragColor = texture(screenTexture);
+	gl_FragColor = texture(screenTexture, texCoords);
 }

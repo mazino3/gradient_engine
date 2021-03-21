@@ -9,6 +9,7 @@ struct BloomEffectRendererImpl
 	RenderTexture& texture2;
 	BlurEffectRenderer blurEffectRenderer;
 	AddShader addShader;
+
 	FilterBrightShader filterBrightShader;
 	Mesh screenMesh;
 	int numberOfBlurPasses;

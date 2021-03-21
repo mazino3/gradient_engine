@@ -1,11 +1,16 @@
 #include "Renderer.h"
+
 #include "Shaders/Shader3d.h"
 #include "Shaders/SimpleShader3d.h"
 #include "Shaders/SkyboxShader.h"
 #include "Shaders/ShadowShader.h"
 #include "Shaders/HdrShader.h"
+#include "Shaders/OutlineAddShader.h"
+#include "Shaders/AddShader.h"
+
 #include "RenderTexture.h"
 #include "BloomEffectRenderer.h"
+#include "BlurEffectRenderer.h"
 #include "Shaders/BypassPostprocessingShader.h"
 #include <vector>
 #include <algorithm>
@@ -31,19 +36,25 @@ struct RendererImpl
 	std::vector<std::shared_ptr<RenderObject>> renderObjects;
 	std::vector<std::shared_ptr<DirectionalLight>> directionalLights;
 	std::vector<std::shared_ptr<PositionalLight>> positionalLights;
+
 	Shader3d shader;
 	SimpleShader3d simpleShader3d;
 	BypassPostprocessingShader bypassPPShader;
 	SkyboxShader skyboxShader;
 	HdrShader hdrShader;
 	ShadowShader shadowShader;
+	AddShader addShader;
+
 	std::shared_ptr<BloomEffectRenderer> bloomEffectRenderer;
 
 	std::shared_ptr<RenderTexture> renderTexture;
 	std::shared_ptr<RenderTexture> renderTexture2;
 	std::shared_ptr<RenderTexture> renderTexture3;
+
 	std::shared_ptr<RenderTexture> textureForOutline;
 	std::shared_ptr<RenderTexture> textureForOutline2;
+	std::shared_ptr<RenderTexture> textureForOutline3;
+	std::shared_ptr<BlurEffectRenderer> outlineBlurRenderer;
 	Mesh screenMesh;
 
 	std::shared_ptr<SkyboxObject> skybox;
@@ -59,13 +70,16 @@ struct RendererImpl
 		renderTexture3 = std::make_shared<RenderTexture>(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Float, true);
 		textureForOutline = std::make_shared<RenderTexture>(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Float, true);
 		textureForOutline2 = std::make_shared<RenderTexture>(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Float, true);
+		textureForOutline3 = std::make_shared<RenderTexture>(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Float, true);
 
-		if (!renderTexture->init() || !renderTexture2->init() || !renderTexture3->init() || !textureForOutline->init() || !textureForOutline2->init())
+		if (!renderTexture->init() || !renderTexture2->init() || !renderTexture3->init() || 
+			!textureForOutline->init() || !textureForOutline2->init() || !textureForOutline3->init())
 		{
 			std::cout << "failed to create render texture inside of Renderer" << std::endl;
 		}
 
 		bloomEffectRenderer = std::make_shared<BloomEffectRenderer>(*renderTexture2, *renderTexture3);
+		outlineBlurRenderer = std::make_shared<BlurEffectRenderer>(*textureForOutline3, 10.0f);
 
 		for (int i = 0; i < MAX_LIGHTS_WITH_SHADOWS; i++)
 		{
@@ -321,8 +335,17 @@ void Renderer::renderScene()
 	data->renderGameObjects(RenderObjectsType::Normal, data->camera);
 	data->renderTexture->updateTexture(false);
 
+	//applying bloom
+	if (data->settings.bloomEnabled)
+	{
+		data->bloomEffectRenderer->setBrightnessThreshold(data->settings.bloomThreshold);
+		data->bloomEffectRenderer->render(*data->renderTexture);
+	}
+
+	//preparing outline textures
+
 	data->textureForOutline->bind();
-	data->textureForOutline->setClearColor(glm::vec4(0.1f, 0.0f, 0.2f, 0.0f));
+	data->textureForOutline->setClearColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 	data->textureForOutline->clear();
 
 	data->simpleShader3d.bind();
@@ -333,17 +356,32 @@ void Renderer::renderScene()
 	data->renderGameObjects(RenderObjectsType::Outline, data->camera);
 	data->textureForOutline->updateTexture(false);
 
-	//applying bloom
-	if (data->settings.bloomEnabled)
-	{
-		data->bloomEffectRenderer->setBrightnessThreshold(data->settings.bloomThreshold);
-		data->bloomEffectRenderer->render(*data->renderTexture);
-	}
+	data->textureForOutline2->bind();
+	data->textureForOutline2->setClearColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	data->textureForOutline2->clear();
+	data->bypassPPShader.bind();
+	data->bypassPPShader.setScreenTexture(data->textureForOutline->getRenderedTexture());
+	data->screenMesh.draw();
+	data->textureForOutline2->updateTexture(false);
+	
+	data->outlineBlurRenderer->render(*data->textureForOutline2);
+	
+	data->textureForOutline3->bind();
+	data->textureForOutline3->setClearColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	data->textureForOutline3->clear();
+	data->addShader.bind();
+	data->addShader.setMultiplier1(1.0f);
+	data->addShader.setMultiplier2(-1.0f);
+	data->addShader.setTexture1(data->textureForOutline2->getRenderedTexture());
+	data->addShader.setTexture2(data->textureForOutline->getRenderedTexture());
+	data->screenMesh.draw();
+	data->textureForOutline3->updateTexture(false);
 
 	//binding base render target and applying post-processing
 
 	data->baseRenderTarget.bind();
 	
+	/*
 	data->hdrShader.bind();
 	if (data->settings.bloomEnabled)
 	{
@@ -360,11 +398,12 @@ void Renderer::renderScene()
 	data->hdrShader.setContrast(data->settings.contrast);
 	data->hdrShader.setExposure(data->settings.exposure);
 	data->screenMesh.draw();
-	
+	*/
 
 	data->bypassPPShader.bind();
-	data->bypassPPShader.setScreenTexture(data->textureForOutline->getRenderedTexture());
+	data->bypassPPShader.setScreenTexture(data->textureForOutline3->getRenderedTexture());
 	data->screenMesh.draw();
+
 }
 
 RenderObject& Renderer::createRenderObject(Texture& diffuseTexture, const GeometryDefinition& geometryDefinition, const Material& material)
