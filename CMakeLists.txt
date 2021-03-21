@@ -15,8 +15,14 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 file (GLOB MATH_FILES ${PROJECT_SOURCE_DIR}/source/Math/*.cpp ${PROJECT_SOURCE_DIR}/source/Math/*.h)
 add_library(Math ${MATH_FILES})
 
-file(GLOB_RECURSE GRAPHICS_FILES ${PROJECT_SOURCE_DIR}/source/Graphics/*.cpp ${PROJECT_SOURCE_DIR}/source/Graphics/*.h)
-add_library(Graphics ${GRAPHICS_FILES})
+file(GLOB GRAPHICS_FILES ${PROJECT_SOURCE_DIR}/source/Graphics/*.cpp ${PROJECT_SOURCE_DIR}/source/Graphics/*.h)
+file(GLOB GRAPHICS_SHADER_FILES ${PROJECT_SOURCE_DIR}/source/Graphics/Shaders/*.cpp ${PROJECT_SOURCE_DIR}/source/Graphics/Shaders/*.h)
+
+#game_logic source groups for visual studio
+source_group("Graphics" FILES ${GRAPHICS_FILES})
+source_group("Graphics\\Shaders" FILES ${GRAPHICS_SHADER_FILES})
+
+add_library(Graphics ${GRAPHICS_FILES} ${GRAPHICS_SHADER_FILES})
 target_link_libraries(Graphics libglew_static)
 target_link_libraries(Graphics glfw)
 target_link_libraries(Graphics Math)
