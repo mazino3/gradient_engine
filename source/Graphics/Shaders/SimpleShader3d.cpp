@@ -29,3 +29,7 @@ void SimpleShader3d::setEyeDirection(const glm::vec3& eyeDirection)
 	setUniform("eyeDirection", eyeDirection);
 }
 
+void SimpleShader3d::setColor(const glm::vec3& color)
+{
+	setUniform("drawColor", color);
+}

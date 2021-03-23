@@ -14,6 +14,8 @@ struct SimpleShader3d : Shader
 
 	void setEyeDirection(const glm::vec3& eyeDirection);
 
+	void setColor(const glm::vec3& color);
+
 };
 
 #endif

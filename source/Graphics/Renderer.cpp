@@ -69,9 +69,9 @@ struct RendererImpl
 		renderTexture = std::make_shared<RenderTexture>(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Float, true);
 		renderTexture2 = std::make_shared<RenderTexture>(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Float, true);
 		renderTexture3 = std::make_shared<RenderTexture>(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Float, true);
-		textureForOutline = std::make_shared<RenderTexture>(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Float, true);
-		textureForOutline2 = std::make_shared<RenderTexture>(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Float, true);
-		textureForOutline3 = std::make_shared<RenderTexture>(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Float, true);
+		textureForOutline = std::make_shared<RenderTexture>(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Integer, true);
+		textureForOutline2 = std::make_shared<RenderTexture>(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Integer, true);
+		textureForOutline3 = std::make_shared<RenderTexture>(baseRenderTarget.getWidth(), baseRenderTarget.getHeight(), RenderTextureType::Integer, true);
 
 		if (!renderTexture->init() || !renderTexture2->init() || !renderTexture3->init() || 
 			!textureForOutline->init() || !textureForOutline2->init() || !textureForOutline3->init())
@@ -167,6 +167,17 @@ void RendererImpl::renderObjectOutline(RenderObject& obj)
 	simpleShader3d.setModelMatrix(obj.transform.getWorldMatrix());
 	glm::mat4x4 modelViewMatrix = camera.getViewMatrix() * obj.transform.getWorldMatrix();
 	simpleShader3d.setNormalMatrix(glm::transpose(glm::inverse(modelViewMatrix)));
+	
+	if (obj.hasOutline)
+	{
+		simpleShader3d.setColor(glm::vec3(1.0f, 1.0f, 1.0f));
+	}
+	else
+	{
+		simpleShader3d.setColor(glm::vec3(0.0f, 0.0f, 0.0f));
+	}
+
+	//simpleShader3d.setColor(glm::vec3(1.0f, 1.0f, 1.0f));
 	obj.mesh.draw();
 }
 
@@ -372,9 +383,9 @@ void Renderer::renderScene()
 	data->textureForOutline3->setClearColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 	data->textureForOutline3->clear();
 	data->addShader.bind();
-	data->addShader.setMultiplier1(1.0f);
-	data->addShader.setMultiplier2(-1.0f);
-	data->addShader.setTexture1(data->textureForOutline2->getRenderedTexture());
+	data->addShader.setMultiplier1(2.0f);
+	data->addShader.setMultiplier2(-2.0f);
+	data->addShader.setTexture1(data->textureForOutline2->getRenderedTexture()); //blurred
 	data->addShader.setTexture2(data->textureForOutline->getRenderedTexture());
 	data->screenMesh.draw();
 	data->textureForOutline3->updateTexture(false);

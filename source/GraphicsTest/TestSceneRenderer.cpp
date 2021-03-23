@@ -39,6 +39,7 @@ TestSceneRenderer::TestSceneRenderer(RenderTarget& renderTarget)
     auto& renderObject1 = data->renderer->createRenderObject(*data->diffuseTexture, *data->normalTexture, quad, material);
     renderObject1.material.alpha = 1.0f;
     renderObject1.textureScalingEnabled = true;
+    renderObject1.hasOutline = true;
     //renderObject1.textureScaleMultiplier = 0.25f;
 
     auto& renderObject2 = data->renderer->createRenderObject(*data->diffuseTexture, *data->normalTexture, quad, material);
@@ -52,6 +53,7 @@ TestSceneRenderer::TestSceneRenderer(RenderTarget& renderTarget)
     renderObject2.material.diffuse = glm::vec3(0.2, 1.0, 0.2);
 
     auto& renderObject3 = data->renderer->createRenderObject(*data->diffuseTexture, *data->normalTexture, quad, material);
+    renderObject3.hasOutline = true;
     renderObject3.transform.position.x -= 2;
 
     auto& torus = data->renderer->createRenderObject(*data->diffuseTexture, GeometryDefinition::createTorus(100, 1, 0.3f), material);
