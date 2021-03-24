@@ -1,4 +1,4 @@
-#include "BypassShader.h"
+#include <Graphics/Shaders/BypassShader.h>
 #include <string>
 
 static std::string vertexShader =

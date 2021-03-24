@@ -1,4 +1,4 @@
-#include "BlurShader.h"
+#include <Graphics/Shaders/BlurShader.h>
 #include <Math/GaussianHelper.h>
 #include <string>
 #include <iostream>

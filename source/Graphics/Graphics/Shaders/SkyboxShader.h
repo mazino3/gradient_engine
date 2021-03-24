@@ -1,8 +1,8 @@
 #ifndef GRAPHICS_SKYBOX_SHADER_H
 #define GRAPHICS_SKYBOX_SHADER_H
 
-#include "Shader.h"
-#include "../CubeMap.h"
+#include <Graphics/Shaders/Shader.h>
+#include <Graphics/CubeMap.h>
 
 struct SkyboxShader : Shader
 {

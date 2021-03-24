@@ -1,4 +1,4 @@
-#include "SkyboxShader.h"
+#include <Graphics/Shaders/SkyboxShader.h>
 
 SkyboxShader::SkyboxShader() : Shader(ShaderInitType::Filename, "Assets/Shaders/SkyboxShader.vert", "Assets/Shaders/SkyboxShader.frag")
 {}

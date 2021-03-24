@@ -1,4 +1,4 @@
-#include "AddShader.h"
+#include <Graphics/Shaders/AddShader.h>
 
 AddShader::AddShader() : Shader(ShaderInitType::Filename, "Assets/Shaders/PostProcessingShader.vert", "Assets/Shaders/AddShader.frag")
 {

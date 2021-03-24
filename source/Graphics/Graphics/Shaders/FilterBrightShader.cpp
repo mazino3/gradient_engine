@@ -1,4 +1,4 @@
-#include "FilterBrightShader.h"
+#include <Graphics/Shaders/FilterBrightShader.h>
 
 FilterBrightShader::FilterBrightShader() : Shader(ShaderInitType::Filename, "Assets/Shaders/PostProcessingShader.vert", "Assets/Shaders/FilterBrightShader.frag")
 {

@@ -1,4 +1,4 @@
-#include "ShadowShader.h"
+#include <Graphics/Shaders/ShadowShader.h>
 
 ShadowShader::ShadowShader() : Shader(ShaderInitType::Filename, "Assets/Shaders/ShadowShader.vert", "Assets/Shaders/ShadowShader.frag")
 {}

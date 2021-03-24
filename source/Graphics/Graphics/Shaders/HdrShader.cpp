@@ -1,4 +1,4 @@
-#include "HdrShader.h"
+#include <Graphics/Shaders/HdrShader.h>
 
 HdrShader::HdrShader() : Shader(ShaderInitType::Filename, "Assets/Shaders/PostProcessingShader.vert", "Assets/Shaders/HdrShader.frag")
 {}

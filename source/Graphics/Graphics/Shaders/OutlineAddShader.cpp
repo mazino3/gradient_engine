@@ -1,4 +1,4 @@
-#include "OutlineAddShader.h"
+#include <Graphics/Shaders/OutlineAddShader.h>
 
 OutlineAddShader::OutlineAddShader() :
 	Shader(ShaderInitType::Filename, "Assets/Shaders/PostProcessingShader.vert", "Assets/Shaders/OutlineAddShader.frag")

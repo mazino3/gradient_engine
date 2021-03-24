@@ -1,7 +1,7 @@
 #ifndef GRAPHICS_SHADOW_SHADER_H
 #define GRAPHICS_SHADOW_SHADER_H
 
-#include "Shader.h"
+#include <Graphics/Shaders/Shader.h>
 
 struct ShadowShader : Shader
 {

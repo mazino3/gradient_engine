@@ -1,4 +1,4 @@
-#include "SimpleShader3d.h"
+#include <Graphics/Shaders/SimpleShader3d.h>
 
 SimpleShader3d::SimpleShader3d() : Shader(ShaderInitType::Filename, "Assets/Shaders/SimpleShader3d.vert", "Assets/Shaders/SimpleShader3d.frag")
 {

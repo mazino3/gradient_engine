@@ -1,7 +1,7 @@
 #ifndef GRAPHICS_SIMPLE_SHADER_3D
 #define GRAPHICS_SIMPLE_SHADER_3D
 
-#include "Shader.h"
+#include <Graphics/Shaders/Shader.h>
 
 struct SimpleShader3d : Shader
 {

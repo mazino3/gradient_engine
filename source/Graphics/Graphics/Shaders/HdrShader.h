@@ -1,8 +1,8 @@
 #ifndef GRAPHICS_HDR_SHADER_H
 #define GRAPHICS_HDR_SHADER_H
 
-#include "Shader.h"
-#include "../Texture.h"
+#include <Graphics/Shaders/Shader.h>
+#include <Graphics/Texture.h>
 
 struct HdrShader : Shader
 {
