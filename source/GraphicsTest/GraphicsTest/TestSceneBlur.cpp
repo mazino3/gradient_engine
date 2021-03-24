@@ -1,11 +1,11 @@
-#include "TestSceneBlur.h"
-#include "Graphics/Shaders/BlurShader.h"
-#include "Graphics/RenderTexture.h"
-#include "Graphics/Shaders/BypassShader.h"
-#include "Graphics/Shaders/HdrShader.h"
-#include "Graphics/BlurEffectRenderer.h"
+#include <GraphicsTest/TestSceneBlur.h>
+#include <Graphics/Shaders/BlurShader.h>
+#include <Graphics/RenderTexture.h>
+#include <Graphics/Shaders/BypassShader.h>
+#include <Graphics/Shaders/HdrShader.h>
+#include <Graphics/BlurEffectRenderer.h>
 #include <iostream>
-#include "imgui.h"
+#include <imgui.h>
 
 struct TestSceneBlurImpl
 {

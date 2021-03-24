@@ -1,8 +1,8 @@
-#include "TestSceneBlurGroup.h"
-#include "imgui.h"
-#include "Graphics/RenderTexture.h"
-#include "Graphics/Shaders/BypassShader.h"
-#include "Graphics/BlurShaderGroup.h"
+#include <GraphicsTest/TestSceneBlurGroup.h>
+#include <imgui.h>
+#include <Graphics/RenderTexture.h>
+#include <Graphics/Shaders/BypassShader.h>
+#include <Graphics/BlurShaderGroup.h>
 #include <iostream>
 
 struct TestSceneBlurGroupImpl

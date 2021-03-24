@@ -1,5 +1,5 @@
-#include "TestSceneBase.h"
-#include "Graphics/InputClient.h"
+#include <GraphicsTest/TestSceneBase.h>
+#include <Graphics/InputClient.h>
 
 struct TestSceneBaseImpl
 {

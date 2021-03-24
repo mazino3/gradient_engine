@@ -1,6 +1,6 @@
-#include "TestSceneImGui.h"
-#include "Graphics/InputClient.h"
-#include "imgui.h"
+#include <GraphicsTest/TestSceneImGui.h>
+#include <Graphics/InputClient.h>
+#include <imgui.h>
 
 struct TestSceneImGuiImpl
 {

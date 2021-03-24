@@ -1,4 +1,4 @@
-#include "GaussianHelper.h"
+#include <Math/GaussianHelper.h>
 #include <math.h>
 
 static float gaussianDensity(float x, float sigma)

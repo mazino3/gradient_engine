@@ -1,10 +1,10 @@
-#include "TestSceneBloom.h"
-#include "Graphics/RenderTexture.h"
-#include "Graphics/BloomEffectRenderer.h"
-#include "Graphics/Shaders/BypassShader.h"
-#include "Graphics/Shaders/HdrShader.h"
-#include "Graphics/Colors.h"
-#include "imgui.h"
+#include <GraphicsTest/TestSceneBloom.h>
+#include <Graphics/RenderTexture.h>
+#include <Graphics/BloomEffectRenderer.h>
+#include <Graphics/Shaders/BypassShader.h>
+#include <Graphics/Shaders/HdrShader.h>
+#include <Graphics/Colors.h>
+#include <imgui.h>
 #include <vector>
 #include <iostream>
 

@@ -1,8 +1,8 @@
-#include "TestSceneRenderer.h"
-#include "Graphics/InputClient.h"
-#include "Graphics/Renderer.h"
-#include "Graphics/FreeCameraController.h"
-#include "imgui.h"
+#include <GraphicsTest/TestSceneRenderer.h>
+#include <Graphics/InputClient.h>
+#include <Graphics/Renderer.h>
+#include <Graphics/FreeCameraController.h>
+#include <imgui.h>
 
 struct TestSceneRendererImpl
 {

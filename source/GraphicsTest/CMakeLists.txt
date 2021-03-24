@@ -4,8 +4,8 @@ file(GLOB GRAPHICS_TEST_FILES ${CMAKE_CURRENT_SOURCE_DIR}/GraphicsTest/*.cpp ${C
 add_executable(GraphicsTest ${GRAPHICS_TEST_FILES})
 target_link_libraries(GraphicsTest Graphics)
 target_link_libraries(GraphicsTest ImGui)
-#target_include_directories(GraphicsTest PRIVATE ${PROJECT_SOURCE_DIR}/imgui-1.79)
-target_include_directories(GraphicsTest PRIVATE ${PROJECT_SOURCE_DIR}/source)
+
+target_include_directories(GraphicsTest PRIVATE ${PROJECT_SOURCE_DIR}/source/GraphicsTest)
 
 add_custom_command(
         TARGET GraphicsTest POST_BUILD

@@ -3,12 +3,12 @@
 #include <GLFW/glfw3.h>
 #include <glm/vec3.hpp>
 
-#include "Graphics/RenderWindow.h"
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
+#include <Graphics/RenderWindow.h>
+#include <imgui.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
 #include <iostream>
-#include "TestSceneFactory.h"
+#include <GraphicsTest/TestSceneFactory.h>
 
 bool getNextSceneWithButtons(TestSceneId& outId)
 {

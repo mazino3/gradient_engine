@@ -1,9 +1,9 @@
-#include "TestSceneFactory.h"
-#include "TestSceneImGui.h"
-#include "TestSceneRenderer.h"
-#include "TestSceneBlur.h"
-#include "TestSceneBlurGroup.h"
-#include "TestSceneBloom.h"
+#include <GraphicsTest/TestSceneFactory.h>
+#include <GraphicsTest/TestSceneImGui.h>
+#include <GraphicsTest/TestSceneRenderer.h>
+#include <GraphicsTest/TestSceneBlur.h>
+#include <GraphicsTest/TestSceneBlurGroup.h>
+#include <GraphicsTest/TestSceneBloom.h>
 #include <unordered_map>
 
 enum SceneIds
