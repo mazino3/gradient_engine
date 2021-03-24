@@ -1,9 +1,9 @@
 #include <glm/ext.hpp>
 #include <cmath>
 #include <algorithm>
-#include "FreeCameraController.h"
-#include "KeyCodes.h"
-#include "InputClient.h"
+#include <Graphics/FreeCameraController.h>
+#include <Graphics/KeyCodes.h>
+#include <Graphics/InputClient.h>
 
 static const float PI = 3.14159265f;
 

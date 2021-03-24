@@ -1,4 +1,4 @@
-#include "InputClient.h"
+#include <Graphics/InputClient.h>
 
 struct InputClientImpl
 {

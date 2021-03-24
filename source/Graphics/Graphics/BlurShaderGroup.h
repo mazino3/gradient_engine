@@ -1,8 +1,8 @@
 #ifndef GRAPHICS_BLUR_SHADER_GROUP_H
 #define GRAPHICS_BLUR_SHADER_GROUP_H
 
-#include "Shaders/BlurShader.h"
-#include "RenderTexture.h"
+#include <Graphics/Shaders/BlurShader.h>
+#include <Graphics/RenderTexture.h>
 #include <memory>
 
 struct BlurShaderGroupImpl;

@@ -1,11 +1,11 @@
 #ifndef GRAPHICS_RENDER_OBJECT_H
 #define GRAPHICS_RENDER_OBJECT_H
 
-#include "Texture.h"
-#include "GeometryDefinition.h"
-#include "Mesh.h"
-#include "Material.h"
-#include "Transform.h"
+#include <Graphics/Texture.h>
+#include <Graphics/GeometryDefinition.h>
+#include <Graphics/Mesh.h>
+#include <Graphics/Material.h>
+#include <Graphics/Transform.h>
 
 struct RenderObject
 {

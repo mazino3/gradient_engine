@@ -1,4 +1,4 @@
-#include "Texture.h"
+#include <Graphics/Texture.h>
 #include <GL/glew.h>
 #define STB_IMAGE_STATIC
 #define STB_IMAGE_IMPLEMENTATION

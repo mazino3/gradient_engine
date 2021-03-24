@@ -1,8 +1,8 @@
 #ifndef GRAPHICS_FREE_CAMERA_CONTROLLER_H
 #define GRAPHICS_FREE_CAMERA_CONTROLLER_H
 
-#include "Camera.h"
-#include "InputClientBase.h"
+#include <Graphics/Camera.h>
+#include <Graphics/InputClientBase.h>
 #include <memory>
 
 struct FreeCameraControllerImpl;

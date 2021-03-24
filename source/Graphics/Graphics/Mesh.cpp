@@ -1,4 +1,4 @@
-#include "Mesh.h"
+#include <Graphics/Mesh.h>
 #include <GL/glew.h>
 
 struct MeshImpl

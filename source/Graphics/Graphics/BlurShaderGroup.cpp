@@ -1,4 +1,4 @@
-#include "BlurShaderGroup.h"
+#include <Graphics/BlurShaderGroup.h>
 #include <vector>
 #include <utility>
 #include <cmath>

@@ -1,4 +1,4 @@
-#include "InputServer.h"
+#include <Graphics/InputServer.h>
 #include <vector>
 #include <utility>
 #include <algorithm>

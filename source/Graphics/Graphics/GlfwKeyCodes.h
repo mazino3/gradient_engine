@@ -1,8 +1,8 @@
 #ifndef GRAPHICS_GLFW_KEYCODES_H
 #define GRAPHICS_GLFW_KEYCODES_H
 
-#include "GLFW/glfw3.h"
-#include "KeyCodes.h"
+#include <GLFW/glfw3.h>
+#include <Graphics/KeyCodes.h>
 
 int glfwMouseCodeToEngineMouseCode(int glfwKeycode)
 {

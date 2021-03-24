@@ -1,6 +1,6 @@
-#include "OrbitCameraController.h"
-#include "InputClient.h"
-#include "KeyCodes.h"
+#include <Graphics/OrbitCameraController.h>
+#include <Graphics/InputClient.h>
+#include <Graphics/KeyCodes.h>
 #include <cmath>
 #include <algorithm>
 #include <glm/ext.hpp>

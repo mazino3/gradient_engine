@@ -1,4 +1,4 @@
-#include "Camera.h"
+#include <Graphics/Camera.h>
 #include <glm/ext.hpp>
 #include <vector>
 #include <iostream>

@@ -1,6 +1,5 @@
-#include "GeometryDefinition.h"
-#include "Colors.h"
-#include "math.h"
+#include <Graphics/GeometryDefinition.h>
+#include <Graphics/Colors.h>
 #include <glm/ext.hpp>
 
 static const float PI = 3.141593f;

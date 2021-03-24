@@ -1,5 +1,5 @@
 #include <GL/glew.h>
-#include "RenderTarget.h"
+#include <Graphics/RenderTarget.h>
 
 struct RenderTargetImpl
 {

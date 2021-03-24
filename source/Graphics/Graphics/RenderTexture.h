@@ -1,8 +1,8 @@
 #ifndef GRAPHICS_RENDER_TEXTURE_H
 #define GRAPHICS_RENDER_TEXTURE_H
 
-#include "RenderTarget.h"
-#include "Texture.h"
+#include <Graphics/RenderTarget.h>
+#include <Graphics/Texture.h>
 #include <memory>
 
 struct RenderTextureImpl;

@@ -2,12 +2,12 @@
 #define GRAPHICS_RENDERER_H
 
 #include <memory>
-#include "Camera.h"
-#include "RenderObject.h"
-#include "RenderTarget.h"
-#include "SkyboxObject.h"
-#include "Lights.h"
-#include "RendererSettings.h"
+#include <Graphics/Camera.h>
+#include <Graphics/RenderObject.h>
+#include <Graphics/RenderTarget.h>
+#include <Graphics/SkyboxObject.h>
+#include <Graphics/Lights.h>
+#include <Graphics/RendererSettings.h>
 
 struct RendererImpl;
 

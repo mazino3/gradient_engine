@@ -2,7 +2,7 @@
 #define GRAPHICS_BLOOM_EFFECT_RENDERER_H
 
 #include <memory>
-#include "RenderTexture.h"
+#include <Graphics/RenderTexture.h>
 
 struct BloomEffectRendererImpl;
 

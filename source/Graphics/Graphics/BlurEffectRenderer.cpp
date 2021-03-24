@@ -1,4 +1,4 @@
-#include "BlurEffectRenderer.h"
+#include <Graphics/BlurEffectRenderer.h>
 
 struct BlurEffectRendererImpl
 {

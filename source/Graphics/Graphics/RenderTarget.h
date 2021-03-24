@@ -3,8 +3,8 @@
 
 #include <glm/vec4.hpp>
 #include <memory>
-#include "Mesh.h"
-#include "Shaders/Shader.h"
+#include <Graphics/Mesh.h>
+#include <Graphics/Shaders/Shader.h>
 
 struct RenderTargetImpl;
 

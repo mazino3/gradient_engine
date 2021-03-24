@@ -1,7 +1,7 @@
 #ifndef GRAPHICS_INPUT_SERVER_H
 #define GRAPHICS_INPUT_SERVER_H
 
-#include "InputClientBase.h"
+#include <Graphics/InputClientBase.h>
 #include <memory>
 
 struct InputServerImpl;

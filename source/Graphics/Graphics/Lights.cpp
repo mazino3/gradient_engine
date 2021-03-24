@@ -1,4 +1,4 @@
-#include "Lights.h"
+#include <Graphics/Lights.h>
 
 DirectionalLight::DirectionalLight() :
 	ambientColor(0, 0, 0),

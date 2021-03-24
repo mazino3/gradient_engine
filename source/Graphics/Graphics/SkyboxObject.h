@@ -1,10 +1,10 @@
 #ifndef GRAPHICS_SKYBOX_OBJECT_H
 #define GRAPHICS_SKYBOX_OBJECT_H
 
-#include "Mesh.h"
-#include "Transform.h"
-#include "CubeMap.h"
-#include "GeometryDefinition.h"
+#include <Graphics/Mesh.h>
+#include <Graphics/Transform.h>
+#include <Graphics/CubeMap.h>
+#include <Graphics/GeometryDefinition.h>
 #include <glm/vec3.hpp>
 
 struct SkyboxObject

@@ -1,17 +1,17 @@
-#include "Renderer.h"
+#include <Graphics/Renderer.h>
 
-#include "Shaders/Shader3d.h"
-#include "Shaders/SimpleShader3d.h"
-#include "Shaders/SkyboxShader.h"
-#include "Shaders/ShadowShader.h"
-#include "Shaders/HdrShader.h"
-#include "Shaders/OutlineAddShader.h"
-#include "Shaders/AddShader.h"
+#include <Graphics/Shaders/Shader3d.h>
+#include <Graphics/Shaders/SimpleShader3d.h>
+#include <Graphics/Shaders/SkyboxShader.h>
+#include <Graphics/Shaders/ShadowShader.h>
+#include <Graphics/Shaders/HdrShader.h>
+#include <Graphics/Shaders/OutlineAddShader.h>
+#include <Graphics/Shaders/AddShader.h>
 
-#include "RenderTexture.h"
-#include "BloomEffectRenderer.h"
-#include "BlurEffectRenderer.h"
-#include "Shaders/BypassPostprocessingShader.h"
+#include <Graphics/RenderTexture.h>
+#include <Graphics/BloomEffectRenderer.h>
+#include <Graphics/BlurEffectRenderer.h>
+#include <Graphics/Shaders/BypassPostprocessingShader.h>
 #include <vector>
 #include <algorithm>
 #include <iostream>

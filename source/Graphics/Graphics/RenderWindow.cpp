@@ -1,8 +1,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include "RenderWindow.h"
+#include <Graphics/RenderWindow.h>
 #include <iostream>
-#include "GlfwKeyCodes.h"
+#include <Graphics/GlfwKeyCodes.h>
 
 
 struct RenderWindowImpl

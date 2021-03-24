@@ -1,7 +1,7 @@
 #ifndef GRAPHICS_MESH_H
 #define GRAPHICS_MESH_H
 
-#include "GeometryDefinition.h"
+#include <Graphics/GeometryDefinition.h>
 #include <memory>
 
 struct MeshImpl;

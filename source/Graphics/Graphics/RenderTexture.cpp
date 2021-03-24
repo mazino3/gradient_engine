@@ -1,4 +1,4 @@
-#include "RenderTexture.h"
+#include <Graphics/RenderTexture.h>
 #include <memory>
 #include <GL/glew.h>
 #include <iostream>

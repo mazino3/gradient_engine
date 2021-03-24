@@ -1,8 +1,8 @@
 #ifndef GRAPHICS_ORBIT_CAMERA_CONTROLLER_H
 #define GRAPHICS_ORBIT_CAMERA_CONTROLLER_H
 
-#include "Camera.h"
-#include "InputClientBase.h"
+#include <Graphics/Camera.h>
+#include <Graphics/InputClientBase.h>
 #include <memory>
 #include <glm/vec3.hpp>
 

@@ -3,8 +3,8 @@
 
 #include <memory>
 #include <string>
-#include "RenderTarget.h"
-#include "InputServer.h"
+#include <Graphics/RenderTarget.h>
+#include <Graphics/InputServer.h>
 
 struct RenderWindowImpl;
 

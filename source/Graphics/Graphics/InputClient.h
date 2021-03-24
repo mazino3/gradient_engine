@@ -1,7 +1,7 @@
 #ifndef GRAPHICS_INPUT_CLIENT_H
 #define GRAPHICS_INPUT_CLIENT_H
 
-#include "InputClientBase.h"
+#include <Graphics/InputClientBase.h>
 #include <functional>
 #include <memory>
 
