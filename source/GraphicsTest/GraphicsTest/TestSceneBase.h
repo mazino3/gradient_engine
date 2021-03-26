@@ -5,6 +5,7 @@
 #include "Graphics/RenderTarget.h"
 #include <memory>
 #include <functional>
+#include <vector>
 
 struct TestSceneBaseImpl;
 
@@ -13,7 +14,7 @@ struct TestSceneBase
 	TestSceneBase();
 
 	virtual ~TestSceneBase();
-	virtual InputClientBase& getInputClient();
+	virtual std::vector<InputClientBase*> getInputClients();
 	virtual void render(RenderTarget& renderTarget, float dt) = 0;
 	virtual void renderUi(RenderTarget& renderTarget) = 0;
 

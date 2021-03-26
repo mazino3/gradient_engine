@@ -10,7 +10,7 @@ struct TestSceneRendererImpl;
 struct TestSceneRenderer : TestSceneBase
 {
 	TestSceneRenderer(RenderTarget& renderTarget);
-	InputClientBase& getInputClient() override;
+	std::vector<InputClientBase*> getInputClients() override;
 	void render(RenderTarget& renderTarget, float dt) override;
 	void renderUi(RenderTarget& renderTarget) override;
 private:

@@ -17,9 +17,12 @@ TestSceneImGui::TestSceneImGui()
 	data = std::make_shared<TestSceneImGuiImpl>();
 }
 
-InputClientBase& TestSceneImGui::getInputClient()
+std::vector<InputClientBase*> TestSceneImGui::getInputClients()
 {
-	return data->inputClient;
+	return std::vector<InputClientBase*> 
+	{
+		&data->inputClient
+	};
 }
 
 void TestSceneImGui::render(RenderTarget& renderTarget, float dt)

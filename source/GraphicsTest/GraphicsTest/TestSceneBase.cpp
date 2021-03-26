@@ -1,11 +1,12 @@
 #include <GraphicsTest/TestSceneBase.h>
 #include <Graphics/InputClient.h>
+#include <vector>
 
 struct TestSceneBaseImpl
 {
 	std::function<void(void)> onDestroyCallback;
 
-	InputClient inputClient;
+	std::vector<InputClientBase*> inputClients;
 
 	TestSceneBaseImpl() : 
 		onDestroyCallback([](){})
@@ -22,9 +23,9 @@ TestSceneBase::~TestSceneBase()
 	data->onDestroyCallback();
 }
 
-InputClientBase& TestSceneBase::getInputClient()
+std::vector<InputClientBase*> TestSceneBase::getInputClients()
 {
-	return data->inputClient;
+	return data->inputClients;
 }
 
 void TestSceneBase::onDestroy(std::function<void(void)> onDestroyCallback)

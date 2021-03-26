@@ -9,7 +9,7 @@ struct TestSceneImGuiImpl;
 struct TestSceneImGui : TestSceneBase
 {
 	TestSceneImGui();
-	InputClientBase& getInputClient() override;
+	std::vector<InputClientBase*> getInputClients() override;
 	void render(RenderTarget& renderTarget, float dt) override;
 	void renderUi(RenderTarget& renderTarget) override;
 private:

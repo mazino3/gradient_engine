@@ -74,13 +74,19 @@ int main()
         {
             if (currentScene != nullptr)
             {
-                window.getInput().removeInputClient(currentScene->getInputClient());
+                for (auto inputClient : currentScene->getInputClients())
+                {
+                    window.getInput().removeInputClient(*inputClient);
+                }
             }
             currentScene = TestSceneFactory::createScene(nextSceneId, window);
             if (currentScene != nullptr)
             {
                 std::cout << "opening scene with id: " << nextSceneId << std::endl;
-                window.getInput().addInputClient(currentScene->getInputClient(), 0.0f);
+                for (auto inputClient : currentScene->getInputClients())
+                {
+                    window.getInput().addInputClient(*inputClient, 0.0f);
+                }
                 currentScene->onDestroy([]() 
                 {
                     std::cout << "closing scene" << std::endl;

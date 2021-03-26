@@ -3,6 +3,7 @@
 #include <Graphics/Renderer.h>
 #include <Graphics/FreeCameraController.h>
 #include <imgui.h>
+#include <iostream>
 
 struct TestSceneRendererImpl
 {
@@ -11,6 +12,8 @@ struct TestSceneRendererImpl
     std::unique_ptr<Texture> diffuseTexture;
     std::unique_ptr<Texture> normalTexture;
     std::unique_ptr<CubeMap> skybox;
+
+    InputClient inputClient;
 };
 
 TestSceneRenderer::TestSceneRenderer(RenderTarget& renderTarget)
@@ -18,11 +21,19 @@ TestSceneRenderer::TestSceneRenderer(RenderTarget& renderTarget)
 	data = std::make_shared<TestSceneRendererImpl>();
 	data->renderer = std::make_unique<Renderer>(renderTarget);
 	auto& camera = data->renderer->getCamera();
-    camera.setPerspective(45.0f, 640.0f / 480.0f, 0.1f, 200.0f);
+    camera.setPerspective(45.0f, (float)renderTarget.getWidth() / (float)renderTarget.getHeight(), 0.1f, 200.0f);
     camera.position = glm::vec3(-5, 0, 5);
 	data->cameraController = std::make_unique<FreeCameraController>(camera);
 	data->cameraController->setOnlyRotationMode(false);
 	data->cameraController->setCameraDirection(glm::normalize(glm::vec3(1, 0, -1)));
+
+    data->inputClient.onWindowSizeChanged(([this](int width, int height) 
+    {
+        std::cout << "window size changed" << std::endl;
+        data->renderer->getCamera().setPerspective(45.0f, (float)width / (float)height, 0.1f, 200.0f);
+        data->renderer->updateRenderTargetSize(width, height);
+        return false;
+    }));
 
     Material material;
     material.ambient = glm::vec3(1, 1, 1);
@@ -82,9 +93,13 @@ TestSceneRenderer::TestSceneRenderer(RenderTarget& renderTarget)
     data->renderer->createSkybox(*data->skybox);
 }
 
-InputClientBase& TestSceneRenderer::getInputClient()
+std::vector<InputClientBase*> TestSceneRenderer::getInputClients()
 {
-    return data->cameraController->getInputClient();
+    return std::vector<InputClientBase*> 
+    {
+        &data->cameraController->getInputClient(),
+        &data->inputClient
+    };
 }
 
 void TestSceneRenderer::render(RenderTarget& renderTarget, float dt)
