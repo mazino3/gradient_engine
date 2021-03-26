@@ -9,11 +9,11 @@ struct BlurEffectRendererImpl;
 
 struct BlurEffectRenderer
 {
-	BlurEffectRenderer(RenderTexture& additionalTexture);
-	BlurEffectRenderer(RenderTexture& additionalTexture, float radius);
+	BlurEffectRenderer();
+	BlurEffectRenderer(float radius);
 
 	void setNumberOfPasses(int passes);
-	void render(RenderTexture& renderTarget);
+	void render(RenderTexture& renderTarget, RenderTexture& additionalTexture);
 private:
 	std::shared_ptr<BlurEffectRendererImpl> data;
 };

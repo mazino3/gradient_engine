@@ -79,8 +79,8 @@ struct RendererImpl
 			std::cout << "failed to create render texture inside of Renderer" << std::endl;
 		}
 
-		bloomEffectRenderer = std::make_shared<BloomEffectRenderer>(*renderTexture2, *renderTexture3);
-		outlineBlurRenderer = std::make_shared<BlurEffectRenderer>(*textureForOutline3, 10.0f);
+		bloomEffectRenderer = std::make_shared<BloomEffectRenderer>();
+		outlineBlurRenderer = std::make_shared<BlurEffectRenderer>(10.0f);
 		outlineBlurRenderer->setNumberOfPasses(3);
 
 		for (int i = 0; i < MAX_LIGHTS_WITH_SHADOWS; i++)
@@ -108,10 +108,23 @@ Renderer::Renderer(RenderTarget& baseRenderTarget)
 void Renderer::updateRenderTargetSize(int width, int height)
 {
 	data->renderTexture = std::make_shared<RenderTexture>(width, height, RenderTextureType::Float, true);
-	data->renderTexture2 = std::make_shared <RenderTexture>(width, height, RenderTextureType::Float, true);
-	if (!data->renderTexture->init() || !data->renderTexture->init())
+	data->renderTexture2 = std::make_shared<RenderTexture>(width, height, RenderTextureType::Float, true);
+	data->renderTexture3 = std::make_shared<RenderTexture>(width, height, RenderTextureType::Float, true);
+	data->textureForOutline = std::make_shared<RenderTexture>(width, height, RenderTextureType::Integer, true);
+	data->textureForOutline2 = std::make_shared<RenderTexture>(width, height, RenderTextureType::Integer, true);
+	data->textureForOutline3 = std::make_shared<RenderTexture>(width, height, RenderTextureType::Integer, true);
+
+	bool allInitialized = true;
+	allInitialized &= data->renderTexture->init();
+	allInitialized &= data->renderTexture2->init();
+	allInitialized &= data->renderTexture3->init();
+	allInitialized &= data->textureForOutline->init();
+	allInitialized &= data->textureForOutline2->init();
+	allInitialized &= data->textureForOutline3->init();
+
+	if (!allInitialized)
 	{
-		std::cout << "failed to re-init render textures after resize" << std::endl;
+		std::cout << "failed to create render texture inside of Renderer" << std::endl;
 	}
 }
 
@@ -352,7 +365,7 @@ void Renderer::renderScene()
 	if (data->settings.bloomEnabled)
 	{
 		data->bloomEffectRenderer->setBrightnessThreshold(data->settings.bloomThreshold);
-		data->bloomEffectRenderer->render(*data->renderTexture);
+		data->bloomEffectRenderer->render(*data->renderTexture, *data->renderTexture2, *data->renderTexture3);
 	}
 
 	//preparing outline textures
@@ -377,7 +390,7 @@ void Renderer::renderScene()
 	data->screenMesh.draw();
 	data->textureForOutline2->updateTexture(false);
 	
-	data->outlineBlurRenderer->render(*data->textureForOutline2);
+	data->outlineBlurRenderer->render(*data->textureForOutline2, *data->textureForOutline3);
 	
 	data->textureForOutline3->bind();
 	data->textureForOutline3->setClearColor(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));

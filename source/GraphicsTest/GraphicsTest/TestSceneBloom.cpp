@@ -28,8 +28,7 @@ TestSceneBloomImpl::TestSceneBloomImpl(int width, int height) :
 	renderTexture2(width, height, RenderTextureType::Float, false),
 	renderTexture3(width, height, RenderTextureType::Float, false),
 	screenMesh(GeometryDefinition::SCREEN),
-	numberOfBlurPasses(5),
-	bloomEffectRenderer(renderTexture2, renderTexture3)
+	numberOfBlurPasses(5)
 {
 	if (!renderTexture1.init()) std::cout << "failed to initialize render texture1" << std::endl;
 	if (!renderTexture2.init()) std::cout << "failed to initialize render texture2" << std::endl;
@@ -68,7 +67,7 @@ void TestSceneBloom::render(RenderTarget& renderTarget, float dt)
 	data->renderTexture1.updateTexture(false);
 
 	data->bloomEffectRenderer.setNumberOfBlurPasses(data->numberOfBlurPasses);
-	data->bloomEffectRenderer.render(data->renderTexture1);
+	data->bloomEffectRenderer.render(data->renderTexture1, data->renderTexture2, data->renderTexture3);
 
 	renderTarget.bind();
 	data->hdrShader.bind();

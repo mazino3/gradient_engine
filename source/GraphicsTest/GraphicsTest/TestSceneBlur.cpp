@@ -28,8 +28,7 @@ TestSceneBlurImpl::TestSceneBlurImpl(int width, int height) :
 	renderTexture2(width, height, RenderTextureType::Integer, false),
 	quadMesh(GeometryDefinition::XY_QUAD),
 	screenMesh(GeometryDefinition::SCREEN),
-	numberOfPasses(1),
-	blurEffectRenderer(renderTexture2)
+	numberOfPasses(1)
 {
 	if (!renderTexture.init())
 	{
@@ -56,7 +55,7 @@ void TestSceneBlur::render(RenderTarget& renderTarget, float dt)
 	data->renderTexture.updateTexture(false);
 	
 	data->blurEffectRenderer.setNumberOfPasses(data->numberOfPasses);
-	data->blurEffectRenderer.render(data->renderTexture);
+	data->blurEffectRenderer.render(data->renderTexture, data->renderTexture2);
 
 	renderTarget.bind();
 	data->hdrShader.bind();

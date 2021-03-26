@@ -5,8 +5,8 @@
 
 struct BloomEffectRendererImpl
 {
-	RenderTexture& texture1;
-	RenderTexture& texture2;
+	RenderTexture* lastOutputTexture;
+
 	BlurEffectRenderer blurEffectRenderer;
 	AddShader addShader;
 
@@ -15,22 +15,21 @@ struct BloomEffectRendererImpl
 	int numberOfBlurPasses;
 	float brightnessThreshold;
 
-	BloomEffectRendererImpl(RenderTexture& texture1, RenderTexture& texture2);
+	BloomEffectRendererImpl();
 };
 
-BloomEffectRendererImpl::BloomEffectRendererImpl(RenderTexture& texture1, RenderTexture& texture2) :
-	texture1(texture1),
-	texture2(texture2),
-	blurEffectRenderer(texture2, 24.0f),
+BloomEffectRendererImpl::BloomEffectRendererImpl() :
+	blurEffectRenderer(24.0f),
 	numberOfBlurPasses(3),
 	brightnessThreshold(0.7f),
-	screenMesh(GeometryDefinition::SCREEN)
+	screenMesh(GeometryDefinition::SCREEN),
+	lastOutputTexture(nullptr)
 {
 }
 
-BloomEffectRenderer::BloomEffectRenderer(RenderTexture& texture1, RenderTexture& texture2)
+BloomEffectRenderer::BloomEffectRenderer()
 {
-	data = std::make_shared<BloomEffectRendererImpl>(texture1, texture2);
+	data = std::make_shared<BloomEffectRendererImpl>();
 }
 
 void BloomEffectRenderer::setBrightnessThreshold(float threshold)
@@ -43,29 +42,30 @@ void BloomEffectRenderer::setNumberOfBlurPasses(int numberOfPasses)
 	data->numberOfBlurPasses = numberOfPasses;
 }
 
-void BloomEffectRenderer::render(RenderTexture& target)
+void BloomEffectRenderer::render(RenderTexture& target, RenderTexture& texture1, RenderTexture& texture2)
 {
-	data->texture1.bind();
+	texture1.bind();
 	data->filterBrightShader.bind();
 	data->filterBrightShader.setScreenTexture(target.getRenderedTexture());
 	data->filterBrightShader.setBrightnessThreshold(data->brightnessThreshold);
 	data->screenMesh.draw();
-	data->texture1.updateTexture(false);
+	texture1.updateTexture(false);
 
 	data->blurEffectRenderer.setNumberOfPasses(data->numberOfBlurPasses);
-	data->blurEffectRenderer.render(data->texture1);
+	data->blurEffectRenderer.render(texture1, texture2);
 
-	data->texture2.bind();
+	texture2.bind();
 	data->addShader.bind();
 	data->addShader.setTexture1(target.getRenderedTexture());
-	data->addShader.setTexture2(data->texture1.getRenderedTexture());
+	data->addShader.setTexture2(texture1.getRenderedTexture());
 	data->addShader.setMultiplier1(1.0f);
 	data->addShader.setMultiplier2(1.0f);
 	data->screenMesh.draw();
-	data->texture2.updateTexture(false);
+	texture2.updateTexture(false);
+	data->lastOutputTexture = &texture2;
 }
 
 RenderTexture& BloomEffectRenderer::getOutputTexture()
 {
-	return data->texture2;
+	return *data->lastOutputTexture;
 }
