@@ -13,6 +13,7 @@ struct AABB
 	AABB(glm::vec3 position, glm::vec3 size);
 
 	bool intersectsWith(const Ray& ray);
+	bool intersectsWith(const Ray& ray, glm::vec3& outPoint1, glm::vec3& outPoint2);
 };
 
 #endif
