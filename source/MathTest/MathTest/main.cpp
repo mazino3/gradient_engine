@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "SimpleTest.h"
+#include "RayAABBIntersectionTest.h"
 
 TEST(TestGroup, SimpleTest)
 {
