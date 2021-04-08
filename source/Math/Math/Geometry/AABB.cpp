@@ -24,17 +24,17 @@ bool AABB::intersectsWith(const Ray& ray, glm::vec3& outPoint1, glm::vec3& outPo
 	//x
 	float t0x = (bmin.x - ray.origin.x) / ray.direction.x;
 	float t1x = (bmax.x - ray.origin.x) / ray.direction.x;
-	//if (txMax < txMin) std::swap(txMax, txMin);
+	//if (t0x < t1x) std::swap(t0x, t1x);
 
 	//y
 	float t0y = (bmin.y - ray.origin.y) / ray.direction.y;
 	float t1y = (bmax.y - ray.origin.y) / ray.direction.y;
-	//if (tyMax < tyMin) std::swap(tyMax, tyMin);
+	//if (t0y < t1y) std::swap(t0y, t1y);
 
 	//z
 	float t0z = (bmin.z - ray.origin.z) / ray.direction.z;
 	float t1z = (bmax.z - ray.origin.z) / ray.direction.z;
-	//if (tzMax < tzMin) std::swap(tzMax, tzMin);
+	//if (t0z < t1z) std::swap(t0z, t1z);
 
 	float tMin = std::max(t0x, t0y); //greatest min
 	float tMax = std::min(t1x, t1y); //smallest max

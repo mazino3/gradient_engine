@@ -3,7 +3,7 @@
 
 #include <gtest/gtest.h>
 #include <Math/Geometry/AABB.h>
-#include <iostream>
+#include <glm/ext.hpp>
 
 TEST(Geometry, RayAABBIntersection)
 {
@@ -59,6 +59,18 @@ TEST(Geometry, RayAABBIntersection)
 	ray.origin = glm::vec3(0, 0, 2);
 	ray.direction = glm::vec3(0, 0, 2);
 	EXPECT_FALSE(aabb.intersectsWith(ray));
+
+	//tracing ray diagonally
+
+	ray.origin = glm::vec3(2, 2, 2);
+	ray.direction = glm::normalize(glm::vec3(-1, -1, -1));
+	
+	p1.x = 1337;
+	EXPECT_TRUE(aabb.intersectsWith(ray, p1, p2));
+
+	//EXPECT_NEAR(p1.x, 0.5f, eps);
+	//EXPECT_NEAR(p1.y, 0.5f, eps);
+	//EXPECT_NEAR(p1.z, 0.5f, eps);
 }
 
 #endif
