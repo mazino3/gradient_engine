@@ -46,11 +46,11 @@ TEST(Geometry, RayAABBIntersection)
 
 	static float eps = 0.0001f;
 
-	EXPECT_NEAR(p1.x, -0.5f, eps);
+	EXPECT_NEAR(p1.x, 0.5f, eps);
 	EXPECT_NEAR(p1.y, 0.0f, eps);
 	EXPECT_NEAR(p1.z, 0.0f, eps);
 
-	EXPECT_NEAR(p2.x, 0.5f, eps);
+	EXPECT_NEAR(p2.x, -0.5f, eps);
 	EXPECT_NEAR(p2.y, 0.0f, eps);
 	EXPECT_NEAR(p2.z, 0.0f, eps);
 
@@ -68,9 +68,9 @@ TEST(Geometry, RayAABBIntersection)
 	p1.x = 1337;
 	EXPECT_TRUE(aabb.intersectsWith(ray, p1, p2));
 
-	//EXPECT_NEAR(p1.x, 0.5f, eps);
-	//EXPECT_NEAR(p1.y, 0.5f, eps);
-	//EXPECT_NEAR(p1.z, 0.5f, eps);
+	EXPECT_NEAR(p1.x, 0.5f, eps);
+	EXPECT_NEAR(p1.y, 0.5f, eps);
+	EXPECT_NEAR(p1.z, 0.5f, eps);
 }
 
 #endif
