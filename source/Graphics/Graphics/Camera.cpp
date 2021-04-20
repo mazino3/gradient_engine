@@ -151,3 +151,17 @@ Camera Camera::getDirectionalLightCamera(const glm::vec3& lightDirection, float 
 
 	return resultLightCamera;
 }
+
+Ray Camera::getMouseRay(float normalizedScreenX, float normalizedScreenY)
+{
+	glm::vec4 clipSpaceRay = glm::vec4(normalizedScreenX, normalizedScreenY, -1.0f, 1.0f);
+	glm::vec4 eyeSpaceRay = glm::inverse(_data->projectionMatrix) * clipSpaceRay;
+	eyeSpaceRay.z = -1.0f;
+	eyeSpaceRay.w = 0.0f;
+	
+	glm::mat4 viewMatrix = getViewMatrix();
+	glm::vec3 worldSpaceRay = glm::vec3(glm::inverse(viewMatrix) * eyeSpaceRay);
+	worldSpaceRay = glm::normalize(worldSpaceRay);
+
+	return Ray(position, worldSpaceRay);
+}

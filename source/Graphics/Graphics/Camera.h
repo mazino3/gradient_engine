@@ -4,6 +4,7 @@
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 #include <memory>
+#include <Math/Geometry/Ray.h>
 
 struct CameraImpl;
 
@@ -32,6 +33,7 @@ struct Camera
 	glm::mat4x4 getRotationMatrix();
 
 	Camera getDirectionalLightCamera(const glm::vec3& lightDirection, float shadowDistance);
+	Ray getMouseRay(float normalizedScreenX, float normalizedScreenY);
 
 private:
 
