@@ -62,6 +62,19 @@ GeometryDefinition GeometryDefinition::XY_QUAD(
 		0, 1, 2,
 		0, 2, 3
 	}
+		);
+
+GeometryDefinition GeometryDefinition::LINE(
+	MeshType::Lines,
+	std::vector<Vertex>
+	{
+		Vertex(vec3(0, 0, 0)),
+		Vertex(vec3(1, 0, 0))
+	},
+	std::vector<uint32_t>
+	{
+		0, 1
+	}
 );
 
 GeometryDefinition GeometryDefinition::SCREEN(
