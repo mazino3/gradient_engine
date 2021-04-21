@@ -12,8 +12,7 @@ struct LineShader3d : Shader
 	
 	void setPos1(const glm::vec3& pos);
 	void setPos2(const glm::vec3& pos);
-	
-	void setEyeDirection(const glm::vec3& eyeDirection);
+
 	void setColor(const glm::vec3& color);
 };
 

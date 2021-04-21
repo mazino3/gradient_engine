@@ -23,11 +23,6 @@ void LineShader3d::setPos2(const glm::vec3& pos)
 	setUniform("pos1", pos);
 }
 
-void LineShader3d::setEyeDirection(const glm::vec3& eyeDirection)
-{
-	setUniform("eyeDirection", eyeDirection);
-}
-
 void LineShader3d::setColor(const glm::vec3& color)
 {
 	setUniform("drawColor", color);
