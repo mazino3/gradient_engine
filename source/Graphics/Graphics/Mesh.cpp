@@ -81,6 +81,10 @@ void Mesh::draw() const
 	{
 		case MeshType::Triangles:
 			glPrimitiveType = GL_TRIANGLES;
+			break;
+		case MeshType::Lines:
+			glPrimitiveType = GL_LINES;
+			break;
 	}
 
 	glBindVertexArray(_data->vao);
