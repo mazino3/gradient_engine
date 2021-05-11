@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "RayAABBIntersectionTest.h"
+#include "UndoManagerTest.h"
 
 TEST(TestGroup, SimpleTest)
 {
