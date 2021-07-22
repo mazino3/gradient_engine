@@ -1,5 +1,7 @@
 # Gradient Engine
 
+![Gradient engine](/Assets/Branding/github_header.jpg?raw=true "Gradient engine")
+
  #### Overview
 
  - Gradient engine provides a set of subsystems such as working with graphics and input
