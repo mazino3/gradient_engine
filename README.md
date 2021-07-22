@@ -2,7 +2,7 @@
 
  #### Overview
 
- - Gradient engine provides a set of abstractions above low-level platform dependent things such as working with graphics and input
+ - Gradient engine provides a set of subsystems such as working with graphics and input
  - Currently it supports OpenGL rendering
  - Provides forward rendering pipeline with post-processing support and shadow mapping
  - Graphics module provides basic shaders and classes to implement custom rendering pipelines
