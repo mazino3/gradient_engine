@@ -17,6 +17,7 @@ struct CommandImpl;
 struct Command : CommandBase
 {
 	Command();
+	~Command();
 
 	void apply() override;
 	void undo() override;

@@ -18,6 +18,8 @@ Command::Command()
 	data = std::make_unique<CommandImpl>();
 }
 
+Command::~Command() = default;
+
 void Command::apply()
 {
 	data->applyCallback();

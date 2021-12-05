@@ -5,7 +5,7 @@
 #include <Utility/Command.h>
 #include <Utility/UndoManager.h>
 
-/*
+
 TEST(Utility, CommandTest)
 {
 	int value = 0;
@@ -24,6 +24,6 @@ TEST(Utility, CommandTest)
 	command.undo();
 	EXPECT_EQ(value, 0);
 }
-*/
+
 
 #endif
