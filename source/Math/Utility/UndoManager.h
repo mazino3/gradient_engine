@@ -9,6 +9,7 @@ struct UndoManagerImpl;
 struct UndoManager
 {
 	UndoManager();
+	~UndoManager();
 
 	void applyCommand(std::shared_ptr<CommandBase> command);
 	void undo();

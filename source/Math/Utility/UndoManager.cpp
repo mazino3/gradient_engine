@@ -1,28 +1,53 @@
 #include <Utility/UndoManager.h>
+#include <vector>
 
 struct UndoManagerImpl
 {
-	//todo: implement
+	std::vector<std::shared_ptr<CommandBase>> undoRedoStack;
+	int commandsToRedo;
+
+	UndoManagerImpl();
 };
+
+UndoManagerImpl::UndoManagerImpl() :
+	commandsToRedo(0)
+{}
 
 UndoManager::UndoManager()
 {
 	data = std::make_unique<UndoManagerImpl>();
 }
 
+UndoManager::~UndoManager() = default;
+
 void UndoManager::applyCommand(std::shared_ptr<CommandBase> command)
 {
-	//todo: implement
+	command->apply();
+	data->undoRedoStack.resize(data->undoRedoStack.size() - data->commandsToRedo);
+	data->commandsToRedo = 0;
+	data->undoRedoStack.push_back(command);
 }
 
 void UndoManager::undo()
 {
-	//todo: implement
+	if (data->undoRedoStack.size() == data->commandsToRedo)
+	{
+		return;
+	}
+	auto command = data->undoRedoStack[data->undoRedoStack.size() - 1 - data->commandsToRedo];
+	command->undo();
+	data->commandsToRedo++;
 }
 
 void UndoManager::redo()
 {
-	//todo: implement
+	if (data->commandsToRedo <= 0)
+	{
+		return;
+	}
+	auto command = data->undoRedoStack[data->undoRedoStack.size() - data->commandsToRedo];
+	command->apply();
+	data->commandsToRedo--;
 }
 
 void UndoManager::setUndoDepth()
@@ -32,6 +57,5 @@ void UndoManager::setUndoDepth()
 
 bool UndoManager::hasRedoOperations()
 {
-	//todo: implement
-	return false;
+	return data->commandsToRedo > 0;
 }

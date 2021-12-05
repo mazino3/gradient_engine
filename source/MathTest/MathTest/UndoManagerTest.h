@@ -25,5 +25,27 @@ TEST(Utility, CommandTest)
 	EXPECT_EQ(value, 0);
 }
 
+TEST(Utility, UndoManagerTest)
+{
+	UndoManager undoManager;
+	int value = 0;
+	std::shared_ptr<Command> command = std::make_shared<Command>();
+	command->onApply([&value]() 
+	{
+		value = 10;
+	});
+	command->onUndo([&value]() 
+	{
+		value = 0;
+	});
+	EXPECT_FALSE(undoManager.hasRedoOperations());
+	undoManager.applyCommand(command);
+	EXPECT_EQ(value, 10);
+	EXPECT_FALSE(undoManager.hasRedoOperations());
+	undoManager.undo();
+	EXPECT_TRUE(undoManager.hasRedoOperations());
+
+}
+
 
 #endif
