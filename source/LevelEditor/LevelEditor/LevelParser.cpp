@@ -1,5 +1,7 @@
 #include <LevelEditor/LevelParser.h>
 #include <json.hpp>
+#include <fstream>
+#include <iostream>
 
 using json = nlohmann::json;
 
@@ -49,8 +51,20 @@ void from_json(const json& j, LevelData& levelData)
 
 LevelData LevelParser::loadFromFile(const std::string& filename)
 {
-	//todo: implement
-	LevelData result;
+	std::ifstream file(filename, std::ios::in);
+	std::string serializedLevel;
+	if (!file.good())
+	{
+		std::cout << "Can't read file " << filename << std::endl;
+		std::terminate();
+	}
+	file.seekg(0, std::ios::end);
+	serializedLevel.resize((unsigned int)file.tellg());
+	file.seekg(0, std::ios::beg);
+	file.read(&serializedLevel[0], serializedLevel.size());
+	file.close();
+
+	LevelData result = std::move(loadFromString(serializedLevel));
 	return result;
 }
 
@@ -68,5 +82,12 @@ std::string LevelParser::serialize(const LevelData& data)
 
 void LevelParser::saveToFile(const LevelData& data, const std::string& filename)
 {
-	//todo: implement
+	std::string serialized = serialize(data);
+	std::ofstream file(filename);
+	if (!file.good())
+	{
+		std::cout << "failed to save level " << filename << std::endl;
+	}
+	file << serialized;
+	file.close();
 }
