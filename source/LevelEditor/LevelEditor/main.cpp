@@ -8,10 +8,16 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 #include <iostream>
-
+#include <LevelEditor/LevelParser.h>
+#include <LevelEditor/ImGuiBaseWindow.h>
+#include <fstream>
 
 int main()
 {
+    LevelData levelData;
+    levelData.objects.push_back(LevelDataObject(glm::vec3(1, 2, 3), glm::vec3(4, 5, 6)));
+    LevelParser::saveToFile(levelData, "testLevel.json");
+
     const char* glsl_version = "#version 130";
     RenderWindow window(800, 600, "Hello GLFW!");
     if (!window.init())
@@ -22,7 +28,7 @@ int main()
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    ImGuiIO&    io = ImGui::GetIO(); (void)io;
 
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
@@ -34,6 +40,10 @@ int main()
 
     window.setClearColor(glm::vec4(0.1f, 0.0f, 0.2f, 0.0f));
 
+    ImGuiBaseWindow guiWindow;
+    guiWindow.setName("test window");
+    guiWindow.setSize(400, 200);
+    guiWindow.setPos(100, 100);
 
     while (window.isOpen())
     {
@@ -42,18 +52,32 @@ int main()
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
+        
+        guiWindow.render();
 
-        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize;
+        /*
+        if (ImGui::Button("test button"))
+        {
+            std::cout << "test button pressed" << std::endl;
+        }
+        
+        ImGui::SetCursorPosX(10.0f);
 
-        ImGui::Begin("test window", nullptr, windowFlags);
-        ImGui::SetWindowSize(ImVec2(200.0f, 100.0f));
-        ImGui::SetWindowPos(ImVec2(0, 0));
-
-        ImGui::End();
-
-
+        if (ImGui::Button("test button 2"))
+        {
+            std::cout << "test button pressed" << std::endl;
+        }
+        */
+     
         ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());        
+
+        auto io = ImGui::GetIO();
+        if (io.WantCaptureMouse)
+        {
+            std::cout << "capturing mouse event" << std::endl;
+        }
+
         window.swapBuffers();
     }
 
