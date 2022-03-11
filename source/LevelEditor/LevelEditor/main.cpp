@@ -45,6 +45,11 @@ int main()
     guiWindow.setSize(400, 200);
     guiWindow.setPos(100, 100);
 
+    guiWindow.createButton(50, 50, "button1");
+    guiWindow.createButton(150, 50, "button2");
+    guiWindow.createButton(50, 150, "button3");
+    guiWindow.createButton(150, 150, "button4");
+
     while (window.isOpen())
     {
         window.clear();

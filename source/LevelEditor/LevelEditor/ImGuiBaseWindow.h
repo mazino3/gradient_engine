@@ -3,10 +3,25 @@
 
 #include <memory>
 #include <string>
+#include <functional>
 #include <glm/vec2.hpp>
 #include <imgui.h>
 
 struct ImGuiBaseWindowImpl;
+struct ImGuiButtonHandlerImpl;
+
+struct ImGuiButtonHandler
+{
+	ImGuiButtonHandler();
+	~ImGuiButtonHandler();
+
+	void onButtonPressed(std::function<void(void)> callback);
+	void fireOnButtonPressed();
+
+private:
+	std::unique_ptr<ImGuiButtonHandlerImpl> data;
+	friend class ImGuiBaseWindow;
+};
 
 struct ImGuiBaseWindow
 {
@@ -23,6 +38,8 @@ struct ImGuiBaseWindow
 
 	void setName(const std::string& windowName);
 	std::string getName();
+
+	ImGuiButtonHandler& createButton(float x, float y, const std::string& name);
 
 	void render();
 

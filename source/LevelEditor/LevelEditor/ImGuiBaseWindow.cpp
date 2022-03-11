@@ -1,13 +1,46 @@
+#include <vector>
 #include <LevelEditor/ImGuiBaseWindow.h>
+
+struct ImGuiButtonHandlerImpl
+{
+	std::function<void(void)> callback;
+	std::string name;
+	glm::vec2 pos;
+
+	ImGuiButtonHandlerImpl() :
+		callback([](){}),
+		pos(0, 0)
+	{}
+};
 
 struct ImGuiBaseWindowImpl
 {
 	glm::vec2 size;
 	glm::vec2 pos;
 	std::string windowName;
+	std::vector<std::shared_ptr<ImGuiButtonHandler>> buttonHandlers;
 
 	ImGuiBaseWindowImpl();
 };
+
+ImGuiButtonHandler::ImGuiButtonHandler()
+{
+	data = std::make_unique<ImGuiButtonHandlerImpl>();
+}
+
+ImGuiButtonHandler::~ImGuiButtonHandler()
+{
+}
+
+void ImGuiButtonHandler::onButtonPressed(std::function<void(void)> callback)
+{
+	data->callback = callback;
+}
+
+void ImGuiButtonHandler::fireOnButtonPressed()
+{
+	data->callback();
+}
 
 ImGuiBaseWindowImpl::ImGuiBaseWindowImpl() :
 	size(0, 0),
@@ -63,5 +96,25 @@ void ImGuiBaseWindow::render()
 	ImGui::SetWindowSize(ImVec2(data->size.x, data->size.y));
 	ImGui::SetWindowPos(ImVec2(data->pos.x, data->pos.y));
 
+	for (auto& handler : data->buttonHandlers)
+	{
+		auto prevCur = ImGui::GetCursorPos();
+		ImGui::SetCursorPos(ImVec2(handler->data->pos.x, handler->data->pos.y));
+		if (ImGui::Button(handler->data->name.c_str()))
+		{
+			handler->fireOnButtonPressed();
+		}
+	}
+
 	ImGui::End();
+}
+
+ImGuiButtonHandler& ImGuiBaseWindow::createButton(float x, float y, const std::string& name)
+{
+	auto handler = std::make_shared<ImGuiButtonHandler>();
+	data->buttonHandlers.push_back(handler);
+	handler->data->name = name;
+	handler->data->pos = glm::vec2(x, y);
+
+	return *handler;
 }
