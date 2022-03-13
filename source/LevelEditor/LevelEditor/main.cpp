@@ -45,7 +45,11 @@ int main()
     guiWindow.setSize(400, 200);
     guiWindow.setPos(100, 100);
 
-    guiWindow.createButton(50, 50, "button1");
+    guiWindow.createButton(50, 50, "button1")
+        .onButtonPressed([]() 
+            {
+                std::cout << "huy pizda" << std::endl;
+            });
     guiWindow.createButton(150, 50, "button2");
     guiWindow.createButton(50, 150, "button3");
     guiWindow.createButton(150, 150, "button4");
@@ -77,11 +81,7 @@ int main()
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());        
 
-        auto io = ImGui::GetIO();
-        if (io.WantCaptureMouse)
-        {
-            std::cout << "capturing mouse event" << std::endl;
-        }
+        
 
         window.swapBuffers();
     }
