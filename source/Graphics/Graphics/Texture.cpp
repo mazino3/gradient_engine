@@ -13,6 +13,8 @@ struct TextureImpl
 	bool multisample;
 };
 
+
+
 Texture::Texture(unsigned int handler, int width, int height, bool multisample)
 {
 	_data = std::make_shared<TextureImpl>();
@@ -20,6 +22,24 @@ Texture::Texture(unsigned int handler, int width, int height, bool multisample)
 	_data->width = width;
 	_data->height = height;
 	_data->multisample = multisample;
+}
+
+Texture Texture::createWhiteTexture()
+{
+	unsigned int handler;
+	glGenTextures(1, &handler);
+	glBindTexture(GL_TEXTURE_2D, handler);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	unsigned char imageData[] = { 0xFF, 0xFF, 0xFF, 0xFF };
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
+
+	return Texture(handler, 1, 1, false);
 }
 
 Texture::Texture(const std::string& filename)
@@ -56,8 +76,18 @@ Texture::Texture(const std::string& filename)
 	stbi_image_free(imageData);
 }
 
+Texture::Texture(Texture&& other)
+{
+	_data = other._data;
+	other._data = std::shared_ptr<TextureImpl>(nullptr);
+}
+
 Texture::~Texture()
 {
+	if (!_data)
+	{
+		return;
+	}
 	glDeleteTextures(1, &_data->textureHandler);
 }
 
