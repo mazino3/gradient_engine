@@ -434,18 +434,18 @@ void Renderer::renderScene()
 	data->screenMesh.draw();
 }
 
-RenderObject& Renderer::createRenderObject(Texture& diffuseTexture, const GeometryDefinition& geometryDefinition, const Material& material)
+std::weak_ptr<RenderObject> Renderer::createRenderObject(Texture& diffuseTexture, const GeometryDefinition& geometryDefinition, const Material& material)
 {
 	auto result = std::make_shared<RenderObject>(diffuseTexture, geometryDefinition, material);
 	data->renderObjects.push_back(result);
-	return *result;
+	return result;
 }
 
-RenderObject& Renderer::createRenderObject(Texture& diffuseTexture, Texture& normalTexture, const GeometryDefinition& geometryDefinition, const Material& material)
+std::weak_ptr<RenderObject> Renderer::createRenderObject(Texture& diffuseTexture, Texture& normalTexture, const GeometryDefinition& geometryDefinition, const Material& material)
 {
 	auto result = std::make_shared<RenderObject>(diffuseTexture, normalTexture, geometryDefinition, material);
 	data->renderObjects.push_back(result);
-	return *result;
+	return result;
 }
 
 void Renderer::removeRenderObject(RenderObject& objectToRemove)

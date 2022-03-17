@@ -25,8 +25,8 @@ struct Renderer
 
 	bool isValid();
 
-	RenderObject& createRenderObject(Texture& diffuseTexture, const GeometryDefinition& geometryDefinition, const Material& material);
-	RenderObject& createRenderObject(Texture& diffuseTexture, Texture& normalTexture, const GeometryDefinition& geometryDefinition, const Material& material);
+	std::weak_ptr<RenderObject> createRenderObject(Texture& diffuseTexture, const GeometryDefinition& geometryDefinition, const Material& material);
+	std::weak_ptr<RenderObject> createRenderObject(Texture& diffuseTexture, Texture& normalTexture, const GeometryDefinition& geometryDefinition, const Material& material);
 	void removeRenderObject(RenderObject& renderObject);
 
 	void createSkybox(CubeMap& cubemap);

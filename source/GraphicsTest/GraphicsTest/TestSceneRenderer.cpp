@@ -49,32 +49,33 @@ TestSceneRenderer::TestSceneRenderer(RenderTarget& renderTarget)
     data->normalTexture = std::make_unique<Texture>("Assets/Sprites/Scifi_Normal.png");
     data->whiteTexture = std::make_unique<Texture>(Texture::createWhiteTexture());
 
-    auto& renderObject1 = data->renderer->createRenderObject(*data->diffuseTexture, *data->normalTexture, quad, material);
-    renderObject1.material.alpha = 1.0f;
-    renderObject1.textureScalingEnabled = true;
-    renderObject1.hasOutline = true;
+    auto renderObject1 = data->renderer->createRenderObject(*data->diffuseTexture, *data->normalTexture, quad, material).lock();
+    
+    renderObject1->material.alpha = 1.0f;
+    renderObject1->textureScalingEnabled = true;
+    renderObject1->hasOutline = true;
     //renderObject1.textureScaleMultiplier = 0.25f;
 
-    auto& renderObject2 = data->renderer->createRenderObject(*data->diffuseTexture, *data->normalTexture, quad, material);
-    renderObject2.transform.scale.z = 0.1;
-    renderObject2.transform.scale.x = 20;
-    renderObject2.transform.scale.y = 20;
-    renderObject2.transform.position.z -= 0.4;
-    renderObject2.textureScalingEnabled = true;
-    renderObject2.material.alpha = 1.0f;
-    renderObject2.material.ambient = glm::vec3(0.2, 1.0, 0.2);
-    renderObject2.material.diffuse = glm::vec3(0.2, 1.0, 0.2);
+    auto renderObject2 = data->renderer->createRenderObject(*data->diffuseTexture, *data->normalTexture, quad, material).lock();
+    renderObject2->transform.scale.z = 0.1;
+    renderObject2->transform.scale.x = 20;
+    renderObject2->transform.scale.y = 20;
+    renderObject2->transform.position.z -= 0.4;
+    renderObject2->textureScalingEnabled = true;
+    renderObject2->material.alpha = 1.0f;
+    renderObject2->material.ambient = glm::vec3(0.2, 1.0, 0.2);
+    renderObject2->material.diffuse = glm::vec3(0.2, 1.0, 0.2);
 
-    auto& renderObject3 = data->renderer->createRenderObject(*data->diffuseTexture, *data->normalTexture, quad, material);
-    renderObject3.hasOutline = true;
-    renderObject3.transform.position.x -= 2;
+    auto renderObject3 = data->renderer->createRenderObject(*data->diffuseTexture, *data->normalTexture, quad, material).lock();
+    renderObject3->hasOutline = true;
+    renderObject3->transform.position.x -= 2;
 
-    auto& torus = data->renderer->createRenderObject(*data->whiteTexture, GeometryDefinition::createTorus(100, 1, 0.3f), material);
-    torus.transform.position.y += 4;
-    torus.transform.rotation.x = 90.0f;
-    torus.material.alpha = 1.0f;
-    torus.material.ambient = glm::vec3(1.0, 0.2, 0.2);
-    torus.material.diffuse = glm::vec3(1.0, 0.2, 0.2);
+    auto torus = data->renderer->createRenderObject(*data->whiteTexture, GeometryDefinition::createTorus(100, 1, 0.3f), material).lock();
+    torus->transform.position.y += 4;
+    torus->transform.rotation.x = 90.0f;
+    torus->material.alpha = 1.0f;
+    torus->material.ambient = glm::vec3(1.0, 0.2, 0.2);
+    torus->material.diffuse = glm::vec3(1.0, 0.2, 0.2);
 
     auto& light = data->renderer->createDirectionalLight();
     light.ambientColor = glm::vec3(0.3f, 0.3f, 0.3f);
