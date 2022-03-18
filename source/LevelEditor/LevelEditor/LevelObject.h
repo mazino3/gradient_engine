@@ -14,7 +14,7 @@ struct LevelObject
 	LevelObject(Renderer& renderer, Resources& resources, glm::vec3 pos, glm::vec3 scale);
 	~LevelObject();
 
-	void setPosition(const glm::vec3 pos);
+	void setPosition(const glm::vec3& pos);
 	glm::vec3 getPosition();
 
 	AABB& getAABB();

@@ -5,6 +5,7 @@ struct LevelObjectImpl
 {
 	Renderer& renderer;
 	std::weak_ptr<RenderObject> renderObject;
+	AABB aabb;
 
 	LevelObjectImpl(Renderer& renderer);
 };
@@ -18,9 +19,26 @@ LevelObject::LevelObject(Renderer& renderer, Resources& resources, glm::vec3 pos
 {
 	data = std::make_unique<LevelObjectImpl>(renderer);
 	data->renderObject = renderer.createRenderObject(*resources.getWhiteTexture().lock(), GeometryDefinition::CUBE, Material());
+	data->aabb.position = pos;
+	data->aabb.size = scale;
 }
 
 LevelObject::~LevelObject()
 {
 	data->renderer.removeRenderObject(*data->renderObject.lock());
+}
+
+void LevelObject::setPosition(const glm::vec3& pos)
+{
+	data->aabb.position = pos;
+}
+
+glm::vec3 LevelObject::getPosition()
+{
+	return data->aabb.position;
+}
+
+AABB& LevelObject::getAABB()
+{
+	return data->aabb;
 }
