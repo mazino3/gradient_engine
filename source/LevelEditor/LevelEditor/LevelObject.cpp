@@ -31,6 +31,7 @@ LevelObject::~LevelObject()
 void LevelObject::setPosition(const glm::vec3& pos)
 {
 	data->aabb.position = pos;
+	data->renderObject.lock()->transform.position = pos;
 }
 
 glm::vec3 LevelObject::getPosition()
@@ -41,4 +42,24 @@ glm::vec3 LevelObject::getPosition()
 AABB& LevelObject::getAABB()
 {
 	return data->aabb;
+}
+
+glm::vec3 LevelObject::getScale()
+{
+	return data->aabb.size;
+}
+
+void LevelObject::setScale(const glm::vec3& scale)
+{
+	data->aabb.size = scale;
+	data->renderObject.lock()->transform.scale = scale;
+}
+
+void LevelObject::update()
+{
+}
+
+LevelDataObject LevelObject::toDataObject()
+{
+	return LevelDataObject(data->aabb.position, data->aabb.size);
 }

@@ -1,9 +1,13 @@
 #include "Scene.h"
+#include "LevelObject.h"
+#include <vector>
 
 struct SceneImpl
 {
 	Renderer& renderer;
 	Resources& resources;
+
+	std::vector<std::shared_ptr<LevelObject>> objects;
 
 	SceneImpl(Renderer& renderer, Resources& resources);
 };
@@ -25,12 +29,21 @@ Scene::~Scene()
 
 void Scene::load(const LevelData& levelData)
 {
-	//todo: implement
+	for (auto& obj : levelData.objects)
+	{
+		auto newObject = std::make_shared<LevelObject>(data->renderer, data->resources, obj.position, obj.scale);
+		data->objects.push_back(newObject);
+	}
 }
 
 LevelData Scene::getLevelData()
 {
-	//todo: implement
+	LevelData result;
+	for (auto& obj : data->objects)
+	{
+		result.objects.push_back(LevelDataObject(obj->getPosition(), obj->getScale()));
+	}
+	return result;
 }
 
 void Scene::update()
