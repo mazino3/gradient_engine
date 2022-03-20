@@ -10,6 +10,7 @@
 #include <iostream>
 #include <LevelEditor/LevelParser.h>
 #include <LevelEditor/ImGuiBaseWindow.h>
+#include <LevelEditor/LevelEditor.h>
 #include <fstream>
 
 int main()
@@ -40,49 +41,18 @@ int main()
 
     window.setClearColor(glm::vec4(0.1f, 0.0f, 0.2f, 0.0f));
 
-    ImGuiBaseWindow guiWindow;
-    guiWindow.setName("test window");
-    guiWindow.setSize(400, 200);
-    guiWindow.setPos(100, 100);
-
-    guiWindow.createButton(50, 50, "button1")
-        .onButtonPressed([]() 
-            {
-                std::cout << "huy pizda" << std::endl;
-            });
-    guiWindow.createButton(150, 50, "button2");
-    guiWindow.createButton(50, 150, "button3");
-    guiWindow.createButton(150, 150, "button4");
+    LevelEditor levelEditor(window);
 
     while (window.isOpen())
     {
         window.clear();
+        levelEditor.render(window, 1.0f / 60.0f);
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
-        
-        guiWindow.render();
-
-        /*
-        if (ImGui::Button("test button"))
-        {
-            std::cout << "test button pressed" << std::endl;
-        }
-        
-        ImGui::SetCursorPosX(10.0f);
-
-        if (ImGui::Button("test button 2"))
-        {
-            std::cout << "test button pressed" << std::endl;
-        }
-        */
-     
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());        
-
-        
-
         window.swapBuffers();
     }
 
