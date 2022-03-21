@@ -20,6 +20,8 @@ struct InputServer
 	void fireKeyPressed(int key);
 	void fireKeyReleased(int key);
 	void fireWindowSizeChanged(int width, int height);
+
+	void processInput();
 private:
 	std::shared_ptr<InputServerImpl> data;
 };

@@ -1,12 +1,16 @@
 #include <Graphics/InputServer.h>
+#include "InputServerEvents.h"
 #include <vector>
 #include <utility>
 #include <algorithm>
 #include <iostream>
 
+
+
 struct InputServerImpl
 {
 	std::vector<std::pair<InputClientBase*, float> > inputClients;
+	std::vector<InputEvent> inputEvents;
 };
 
 InputServer::InputServer()
@@ -45,84 +49,98 @@ void InputServer::removeInputClient(InputClientBase& inputClient)
 
 void InputServer::fireMousePressed(double xpos, double ypos, int button)
 {
-	for (const auto& inputClient : data->inputClients)
-	{
-		bool consumed = inputClient.first->onMousePressed(xpos, ypos, button);
-		if (consumed)
-		{
-			break;
-		}
-	}
+	InputEvent e;
+	e.type = InputEventType::MOUSE_PRESSED;
+	e.mousePressed = MousePressedEvent{ xpos, ypos, button };
+	data->inputEvents.push_back(e);
 }
 
 void InputServer::fireMouseMoved(double xpos, double ypos)
 {
-	for (const auto& inputClient : data->inputClients)
-	{
-		bool consumed = inputClient.first->onMouseMoved(xpos, ypos);
-		if (consumed)
-		{
-			break;
-		}
-	}
+	InputEvent e;
+	e.type = InputEventType::MOUSE_MOVED;
+	e.mouseMoved = MouseMovedEvent{ xpos, ypos };
+	data->inputEvents.push_back(e);
 }
 
 void InputServer::fireMouseReleased(double xpos, double ypos, int button)
 {
-	for (const auto& inputClient : data->inputClients)
-	{
-		bool consumed = inputClient.first->onMouseReleased(xpos, ypos, button);
-		if (consumed)
-		{
-			break;
-		}
-	}
+	InputEvent e;
+	e.type = InputEventType::MOUSE_RELEASED;
+	e.mouseReleased = MouseReleasedEvent{ xpos, ypos, button };
+	data->inputEvents.push_back(e);
 }
 
 void InputServer::fireMouseScrolled(double xoffset, double yoffset)
 {
-	for (const auto& inputClient : data->inputClients)
-	{
-		bool consumed = inputClient.first->onMouseScrolled(xoffset, yoffset);
-		if (consumed)
-		{
-			break;
-		}
-	}
+	InputEvent e;
+	e.type = InputEventType::MOUSE_SCROLLED;
+	e.mouseScrolled = MouseScrolledEvent{ xoffset, yoffset };
+	data->inputEvents.push_back(e);
 }
 
 void InputServer::fireKeyPressed(int key)
 {
-	for (const auto& inputClient : data->inputClients)
-	{
-		bool consumed = inputClient.first->onKeyPressed(key);
-		if (consumed)
-		{
-			break;
-		}
-	}
+	InputEvent e;
+	e.type = InputEventType::KEY_PRESSED;
+	e.keyPressed = KeyPressedEvent{ key };
+	data->inputEvents.push_back(e);
 }
 
 void InputServer::fireKeyReleased(int key)
 {
-	for (const auto& inputClient : data->inputClients)
-	{
-		bool consumed = inputClient.first->onKeyReleased(key);
-		if (consumed)
-		{
-			break;
-		}
-	}
+	InputEvent e;
+	e.type = InputEventType::KEY_RELEASED;
+	e.keyReleased = KeyReleasedEvent{ key };
+	data->inputEvents.push_back(e);
 }
 
 void InputServer::fireWindowSizeChanged(int width, int height)
 {
-	for (const auto& inputClient : data->inputClients)
+	InputEvent e;
+	e.type = InputEventType::WINDOW_SIZE_CHANGED;
+	e.windowSizeChanged = WindowSizeChangedEvent{ width, height };
+	data->inputEvents.push_back(e);
+}
+
+void InputServer::processInput()
+{
+	for (auto& e : data->inputEvents)
 	{
-		bool consumed = inputClient.first->onWindowSizeChanged(width, height);
-		if (consumed)
+		bool consumed = false;
+		for (auto& inputClient : data->inputClients)
 		{
-			break;
+			switch (e.type)
+			{
+				case InputEventType::MOUSE_PRESSED:
+					consumed = inputClient.first->onMousePressed(e.mousePressed.xpos, e.mousePressed.ypos, e.mousePressed.button);
+					break;
+				case InputEventType::MOUSE_RELEASED:
+					consumed = inputClient.first->onMouseReleased(e.mouseReleased.xpos, e.mouseReleased.ypos, e.mouseReleased.button);
+					break;
+				case InputEventType::MOUSE_MOVED:
+					consumed = inputClient.first->onMouseMoved(e.mouseMoved.xpos, e.mouseMoved.ypos);
+					break;
+				case InputEventType::MOUSE_SCROLLED:
+					consumed = inputClient.first->onMouseScrolled(e.mouseScrolled.xoffset, e.mouseScrolled.yoffset);
+					break;
+				case InputEventType::KEY_PRESSED:
+					consumed = inputClient.first->onKeyPressed(e.keyPressed.key);
+					break;
+				case InputEventType::KEY_RELEASED:
+					consumed = inputClient.first->onKeyReleased(e.keyReleased.key);
+					break;
+				case InputEventType::WINDOW_SIZE_CHANGED:
+					consumed = inputClient.first->onWindowSizeChanged(e.windowSizeChanged.width, e.windowSizeChanged.height);
+					break;
+			}
+
+			if (consumed)
+			{
+				break;
+			}
 		}
 	}
+
+	data->inputEvents.clear();
 }
