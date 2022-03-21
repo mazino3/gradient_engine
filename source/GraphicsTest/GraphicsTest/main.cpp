@@ -54,7 +54,7 @@ int main()
     {
         window.clear();
 
-        window.getInput().processInput();
+        window.getInput().processInput(); 
         if (currentScene != nullptr)
         {
             currentScene->render(window, 0.016f);
