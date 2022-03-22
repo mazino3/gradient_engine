@@ -4,6 +4,7 @@
 #include <glm/vec3.hpp>
 
 #include <Graphics/RenderWindow.h>
+#include <Graphics/InputClient.h>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
@@ -12,6 +13,8 @@
 #include <LevelEditor/ImGuiBaseWindow.h>
 #include <LevelEditor/LevelEditor.h>
 #include <fstream>
+
+#include "InputPriorities.h"
 
 int main()
 {
@@ -26,31 +29,54 @@ int main()
         std::cerr << "failed to create window";
         return -1;
     }
+    window.setClearColor(glm::vec4(0.1f, 0.0f, 0.2f, 0.0f));
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGuiIO&    io = ImGui::GetIO(); (void)io;
-
-    // Setup Dear ImGui style
     ImGui::StyleColorsDark();
-    //ImGui::StyleColorsClassic();
 
     // Setup Platform/Renderer bindings
     ImGui_ImplGlfw_InitForOpenGL(window.getWindowPointer(), true);
-    ImGui_ImplOpenGL3_Init(glsl_version);
-
-    window.setClearColor(glm::vec4(0.1f, 0.0f, 0.2f, 0.0f));
+    ImGui_ImplOpenGL3_Init(glsl_version);    
 
     LevelEditor levelEditor(window);
+
+    InputClient imguiInputClient;
+    imguiInputClient.onMousePressed([](double xpos, double ypos, int button) 
+    {
+        return ImGui::GetIO().WantCaptureMouse;
+    });
+    imguiInputClient.onMouseMoved([](double xpos, double ypos) 
+    {
+        return ImGui::GetIO().WantCaptureMouse;
+    });
+    imguiInputClient.onMouseReleased([](double xpos, double ypos, int button) 
+    {
+        return ImGui::GetIO().WantCaptureMouse;
+    });
+    window.getInput().addInputClient(imguiInputClient, InputPriorities::IMGUI);
+
+    for (auto& inputClient : levelEditor.getInputClients())
+    {
+        window.getInput().addInputClient(*inputClient, InputPriorities::EDITOR);
+    }
+
+    ImGuiBaseWindow guiWindow;
+    guiWindow.setSize(100, 200);
+    guiWindow.setName("my window");
 
     while (window.isOpen())
     {
         window.clear();
+        window.getInput().processInput();
         levelEditor.render(window, 1.0f / 60.0f);
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
+
+        guiWindow.render();
+
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());        
         window.swapBuffers();

@@ -42,7 +42,6 @@ LevelEditor::LevelEditor(RenderTarget& renderTarget)
 
 LevelEditor::~LevelEditor()
 {
-
 }
 
 void LevelEditor::render(RenderTarget& renderTarget, float dt)
@@ -50,4 +49,12 @@ void LevelEditor::render(RenderTarget& renderTarget, float dt)
 	data->cameraController->update(dt);
 	renderTarget.bind();
 	data->renderer->renderScene();
+}
+
+std::vector<InputClientBase*> LevelEditor::getInputClients()
+{
+	return std::vector<InputClientBase*>
+	{
+		&data->cameraController->getInputClient()
+	};
 }
