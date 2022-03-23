@@ -49,6 +49,9 @@ uniform sampler2D normalTex;
 uniform bool envMapEnabled;
 uniform samplerCube envMap;
 
+uniform float fogDistance;
+uniform vec3 fogColor;
+
 in vec4 ex_Color;
 in vec2 ex_TexCoord;
 in vec3 ex_Normal;
@@ -127,6 +130,8 @@ void main(void) {
 	
 	vec4 noreflectColor = vec4(resultColor, materials[materialIndex].alpha) * texture(diffuseTex, ex_TexCoord);
 	
+	vec4 finalColor = vec4(0.0);
+	
 	if (envMapEnabled)
 	{
 		vec3 reflectedDir = reflect(eyeDir, normal);
@@ -140,22 +145,30 @@ void main(void) {
 		vec4 combinedColor = noreflectColor * (1.0 - fresnel) + reflection * fresnel;
 		if (dot(eyeDir, vertexNormal) < 0.0)
 		{
-			gl_FragColor = vec4(0.0);
+			finalColor = vec4(0.0);
 		}
 		else
 		{
-			gl_FragColor = combinedColor;
+			finalColor = combinedColor;
 		}		
 	}
 	else
 	{
 		if (dot(eyeDir, vertexNormal) < 0.0)
 		{
-			gl_FragColor = vec4(0.0);
+			finalColor = vec4(0.0);
 		}
 		else
 		{
-			gl_FragColor = noreflectColor;
+			finalColor = noreflectColor;
 		}	
 	}
+	
+	
+	float distFromCamera = length(ex_VertPos);
+	float fogValue = clamp(1.0 - distFromCamera / fogDistance, 0.0, 1.0);
+	
+	finalColor = vec4(fogColor, 0.0) * (1.0 - fogValue) + finalColor * (fogValue);
+	
+	gl_FragColor = finalColor;
 }

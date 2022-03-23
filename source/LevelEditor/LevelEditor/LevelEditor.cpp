@@ -27,7 +27,7 @@ LevelEditor::LevelEditor(RenderTarget& renderTarget)
 	
 	auto& light = data->renderer->createDirectionalLight();
 	light.ambientColor = glm::vec3(0.3f, 0.3f, 0.3f);
-	light.diffuseColor = glm::vec3(3.0f, 3.0f, 3.0f);
+	light.diffuseColor = glm::vec3(1.0f, 1.0f, 1.0f);
 	light.specularColor = glm::vec3(0.0f, 0.0f, 0.0f);
 	light.direction = glm::normalize(glm::vec3(1, 0.3, 1));
 	light.shadowsEnabled = true;
@@ -35,9 +35,11 @@ LevelEditor::LevelEditor(RenderTarget& renderTarget)
 	GeometryDefinition quad(GeometryDefinition::CUBE);
 	auto floor = data->renderer->createRenderObject(*data->resources.getWhiteTexture().lock(), quad, Material()).lock();
 	floor->transform.position = glm::vec3(0, 0, 0);
-	floor->transform.scale = glm::vec3(20, 20, 0.1);
+	floor->transform.scale = glm::vec3(200, 200, 0.1);
 
 	data->renderer->getSettings().bloomEnabled = false;
+	data->renderer->getSettings().fogDistance = 100.0f;
+	data->renderer->getSettings().fogColor = glm::vec3(0, 0, 0);
 }
 
 LevelEditor::~LevelEditor()

@@ -170,6 +170,9 @@ void RendererImpl::renderObject(RenderObject& obj)
 		shader.setTextureScalingEnabled(false);
 	}
 
+	shader.setFogDistance(settings.fogDistance);
+	shader.setFogColor(settings.fogColor);
+
 	obj.mesh.draw();
 }
 

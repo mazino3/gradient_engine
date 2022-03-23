@@ -29,7 +29,7 @@ int main()
         std::cerr << "failed to create window";
         return -1;
     }
-    window.setClearColor(glm::vec4(0.1f, 0.0f, 0.2f, 0.0f));
+    window.setClearColor(glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();

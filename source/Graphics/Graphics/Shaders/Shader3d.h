@@ -38,6 +38,9 @@ struct Shader3d : Shader
 	void setTextureScalingEnabled(bool textureScalingEnabled);
 	void setTextureScale(const glm::vec3& textureScale);
 
+	void setFogColor(const glm::vec3& color);
+	void setFogDistance(float distance);
+
 	void bind() override;
 };
 

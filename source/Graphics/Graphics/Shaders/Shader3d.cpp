@@ -149,6 +149,16 @@ void Shader3d::setTextureScale(const glm::vec3& textureScale)
 	setUniform("textureScale", textureScale);
 }
 
+void Shader3d::setFogColor(const glm::vec3& color)
+{
+	setUniform("fogColor", color);
+}
+
+void Shader3d::setFogDistance(float distance)
+{
+	setUniform("fogDistance", distance);
+}
+
 void Shader3d::bind()
 {
 	Shader::bind();
