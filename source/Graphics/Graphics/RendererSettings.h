@@ -16,6 +16,7 @@ struct RendererSettings
 
 	glm::vec3 fogColor;
 	float fogDistance;
+	float fogPower;
 
 	RendererSettings() :
 		toneMappingEnabled(true),
@@ -26,7 +27,8 @@ struct RendererSettings
 		bloomEnabled(true),
 		bloomThreshold(0.7f),
 		fogColor(1, 1, 1),
-		fogDistance(50.0f)
+		fogDistance(50.0f),
+		fogPower(5.0f)
 	{}
 };
 

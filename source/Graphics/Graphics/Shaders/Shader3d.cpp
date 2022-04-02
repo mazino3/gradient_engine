@@ -159,6 +159,11 @@ void Shader3d::setFogDistance(float distance)
 	setUniform("fogDistance", distance);
 }
 
+void Shader3d::setFogPower(float power)
+{
+	setUniform("fogPower", power);
+}
+
 void Shader3d::bind()
 {
 	Shader::bind();

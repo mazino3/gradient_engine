@@ -50,6 +50,7 @@ uniform bool envMapEnabled;
 uniform samplerCube envMap;
 
 uniform float fogDistance;
+uniform float fogPower;
 uniform vec3 fogColor;
 
 in vec4 ex_Color;
@@ -167,7 +168,7 @@ void main(void) {
 	
 	float distFromCamera = length(ex_VertPos);
 	float fogValue = clamp(1.0 - distFromCamera / fogDistance, 0.0, 1.0);
-	fogValue = pow(fogValue, 5.0);
+	fogValue = pow(fogValue, fogPower);
 	
 	finalColor = vec4(fogColor, 1.0) * (1.0 - fogValue) + vec4(clamp(finalColor.r, 0.0, 1.0), clamp(finalColor.g, 0.0, 1.0), clamp(finalColor.b, 0.0, 1.0), finalColor.a) * (fogValue);
 	

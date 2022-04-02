@@ -40,6 +40,7 @@ struct Shader3d : Shader
 
 	void setFogColor(const glm::vec3& color);
 	void setFogDistance(float distance);
+	void setFogPower(float power);
 
 	void bind() override;
 };

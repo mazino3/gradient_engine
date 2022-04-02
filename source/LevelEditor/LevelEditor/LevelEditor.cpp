@@ -39,7 +39,6 @@ LevelEditor::LevelEditor(RenderTarget& renderTarget)
 
 	data->renderer->getSettings().bloomEnabled = false;
 	data->renderer->getSettings().fogDistance = 100.0f;
-	//data->renderer->getSettings().fogColor = glm::vec3(0.5f, 0.7f, 0.7f);
 	data->renderer->getSettings().fogColor = glm::vec3(1.0f, 0.5f, 1.0f);
 
 	for (int i = 0; i < 10; i++)

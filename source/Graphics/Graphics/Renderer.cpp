@@ -170,8 +170,7 @@ void RendererImpl::renderObject(RenderObject& obj)
 		shader.setTextureScalingEnabled(false);
 	}
 
-	shader.setFogDistance(settings.fogDistance);
-	shader.setFogColor(settings.fogColor);
+	
 
 	obj.mesh.draw();
 }
@@ -330,6 +329,10 @@ void Renderer::renderScene()
 	data->shader.setViewMatrix(data->camera.getViewMatrix());
 	data->shader.setCurrentMaterialIndex(0); //todo: group objects by materials
 	data->shader.setEyeDirection(data->camera.dirFront);
+	
+	data->shader.setFogDistance(data->settings.fogDistance);
+	data->shader.setFogColor(data->settings.fogColor);
+	data->shader.setFogPower(data->settings.fogPower);
 
 	data->shader.setDirectionalLightsWithShadowsCount(lightsWithShadows.size());
 	for (int i = 0; i < lightsWithShadows.size(); i++)
