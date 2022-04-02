@@ -312,6 +312,7 @@ void Renderer::renderScene()
 	//bind render texture
 
 	data->renderTexture->bind();
+	data->renderTexture->setClearColor(glm::vec4(data->settings.fogColor, 1.0f));
 	data->renderTexture->clear();
 	
 	if (data->skybox != nullptr)
