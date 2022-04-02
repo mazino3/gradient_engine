@@ -167,8 +167,9 @@ void main(void) {
 	
 	float distFromCamera = length(ex_VertPos);
 	float fogValue = clamp(1.0 - distFromCamera / fogDistance, 0.0, 1.0);
+	fogValue = pow(fogValue, 5.0);
 	
-	finalColor = vec4(fogColor, 0.0) * (1.0 - fogValue) + finalColor * (fogValue);
+	finalColor = vec4(fogColor, 1.0) * (1.0 - fogValue) + vec4(clamp(finalColor.r, 0.0, 1.0), clamp(finalColor.g, 0.0, 1.0), clamp(finalColor.b, 0.0, 1.0), finalColor.a) * (fogValue);
 	
 	gl_FragColor = finalColor;
 }
