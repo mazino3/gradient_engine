@@ -38,6 +38,9 @@ struct GeometryDefinition
 	GeometryDefinition(MeshType type);
 	GeometryDefinition(MeshType type, const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices);
 
+	GeometryDefinition translate(const glm::vec3& translation);
+	GeometryDefinition scale(const glm::vec3& scale);
+
 	friend GeometryDefinition operator+(const GeometryDefinition& first, const GeometryDefinition& second);
 
 	static GeometryDefinition XY_QUAD;

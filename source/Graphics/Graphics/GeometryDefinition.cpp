@@ -85,6 +85,33 @@ GeometryDefinition operator+(const GeometryDefinition& first, const GeometryDefi
 	return GeometryDefinition(first.type, vertices, indices);
 }
 
+GeometryDefinition GeometryDefinition::translate(const glm::vec3& translation)
+{
+	std::vector<Vertex> newVertices;
+
+	for (auto& vertex : vertices)
+	{
+		newVertices.push_back(vertex);
+		newVertices.back().pos += translation;
+	}
+
+	return GeometryDefinition(type, newVertices, indices);
+}
+
+GeometryDefinition GeometryDefinition::scale(const glm::vec3& scale)
+{
+	std::vector<Vertex> newVertices;
+
+	for (auto& vertex : vertices)
+	{
+		newVertices.push_back(vertex);
+		newVertices.back().pos *= scale;
+	}
+
+	return GeometryDefinition(type, newVertices, indices);
+}
+
+
 GeometryDefinition GeometryDefinition::XY_QUAD(
 	MeshType::Triangles,
 	std::vector<Vertex>
