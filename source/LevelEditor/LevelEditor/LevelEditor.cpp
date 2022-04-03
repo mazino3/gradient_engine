@@ -3,6 +3,7 @@
 #include <Graphics/Renderer.h>
 #include <Graphics/OrbitCameraController.h>
 #include <Graphics/InputClient.h>
+#include <LevelEditor/Util.h>
 
 struct LevelEditorImpl
 {
@@ -53,12 +54,13 @@ LevelEditor::LevelEditor(RenderTarget& renderTarget)
 		}
 	}
 
-	GeometryDefinition lineGeometry(GeometryDefinition::LINE_X);
+	//GeometryDefinition lineGeometry(GeometryDefinition::LINE_X);
+	GeometryDefinition lineGeometry = Util::createGridGeometry(100, 1, 0.2f);
 	auto line = data->renderer->createRenderObject(*data->resources.getWhiteTexture().lock(), lineGeometry, Material()).lock();
-	line->transform.scale = glm::vec3(10, 1, 1);
+	line->transform.scale = glm::vec3(1, 1, 1);
 	line->material.diffuse = glm::vec3(0, 0, 0);
 	line->material.ambient = glm::vec3(0, 0, 0);
-	line->transform.position = glm::vec3(0, 0, 1);
+	line->transform.position = glm::vec3(0, 0, 0.055);
 
 }
 

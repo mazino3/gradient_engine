@@ -145,7 +145,7 @@ GeometryDefinition GeometryDefinition::LINE_Y(
 	std::vector<Vertex>
 	{
 		Vertex(vec3(0, 0, 0), vec3(0, 0, 1), vec3(1, 0, 0), vec3(0, 1, 0), Colors::WHITE, vec2(0, 0)),
-		Vertex(vec3(1, 0, 0), vec3(0, 0, 1), vec3(1, 0, 0), vec3(0, 1, 0), Colors::WHITE, vec2(1, 1))
+		Vertex(vec3(0, 1, 0), vec3(0, 0, 1), vec3(1, 0, 0), vec3(0, 1, 0), Colors::WHITE, vec2(1, 1))
 	},
 	std::vector<uint32_t>
 	{

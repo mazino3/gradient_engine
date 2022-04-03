@@ -31,9 +31,9 @@ enum class MeshType
 
 struct GeometryDefinition
 {
-	const MeshType type;
-	const std::vector<Vertex> vertices;
-	const std::vector<uint32_t> indices;
+	MeshType type;
+	std::vector<Vertex> vertices;
+	std::vector<uint32_t> indices;
 	
 	GeometryDefinition(MeshType type);
 	GeometryDefinition(MeshType type, const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices);
