@@ -25,7 +25,8 @@ struct Vertex
 enum class MeshType
 {
 	Triangles,
-	Lines
+	Lines,
+	Error
 };
 
 struct GeometryDefinition
@@ -33,13 +34,17 @@ struct GeometryDefinition
 	const MeshType type;
 	const std::vector<Vertex> vertices;
 	const std::vector<uint32_t> indices;
-
+	
+	GeometryDefinition(MeshType type);
 	GeometryDefinition(MeshType type, const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices);
+
+	friend GeometryDefinition operator+(const GeometryDefinition& first, const GeometryDefinition& second);
 
 	static GeometryDefinition XY_QUAD;
 	static GeometryDefinition CUBE;
 	static GeometryDefinition SCREEN;
-	static GeometryDefinition LINE;
+	static GeometryDefinition LINE_X;
+	static GeometryDefinition LINE_Y;
 
 	static GeometryDefinition createSphere(int points);
 	static GeometryDefinition createTorus(int points, float radius, float thickness);

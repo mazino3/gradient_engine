@@ -39,7 +39,7 @@ LevelEditor::LevelEditor(RenderTarget& renderTarget)
 
 	data->renderer->getSettings().bloomEnabled = false;
 	data->renderer->getSettings().fogDistance = 100.0f;
-	data->renderer->getSettings().fogColor = glm::vec3(1.0f, 0.5f, 1.0f);
+	data->renderer->getSettings().fogColor = glm::vec3(0.5f, 0.7f, 0.7f);
 
 	for (int i = 0; i < 10; i++)
 	{
@@ -52,6 +52,14 @@ LevelEditor::LevelEditor(RenderTarget& renderTarget)
 			box->material.ambient = glm::vec3(0, 0, 0);
 		}
 	}
+
+	GeometryDefinition lineGeometry(GeometryDefinition::LINE_X);
+	auto line = data->renderer->createRenderObject(*data->resources.getWhiteTexture().lock(), lineGeometry, Material()).lock();
+	line->transform.scale = glm::vec3(10, 1, 1);
+	line->material.diffuse = glm::vec3(0, 0, 0);
+	line->material.ambient = glm::vec3(0, 0, 0);
+	line->transform.position = glm::vec3(0, 0, 1);
+
 }
 
 LevelEditor::~LevelEditor()

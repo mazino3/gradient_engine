@@ -13,7 +13,7 @@ struct TestSceneLineImpl
 };
 
 TestSceneLineImpl::TestSceneLineImpl() :
-	lineMesh(GeometryDefinition::LINE)
+	lineMesh(GeometryDefinition::LINE_X)
 {}
 
 TestSceneLine::TestSceneLine(RenderTarget& renderTarget)

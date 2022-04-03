@@ -42,11 +42,48 @@ Vertex::Vertex(const vec3& pos, const vec3& normal, const vec3& tangent, const v
 	texCoords(texCoords)
 {}
 
+GeometryDefinition::GeometryDefinition(MeshType type) :
+	type(type)
+{}
+
 GeometryDefinition::GeometryDefinition(MeshType type, const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices) :
 	vertices(vertices),
 	indices(indices),
 	type(type)
 {}
+
+GeometryDefinition operator+(const GeometryDefinition& first, const GeometryDefinition& second)
+{
+	if (first.type != second.type)
+	{
+		return GeometryDefinition(MeshType::Error);
+	}
+	
+	std::vector<Vertex> vertices;
+	std::vector<uint32_t> indices;
+
+	for (auto& vertex : first.vertices)
+	{
+		vertices.push_back(vertex);
+	}
+
+	for (auto& index : first.indices)
+	{
+		indices.push_back(index);
+	}
+	
+	for (auto& vertex : second.vertices)
+	{
+		vertices.push_back(vertex);
+	}
+
+	for (auto& index : second.indices)
+	{
+		indices.push_back(index + first.indices.size());
+	}
+
+	return GeometryDefinition(first.type, vertices, indices);
+}
 
 GeometryDefinition GeometryDefinition::XY_QUAD(
 	MeshType::Triangles,
@@ -64,12 +101,24 @@ GeometryDefinition GeometryDefinition::XY_QUAD(
 	}
 		);
 
-GeometryDefinition GeometryDefinition::LINE(
+GeometryDefinition GeometryDefinition::LINE_X(
 	MeshType::Lines,
 	std::vector<Vertex>
 	{
-		Vertex(vec3(0, 0, 0)),
-		Vertex(vec3(1, 0, 0))
+		Vertex(vec3(0, 0, 0), vec3(0, 0, 1), vec3(1, 0, 0), vec3(0, 1, 0), Colors::WHITE, vec2(0, 0)),
+		Vertex(vec3(1, 0, 0), vec3(0, 0, 1), vec3(1, 0, 0), vec3(0, 1, 0), Colors::WHITE, vec2(1, 1))
+	},
+	std::vector<uint32_t>
+	{
+		0, 1
+	}
+);
+GeometryDefinition GeometryDefinition::LINE_Y(
+	MeshType::Lines,
+	std::vector<Vertex>
+	{
+		Vertex(vec3(0, 0, 0), vec3(0, 0, 1), vec3(1, 0, 0), vec3(0, 1, 0), Colors::WHITE, vec2(0, 0)),
+		Vertex(vec3(1, 0, 0), vec3(0, 0, 1), vec3(1, 0, 0), vec3(0, 1, 0), Colors::WHITE, vec2(1, 1))
 	},
 	std::vector<uint32_t>
 	{
