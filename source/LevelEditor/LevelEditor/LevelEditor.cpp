@@ -1,9 +1,11 @@
 #include "LevelEditor.h"
+#include "LevelObject.h"
 #include "Resources.h"
 #include <Graphics/Renderer.h>
 #include <Graphics/OrbitCameraController.h>
 #include <Graphics/InputClient.h>
 #include <LevelEditor/Util.h>
+#include <vector>
 
 struct LevelEditorImpl
 {
@@ -11,6 +13,8 @@ struct LevelEditorImpl
 	std::unique_ptr<OrbitCameraController> cameraController;
 	Resources resources;
 	InputClient inputClient;
+
+	std::vector<std::shared_ptr<LevelObject>> levelObjects;
 };
 
 LevelEditor::LevelEditor(RenderTarget& renderTarget)
@@ -46,21 +50,18 @@ LevelEditor::LevelEditor(RenderTarget& renderTarget)
 	{
 		for (int j = 0; j < 10; j++)
 		{
-			auto box = data->renderer->createRenderObject(*data->resources.getWhiteTexture().lock(), quad, Material()).lock();
-			box->transform.position = glm::vec3(-50 + i * 10, -50 + j * 10, 0);
-			box->transform.scale = glm::vec3(1, 1, 5);
-			box->material.diffuse = glm::vec3(1.0f, 0.0f, 0.0f);
-			box->material.ambient = glm::vec3(0, 0, 0);
+			auto levelObject = std::make_shared<LevelObject>(*data->renderer, data->resources, glm::vec3(-50 + i * 10, -50 + j * 10, 0), glm::vec3(1, 1, 5));
+			data->levelObjects.push_back(levelObject);
 		}
 	}
 
-	//GeometryDefinition lineGeometry(GeometryDefinition::LINE_X);
 	GeometryDefinition lineGeometry = Util::createGridGeometry(100, 1, 0.2f);
 	auto line = data->renderer->createRenderObject(*data->resources.getWhiteTexture().lock(), lineGeometry, Material()).lock();
 	line->transform.scale = glm::vec3(1, 1, 1);
 	line->material.diffuse = glm::vec3(0, 0, 0);
 	line->material.ambient = glm::vec3(0, 0, 0);
 	line->transform.position = glm::vec3(0, 0, 0.055);
+	line->castsShadows = false;
 
 }
 

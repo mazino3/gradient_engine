@@ -21,6 +21,8 @@ LevelObject::LevelObject(Renderer& renderer, Resources& resources, glm::vec3 pos
 	data->renderObject = renderer.createRenderObject(*resources.getWhiteTexture().lock(), GeometryDefinition::CUBE, Material());
 	data->aabb.position = pos;
 	data->aabb.size = scale;
+	data->renderObject.lock()->transform.position = pos;
+	data->renderObject.lock()->transform.scale = scale;
 }
 
 LevelObject::~LevelObject()
@@ -53,6 +55,16 @@ void LevelObject::setScale(const glm::vec3& scale)
 {
 	data->aabb.size = scale;
 	data->renderObject.lock()->transform.scale = scale;
+}
+
+void LevelObject::setOutlineEnabled(bool enabled)
+{
+	data->renderObject.lock()->hasOutline = enabled;
+}
+
+bool LevelObject::getOutlineEnabled()
+{
+	return data->renderObject.lock()->hasOutline;
 }
 
 void LevelObject::update()

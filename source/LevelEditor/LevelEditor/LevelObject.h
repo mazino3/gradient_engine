@@ -24,6 +24,9 @@ struct LevelObject
 	AABB& getAABB();
 	LevelDataObject toDataObject();
 
+	void setOutlineEnabled(bool enabled);
+	bool getOutlineEnabled();
+
 	void update();
 
 private:
