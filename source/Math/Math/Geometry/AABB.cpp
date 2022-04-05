@@ -48,7 +48,7 @@ bool AABB::intersectsWith(const Ray& ray, glm::vec3& outPoint1, glm::vec3& outPo
 	std::cout << "t1z: " << t1z << std::endl;
 	*/
 
-	static float eps = 0.0001f;
+	static float eps = 0.000001f;
 
 	//if (t0x >= t1y + eps || t0y >= t1x + eps) return false;
 	if (tMin >= t1z + eps || t0z >= tMax + eps) return false;

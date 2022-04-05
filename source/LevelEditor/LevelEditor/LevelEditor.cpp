@@ -1,11 +1,14 @@
 #include "LevelEditor.h"
 #include "LevelObject.h"
+#include "InputPriorities.h"
 #include "Resources.h"
 #include <Graphics/Renderer.h>
 #include <Graphics/OrbitCameraController.h>
 #include <Graphics/InputClient.h>
 #include <LevelEditor/Util.h>
 #include <vector>
+#include <Graphics/InputClient.h>
+#include <iostream>
 
 struct LevelEditorImpl
 {
@@ -63,6 +66,27 @@ LevelEditor::LevelEditor(RenderTarget& renderTarget)
 	line->transform.position = glm::vec3(0, 0, 0.055);
 	line->castsShadows = false;
 
+	data->inputClient.onMouseMoved([this, &renderTarget](double x, double y) 
+		{
+			double normalizedX = x / renderTarget.getWidth();
+			double normalizedY = y / renderTarget.getHeight();
+
+			normalizedX -= 0.5;
+			normalizedY = 0.5 - normalizedY;
+			normalizedX *= 2;
+			normalizedY *= 2;
+
+			std::cout << "x: " << normalizedX << " y: " << normalizedY << std::endl;
+			
+
+			Ray ray = data->renderer->getCamera().getMouseRay(normalizedX, normalizedY);
+			for (auto& levelObject : data->levelObjects)
+			{
+				bool intersects = levelObject->getAABB().intersectsWith(ray);
+				levelObject->setOutlineEnabled(intersects);
+			}
+			return false;
+		});
 }
 
 LevelEditor::~LevelEditor()
@@ -76,10 +100,11 @@ void LevelEditor::render(RenderTarget& renderTarget, float dt)
 	data->renderer->renderScene();
 }
 
-std::vector<InputClientBase*> LevelEditor::getInputClients()
+std::vector<std::pair<float, InputClientBase*>> LevelEditor::getInputClients()
 {
-	return std::vector<InputClientBase*>
+	return std::vector<std::pair<float, InputClientBase*>>
 	{
-		&data->cameraController->getInputClient()
+		std::make_pair(InputPriorities::EDITOR, & data->cameraController->getInputClient()),
+		std::make_pair(InputPriorities::SELECTION, &data->inputClient)
 	};
 }

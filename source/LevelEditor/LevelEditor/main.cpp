@@ -56,9 +56,11 @@ int main()
     });
     window.getInput().addInputClient(imguiInputClient, InputPriorities::IMGUI);
 
-    for (auto& inputClient : levelEditor.getInputClients())
+    for (auto& inputClientEntry : levelEditor.getInputClients())
     {
-        window.getInput().addInputClient(*inputClient, InputPriorities::EDITOR);
+        auto inputClientPtr = inputClientEntry.second;
+        auto inputPriority = inputClientEntry.first;
+        window.getInput().addInputClient(*inputClientPtr, inputPriority);
     }
 
     ImGuiBaseWindow guiWindow;

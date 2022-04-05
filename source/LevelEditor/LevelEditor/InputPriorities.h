@@ -5,6 +5,7 @@ namespace InputPriorities
 {
 	const float IMGUI = 0.0f;
 	const float EDITOR = 1.0f;
+	const float SELECTION = 1.0f;
 }
 
 #endif
