@@ -73,4 +73,20 @@ TEST(Geometry, RayAABBIntersection)
 	EXPECT_NEAR(p1.z, 0.5f, eps);
 }
 
+TEST(Geometry, AABB_SizeTest)
+{
+	AABB centered(glm::vec3(0, 0, 0), glm::vec3(1, 1, 10));
+	Ray ray(glm::vec3(-2, -2, 0), glm::vec3(1, 0, 0));
+
+	EXPECT_FALSE(centered.intersectsWith(ray));
+}
+
+TEST(Geometry, AABB_RealData)
+{
+	AABB aabb(glm::vec3(0, 0, 0), glm::vec3(1, 1, 5));
+	Ray ray(glm::vec3(9.92546, 0, 1.21869), glm::vec3(-0.91378, -0.406179, 0.00496704));
+
+	EXPECT_FALSE(aabb.intersectsWith(ray));
+}
+
 #endif

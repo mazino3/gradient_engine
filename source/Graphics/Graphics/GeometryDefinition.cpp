@@ -315,3 +315,18 @@ GeometryDefinition GeometryDefinition::createTorus(int points, float radius, flo
 	return GeometryDefinition(MeshType::Triangles, vertices, indices);
 }
 
+GeometryDefinition GeometryDefinition::createLine(const glm::vec3& p1, const glm::vec3& p2)
+{
+	return GeometryDefinition(
+		MeshType::Lines,
+		std::vector<Vertex>
+		{
+			Vertex(p1, vec3(0, 0, 1), vec3(1, 0, 0), vec3(0, 1, 0), Colors::WHITE, vec2(0, 0)),
+			Vertex(p2, vec3(0, 0, 1), vec3(1, 0, 0), vec3(0, 1, 0), Colors::WHITE, vec2(1, 1))
+		},
+		std::vector<uint32_t>
+		{
+			0, 1
+		}
+	);
+}
