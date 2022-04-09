@@ -40,6 +40,7 @@ struct GeometryDefinition
 
 	GeometryDefinition translate(const glm::vec3& translation);
 	GeometryDefinition scale(const glm::vec3& scale);
+	GeometryDefinition rotate(const glm::vec3& rotation);
 
 	friend GeometryDefinition operator+(const GeometryDefinition& first, const GeometryDefinition& second);
 

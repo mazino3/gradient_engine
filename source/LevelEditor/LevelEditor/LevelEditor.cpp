@@ -68,8 +68,11 @@ LevelEditor::LevelEditor(RenderTarget& renderTarget)
 
 	//cylinder:
 
-	auto cylinder = data->renderer->createRenderObject(*data->resources.getWhiteTexture().lock(), GeometryDefinition::createCylinder(100, 1, 4), Material());
-	cylinder.lock()->transform.rotation.x = 90.0f;
+	auto cylinderGeometry = GeometryDefinition::createCylinder(100, 1, 4) + GeometryDefinition::createCylinder(100, 1, 4).translate(glm::vec3(2, 0, 0));
+	cylinderGeometry = cylinderGeometry.rotate(glm::vec3(45.0f, 0.0f, 0.0f));
+
+	auto cylinder = data->renderer->createRenderObject(*data->resources.getWhiteTexture().lock(), cylinderGeometry, Material());
+	//cylinder.lock()->transform.rotation.x = 90.0f;
 	cylinder.lock()->transform.position.z = 2.0f;
 
 	data->inputClient.onMouseMoved([this, &renderTarget](double x, double y) 

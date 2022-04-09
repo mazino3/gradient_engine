@@ -113,6 +113,30 @@ GeometryDefinition GeometryDefinition::scale(const glm::vec3& scale)
 	return GeometryDefinition(type, newVertices, indices);
 }
 
+GeometryDefinition GeometryDefinition::rotate(const glm::vec3& rotation)
+{
+	glm::mat4x4 matRotateX = glm::rotate(glm::mat4x4(1.0f), glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+	glm::mat4x4 matRotateY = glm::rotate(glm::mat4x4(1.0f), glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4x4 matRotateZ = glm::rotate(glm::mat4x4(1.0f), glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+	glm::mat4x4 matRotate = matRotateZ * matRotateY * matRotateX;
+
+	glm::mat4x4 matRotateNormal = glm::transpose(glm::inverse(matRotate));
+
+	std::vector<Vertex> newVertices;
+
+	for (auto& vertex : vertices)
+	{
+		Vertex newVertex = vertex;
+		newVertex.pos = matRotate * glm::vec4(vertex.pos, 1.0f);
+		newVertex.normal = matRotateNormal * glm::vec4(vertex.normal, 1.0f);
+		newVertex.tangent = matRotateNormal * glm::vec4(vertex.tangent, 1.0f);
+		newVertex.bitangent = matRotateNormal * glm::vec4(vertex.bitangent, 1.0f);
+		newVertices.push_back(newVertex);
+	}
+
+	return GeometryDefinition(type, newVertices, indices);
+}
+
 
 GeometryDefinition GeometryDefinition::XY_QUAD(
 	MeshType::Triangles,
