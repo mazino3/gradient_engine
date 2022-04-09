@@ -52,6 +52,7 @@ struct GeometryDefinition
 	static GeometryDefinition createSphere(int points);
 	static GeometryDefinition createTorus(int points, float radius, float thickness);
 	static GeometryDefinition createLine(const glm::vec3& p1, const glm::vec3& p2);
+	static GeometryDefinition createCylinder(int points, float radius, float height);
 };
 
 #endif

@@ -53,8 +53,8 @@ LevelEditor::LevelEditor(RenderTarget& renderTarget)
 	{
 		for (int j = 0; j < 1; j++)
 		{
-			auto levelObject = std::make_shared<LevelObject>(*data->renderer, data->resources, glm::vec3( + i * 10, + j * 10, 0), glm::vec3(1, 1, 5));
-			data->levelObjects.push_back(levelObject);
+			//auto levelObject = std::make_shared<LevelObject>(*data->renderer, data->resources, glm::vec3( + i * 10, + j * 10, 0), glm::vec3(1, 1, 5));
+			//data->levelObjects.push_back(levelObject);
 		}
 	}
 
@@ -65,6 +65,12 @@ LevelEditor::LevelEditor(RenderTarget& renderTarget)
 	line->material.ambient = glm::vec3(0, 0, 0);
 	line->transform.position = glm::vec3(0, 0, 0.055);
 	line->castsShadows = false;
+
+	//cylinder:
+
+	auto cylinder = data->renderer->createRenderObject(*data->resources.getWhiteTexture().lock(), GeometryDefinition::createCylinder(100, 1, 4), Material());
+	cylinder.lock()->transform.rotation.x = 90.0f;
+	cylinder.lock()->transform.position.z = 2.0f;
 
 	data->inputClient.onMouseMoved([this, &renderTarget](double x, double y) 
 		{
