@@ -71,6 +71,8 @@ GeometryDefinition operator+(const GeometryDefinition& first, const GeometryDefi
 	{
 		indices.push_back(index);
 	}
+
+	int offset = vertices.size();
 	
 	for (auto& vertex : second.vertices)
 	{
@@ -79,7 +81,7 @@ GeometryDefinition operator+(const GeometryDefinition& first, const GeometryDefi
 
 	for (auto& index : second.indices)
 	{
-		indices.push_back(index + first.indices.size());
+		indices.push_back(index + offset);
 	}
 
 	return GeometryDefinition(first.type, vertices, indices);
