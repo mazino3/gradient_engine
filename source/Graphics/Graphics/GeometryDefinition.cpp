@@ -343,57 +343,11 @@ GeometryDefinition GeometryDefinition::createCylinder(int points, float radius, 
 		indices.push_back(points + 1 + i + 1);
 	}
 
-	int topFirstVertex = vertices.size();
+	GeometryDefinition sideGeometry(MeshType::Triangles, vertices, indices);
+	GeometryDefinition top = createCircleXY(points, radius, glm::vec3(0, 0, 1)).translate(glm::vec3(0, 0, height / 2));
+	GeometryDefinition bottom = createCircleXY(points, radius, glm::vec3(0, 0, -1)).translate(glm::vec3(0, 0, -height / 2));
 
-	for (int i = 0; i <= points; i++)
-	{
-		float angle = (float)i / (float)points * PI * 2;
-		
-		float texCoordX = cosf(angle) * 0.5f + 0.5f;
-		float texCoordY = sinf(angle) * 0.5f + 0.5f;
-
-		float x = cosf(angle) * radius;
-		float y = sinf(angle) * radius;
-		float z = height / 2;
-
-		vertices.push_back(Vertex(glm::vec3(x, y, z), glm::vec3(0, 0, 1), Colors::WHITE, glm::vec2(texCoordX, texCoordY)));
-	}
-
-	vertices.push_back(Vertex(glm::vec3(0, 0, height / 2), glm::vec3(0, 0, 1), Colors::WHITE, glm::vec2(0.5f, 0.5f)));
-
-	for (int i = 0; i < points; i++)
-	{
-		indices.push_back(topFirstVertex + i);
-		indices.push_back(topFirstVertex + points + 1);
-		indices.push_back(topFirstVertex + i + 1);
-	}
-
-	int bottomFirstVertex = vertices.size();
-
-	for (int i = 0; i <= points; i++)
-	{
-		float angle = (float)i / (float)points * PI * 2;
-
-		float texCoordX = cosf(angle) * 0.5f + 0.5f;
-		float texCoordY = sinf(angle) * 0.5f + 0.5f;
-
-		float x = cosf(angle) * radius;
-		float y = sinf(angle) * radius;
-		float z = -height / 2;
-
-		vertices.push_back(Vertex(glm::vec3(x, y, z), glm::vec3(0, 0, -1), Colors::WHITE, glm::vec2(texCoordX, texCoordY)));
-	}
-
-	vertices.push_back(Vertex(glm::vec3(0, 0, -height / 2), glm::vec3(0, 0, -1), Colors::WHITE, glm::vec2(0.5f, 0.5f)));
-
-	for (int i = 0; i < points; i++)
-	{
-		indices.push_back(bottomFirstVertex + i);
-		indices.push_back(bottomFirstVertex + points + 1);
-		indices.push_back(bottomFirstVertex + i + 1);
-	}
-
-	return GeometryDefinition(MeshType::Triangles, vertices, indices);
+	return sideGeometry + top + bottom;
 }
 
 GeometryDefinition GeometryDefinition::createTorus(int points, float radius, float thickness)
@@ -456,6 +410,37 @@ GeometryDefinition GeometryDefinition::createLine(const glm::vec3& p1, const glm
 			0, 1
 		}
 	);
+}
+
+GeometryDefinition GeometryDefinition::createCircleXY(int points, float radius, const glm::vec3& normal)
+{
+	std::vector<Vertex> vertices;
+	std::vector<uint32_t> indices;
+
+	for (int i = 0; i <= points; i++)
+	{
+		float angle = (float)i / (float)points * PI * 2;
+
+		float texCoordX = cosf(angle) * 0.5f + 0.5f;
+		float texCoordY = sinf(angle) * 0.5f + 0.5f;
+
+		float x = cosf(angle) * radius;
+		float y = sinf(angle) * radius;
+		float z = 0;
+
+		vertices.push_back(Vertex(glm::vec3(x, y, z), normal, Colors::WHITE, glm::vec2(texCoordX, texCoordY)));
+	}
+
+	vertices.push_back(Vertex(glm::vec3(0, 0, 0), normal, Colors::WHITE, glm::vec2(0.5f, 0.5f)));
+
+	for (int i = 0; i < points; i++)
+	{
+		indices.push_back(i);
+		indices.push_back(points + 1);
+		indices.push_back(i + 1);
+	}
+
+	return GeometryDefinition(MeshType::Triangles, vertices, indices);
 }
 
 
