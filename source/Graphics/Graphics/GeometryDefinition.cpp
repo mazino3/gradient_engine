@@ -396,6 +396,54 @@ GeometryDefinition GeometryDefinition::createTorus(int points, float radius, flo
 	return GeometryDefinition(MeshType::Triangles, vertices, indices);
 }
 
+GeometryDefinition GeometryDefinition::createCone(int points, float radius, float height)
+{
+	std::vector<Vertex> vertices;
+	std::vector<uint32_t> indices;
+
+	float coneAngle = atanf(height / radius);
+
+	for (int i = 0; i < points; i++)
+	{
+		float phase = (float)i / (float)points * PI * 2;
+		float nextPhase = (float)(i + 1) / (float)points * PI * 2;
+
+		float texCoordX = cosf(phase) * 0.5f + 0.5f;
+		float texCoordY = sinf(phase) * 0.5f + 0.5f;
+
+		float nextTexCoordsX = cosf(nextPhase) * 0.5f + 0.5f;
+		float nextTexCoordsY = sinf(nextPhase) * 0.5f + 0.5f;
+
+		float x = cosf(phase) * radius;
+		float y = sinf(phase) * radius;
+		float z = 0;
+
+		float nextX = cosf(nextPhase) * radius;
+		float nextY = sinf(nextPhase) * radius;
+		float nextZ = 0;
+
+		glm::vec3 normal(cosf(coneAngle) * cosf(phase), cosf(coneAngle) * sinf(phase), sinf(coneAngle));
+
+		vertices.push_back(Vertex(glm::vec3(x, y, z), normal, Colors::WHITE, glm::vec2(texCoordX, texCoordY)));
+		vertices.push_back(Vertex(glm::vec3(nextX, nextY, nextZ), normal, Colors::WHITE, glm::vec2(nextTexCoordsX, nextTexCoordsY)));
+		vertices.push_back(Vertex(glm::vec3(0, 0, height), normal, Colors::WHITE, glm::vec2(0, 0)));
+	}
+
+	for (int i = 0; i < vertices.size(); i += 3)
+	{
+		indices.push_back(i);
+		indices.push_back(i + 1);
+		indices.push_back(i + 2);
+
+		indices.push_back(i);
+		indices.push_back(i + 2);
+		indices.push_back(i + 1);
+		
+	}
+
+	return GeometryDefinition(MeshType::Triangles, vertices, indices);
+}
+
 GeometryDefinition GeometryDefinition::createLine(const glm::vec3& p1, const glm::vec3& p2)
 {
 	return GeometryDefinition(

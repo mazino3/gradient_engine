@@ -55,6 +55,7 @@ struct GeometryDefinition
 	static GeometryDefinition createLine(const glm::vec3& p1, const glm::vec3& p2);
 	static GeometryDefinition createCylinder(int points, float radius, float height);
 	static GeometryDefinition createCircleXY(int points, float radius, const glm::vec3& normal);
+	static GeometryDefinition createCone(int points, float radius, float height);
 };
 
 #endif

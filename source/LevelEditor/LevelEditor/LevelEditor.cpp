@@ -68,7 +68,7 @@ LevelEditor::LevelEditor(RenderTarget& renderTarget)
 
 	//cylinder:
 
-	auto cylinderGeometry = GeometryDefinition::createCylinder(100, 1, 4) + GeometryDefinition::createCylinder(100, 1, 4).translate(glm::vec3(2, 0, 0));
+	auto cylinderGeometry = GeometryDefinition::createCone(100, 1, 4) + GeometryDefinition::createCylinder(100, 1, 4).translate(glm::vec3(2, 0, 0));
 	cylinderGeometry = cylinderGeometry.rotate(glm::vec3(45.0f, 0.0f, 0.0f));
 
 	auto cylinder = data->renderer->createRenderObject(*data->resources.getWhiteTexture().lock(), cylinderGeometry, Material());
