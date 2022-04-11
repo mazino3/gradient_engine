@@ -1,5 +1,6 @@
 #include <Graphics/GeometryDefinition.h>
 #include <Graphics/Colors.h>
+#include <Graphics/GetAngle.h>
 #include <glm/ext.hpp>
 
 static const float PI = 3.141593f;
@@ -401,7 +402,7 @@ GeometryDefinition GeometryDefinition::createCone(int points, float radius, floa
 	std::vector<Vertex> vertices;
 	std::vector<uint32_t> indices;
 
-	float coneAngle = atanf(height / radius);
+	float coneAngle = getAngle(radius, height);
 
 	for (int i = 0; i < points; i++)
 	{
@@ -422,7 +423,7 @@ GeometryDefinition GeometryDefinition::createCone(int points, float radius, floa
 		float nextY = sinf(nextPhase) * radius;
 		float nextZ = 0;
 
-		glm::vec3 normal(cosf(coneAngle) * cosf(phase), cosf(coneAngle) * sinf(phase), sinf(coneAngle));
+		glm::vec3 normal(cosf(coneAngle) * cosf(phase * 0.5 + nextPhase * 0.5), cosf(coneAngle) * sinf(phase * 0.5 + nextPhase * 0.5), sinf(coneAngle));
 
 		vertices.push_back(Vertex(glm::vec3(x, y, z), normal, Colors::WHITE, glm::vec2(texCoordX, texCoordY)));
 		vertices.push_back(Vertex(glm::vec3(nextX, nextY, nextZ), normal, Colors::WHITE, glm::vec2(nextTexCoordsX, nextTexCoordsY)));
@@ -431,9 +432,9 @@ GeometryDefinition GeometryDefinition::createCone(int points, float radius, floa
 
 	for (int i = 0; i < vertices.size(); i += 3)
 	{
-		indices.push_back(i);
-		indices.push_back(i + 1);
-		indices.push_back(i + 2);
+		//indices.push_back(i);
+		//indices.push_back(i + 1);
+		//indices.push_back(i + 2);
 
 		indices.push_back(i);
 		indices.push_back(i + 2);

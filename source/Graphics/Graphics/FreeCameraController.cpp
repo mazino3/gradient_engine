@@ -4,6 +4,8 @@
 #include <Graphics/FreeCameraController.h>
 #include <Graphics/KeyCodes.h>
 #include <Graphics/InputClient.h>
+#include <Graphics/KeyCodes.h>
+#include <Graphics/GetAngle.h>
 
 static const float PI = 3.14159265f;
 
@@ -193,32 +195,6 @@ void FreeCameraController::setSensitivity(float sensitivity)
 void FreeCameraController::setSpeed(float speed)
 {
 	data->speed = speed;
-}
-
-static float getAngle(const glm::vec2& direction)
-{
-	static const float EPS = 0.00001f;
-
-	if (std::fabsf(direction.x) < EPS)
-	{
-		return direction.y > 0 ? 0 : PI;
-	}
-
-	if (direction.x < 0)
-	{
-		return std::atanf(direction.y / direction.x) + PI;
-	}
-	else
-	{
-		if (direction.y > 0)
-		{
-			return std::atanf(direction.y / direction.x);
-		}
-		else
-		{
-			return std::atanf(direction.y / direction.x) + PI * 2;
-		}
-	}
 }
 
 static float getVerticalAngle(const glm::vec2& direction)
