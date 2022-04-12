@@ -443,7 +443,7 @@ GeometryDefinition GeometryDefinition::createCone(int points, float radius, floa
 		
 	}
 
-	return GeometryDefinition(MeshType::Triangles, vertices, indices);
+	return GeometryDefinition(MeshType::Triangles, vertices, indices) + createCircleXY(points, radius, glm::vec3(0, 0, -1));
 }
 
 GeometryDefinition GeometryDefinition::createLine(const glm::vec3& p1, const glm::vec3& p2)
