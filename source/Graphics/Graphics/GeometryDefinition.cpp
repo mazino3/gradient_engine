@@ -493,4 +493,16 @@ GeometryDefinition GeometryDefinition::createCircleXY(int points, float radius, 
 	return GeometryDefinition(MeshType::Triangles, vertices, indices);
 }
 
+GeometryDefinition GeometryDefinition::createArrow(int points, float length, float baseLength, float smallRadius, float bigRadius)
+{
+	auto cone = createCone(points, bigRadius, length - baseLength).translate(glm::vec3(0, 0, baseLength));
+	auto base = createCylinder(points, smallRadius, baseLength).translate(glm::vec3(0, 0, baseLength / 2));
+	return (cone + base).translate(glm::vec3(0, 0, -length / 2));
+}
+
+GeometryDefinition GeometryDefinition::createArrow(int points)
+{
+	return createArrow(points, 1.0f, 1.0f / 3.0f, 0.25, 0.35);
+}
+
 
