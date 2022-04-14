@@ -1,6 +1,7 @@
 #include <Graphics/OrbitCameraController.h>
 #include <Graphics/InputClient.h>
 #include <Graphics/KeyCodes.h>
+#include <Math/Geometry/Plane.h>
 #include <cmath>
 #include <algorithm>
 #include <glm/ext.hpp>
@@ -20,6 +21,7 @@ struct OrbitCameraControllerImpl
 	InputClient inputClient;
 	
 	bool isDragging;
+	bool isSpacePressed;
 	double prevXpos;
 	double prevYpos;
 
@@ -30,6 +32,7 @@ struct OrbitCameraControllerImpl
 		horizontalAngle(0.0f),
 		verticalAngle(45.0f),
 		isDragging(false),
+		isSpacePressed(false),
 		prevXpos(0.0),
 		prevYpos(0.0),
 		sensitivity(0.5f),
@@ -71,15 +74,25 @@ OrbitCameraController::OrbitCameraController(Camera& camera)
 	{
 		if (data->isDragging)
 		{
-			double deltaX = xpos - data->prevXpos;
-			double deltaY = ypos - data->prevYpos;
-			data->prevXpos = xpos;
-			data->prevYpos = ypos;
+			if (data->isSpacePressed)
+			{
+				glm::vec3 oldGroundPoint;
+				glm::vec3 newGroundPoint;
 
-			float horizontalDelta = -deltaX * data->sensitivity;
-			float verticalDelta = deltaY * data->sensitivity;
-			data->horizontalAngle += horizontalDelta;
-			data->verticalAngle = std::max(std::min(data->verticalAngle + verticalDelta, 90.0f), 0.0f);
+				//todo: get old and new mouse ray, compute ground points and move camera on that delta
+			}
+			else
+			{
+				double deltaX = xpos - data->prevXpos;
+				double deltaY = ypos - data->prevYpos;
+				data->prevXpos = xpos;
+				data->prevYpos = ypos;
+
+				float horizontalDelta = -deltaX * data->sensitivity;
+				float verticalDelta = deltaY * data->sensitivity;
+				data->horizontalAngle += horizontalDelta;
+				data->verticalAngle = std::max(std::min(data->verticalAngle + verticalDelta, 90.0f), 0.0f);
+			}
 
 			return true;
 		}
@@ -92,6 +105,22 @@ OrbitCameraController::OrbitCameraController(Camera& camera)
 	{
 		data->distance = std::max(1.0, std::min(data->distance - yoffset * data->distanceSensitivity, (double) data->maxDistance));
 		return true;
+	});
+	data->inputClient.onKeyPressed([this](int keyCode) 
+	{
+		if (keyCode == KEYCODE_KEY_SPACE)
+		{
+			data->isSpacePressed = true;
+		}
+		return false;
+	});
+	data->inputClient.onKeyReleased([this](int keyCode) 
+	{
+		if (keyCode == KEYCODE_KEY_SPACE)
+		{
+			data->isSpacePressed = true;
+		}
+		return false;
 	});
 }
 
