@@ -25,6 +25,9 @@ struct OrbitCameraControllerImpl
 	double prevXpos;
 	double prevYpos;
 
+	float screenSizeX;
+	float screenSizeY;
+
 	OrbitCameraControllerImpl(Camera& camera) :
 		camera(camera),
 		distance(10.0f),
@@ -37,13 +40,40 @@ struct OrbitCameraControllerImpl
 		prevYpos(0.0),
 		sensitivity(0.5f),
 		distanceSensitivity(1),
-		rootPosition(0.0f, 0.0f, 0.0f)
+		rootPosition(0.0f, 0.0f, 0.0f),
+		screenSizeX(0.0f),
+		screenSizeY(0.0f)
 	{}
+
+	glm::vec2 getNormalizedMousePos(float x, float y);
 };
 
-OrbitCameraController::OrbitCameraController(Camera& camera)
+glm::vec2 OrbitCameraControllerImpl::getNormalizedMousePos(float x, float y)
+{
+	double normalizedX = x / screenSizeX;
+	double normalizedY = y / screenSizeY;
+
+	normalizedX -= 0.5;
+	normalizedY = 0.5 - normalizedY;
+	normalizedX *= 2;
+	normalizedY *= 2;
+
+	return glm::vec2(normalizedX, normalizedY);
+}
+
+OrbitCameraController::OrbitCameraController(Camera& camera, float screenSizeX, float screenSizeY)
 {
 	data = std::make_shared<OrbitCameraControllerImpl>(camera);
+	data->screenSizeX = screenSizeX;
+	data->screenSizeY = screenSizeY;
+
+	data->inputClient.onWindowSizeChanged([this](int newWidth, int newHeight) 
+	{
+		data->screenSizeX = newWidth;
+		data->screenSizeY = newHeight;
+		return false;
+	});
+
 	data->inputClient.onMousePressed([this](double xpos, double ypos, int button) 
 	{
 		if (button == KEYCODE_MOUSE_BUTTON_2)
@@ -79,20 +109,35 @@ OrbitCameraController::OrbitCameraController(Camera& camera)
 				glm::vec3 oldGroundPoint;
 				glm::vec3 newGroundPoint;
 
-				//todo: get old and new mouse ray, compute ground points and move camera on that delta
+				glm::vec2 oldNormalizedMousePos = data->getNormalizedMousePos(data->prevXpos, data->prevYpos);
+				glm::vec2 newNormalizedMousePos = data->getNormalizedMousePos(xpos, ypos);
+
+				Ray oldRay = data->camera.getMouseRay(oldNormalizedMousePos);
+				Ray newRay = data->camera.getMouseRay(newNormalizedMousePos);
+
+				if (!Plane::PLANE_XY.intersectsWith(oldRay, oldGroundPoint) || !Plane::PLANE_XY.intersectsWith(newRay, newGroundPoint))
+				{
+					return false;
+				}
+
+				glm::vec3 delta = newGroundPoint - oldGroundPoint;
+				delta.z = 0;
+				data->rootPosition -= delta;
 			}
 			else
 			{
 				double deltaX = xpos - data->prevXpos;
 				double deltaY = ypos - data->prevYpos;
-				data->prevXpos = xpos;
-				data->prevYpos = ypos;
+				
 
 				float horizontalDelta = -deltaX * data->sensitivity;
 				float verticalDelta = deltaY * data->sensitivity;
 				data->horizontalAngle += horizontalDelta;
 				data->verticalAngle = std::max(std::min(data->verticalAngle + verticalDelta, 90.0f), 0.0f);
 			}
+
+			data->prevXpos = xpos;
+			data->prevYpos = ypos;
 
 			return true;
 		}
@@ -118,7 +163,7 @@ OrbitCameraController::OrbitCameraController(Camera& camera)
 	{
 		if (keyCode == KEYCODE_KEY_SPACE)
 		{
-			data->isSpacePressed = true;
+			data->isSpacePressed = false;
 		}
 		return false;
 	});

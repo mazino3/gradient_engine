@@ -1,5 +1,6 @@
 #include "Plane.h"
 #include <glm/ext.hpp>
+#include <cmath>
 
 Plane::Plane(const glm::vec3& origin, const glm::vec3& normal) :
 	origin(origin),
@@ -15,7 +16,7 @@ bool Plane::intersectsWith(const Ray& ray)
 bool Plane::intersectsWith(const Ray& ray, glm::vec3& outPosition)
 {
 	static float eps = 0.00001f;
-	if (glm::dot(ray.direction, normal) < eps) 
+	if (std::abs(glm::dot(ray.direction, normal)) < eps) 
 	{
 		return false;
 	}

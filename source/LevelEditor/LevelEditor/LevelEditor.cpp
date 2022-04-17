@@ -27,7 +27,7 @@ LevelEditor::LevelEditor(RenderTarget& renderTarget)
 	auto& camera = data->renderer->getCamera();
 	camera.setPerspective(45.0f, (float)renderTarget.getWidth() / (float)renderTarget.getHeight(), 0.1f, 200.0f);
 	camera.position = glm::vec3(-5, 0, 5);
-	data->cameraController = std::make_unique<OrbitCameraController>(camera);
+	data->cameraController = std::make_unique<OrbitCameraController>(camera, renderTarget.getWidth(), renderTarget.getHeight());
 	data->cameraController->setHorizontalAngle(0);
 	data->cameraController->setMaxDistance(100);
 	data->cameraController->setDistance(10);

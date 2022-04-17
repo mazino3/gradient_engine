@@ -165,3 +165,8 @@ Ray Camera::getMouseRay(float normalizedScreenX, float normalizedScreenY)
 
 	return Ray(position, worldSpaceRay);
 }
+
+Ray Camera::getMouseRay(const glm::vec2& normalizedScreenPos)
+{
+	return getMouseRay(normalizedScreenPos.x, normalizedScreenPos.y);
+}

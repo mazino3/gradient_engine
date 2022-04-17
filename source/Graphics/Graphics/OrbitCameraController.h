@@ -10,7 +10,7 @@ struct OrbitCameraControllerImpl;
 
 struct OrbitCameraController
 {
-	OrbitCameraController(Camera& camera);
+	OrbitCameraController(Camera& camera, float screenSizeX, float screnSizeY);
 	
 	void update(float dt);
 	void setDistance(float distance);
