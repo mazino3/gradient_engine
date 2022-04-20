@@ -7,12 +7,15 @@
 #include <glm/vec3.hpp>
 #include "Resources.h"
 #include "LevelData.h"
+#include "SelectionManager.h"
+#include "RaycastManager.h"
 
 struct LevelObjectImpl;
 
 struct LevelObject
 {
-	LevelObject(Renderer& renderer, Resources& resources, glm::vec3 pos, glm::vec3 scale);
+	LevelObject(Renderer& renderer, Resources& resources, SelectionManager& selectionManager,
+				RaycastManager& raycastManager, glm::vec3 pos, glm::vec3 scale);
 	~LevelObject();
 
 	void setPosition(const glm::vec3& pos);

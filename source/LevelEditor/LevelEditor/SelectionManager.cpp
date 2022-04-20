@@ -1,5 +1,6 @@
 #include "SelectionManager.h"
 #include <unordered_map>
+#include <iostream>
 
 struct SelectionSubscriptionImpl : SelectionSubscription
 {
@@ -56,6 +57,7 @@ int SelectionManager::getId()
 
 void SelectionManager::fireSelectionChanged(int selectedId)
 {
+	std::cout << "firing selection to " << data->subscriptions.size() << " subscribers" << std::endl;
 	for (auto it = data->subscriptions.begin(); it != data->subscriptions.end(); it++)
 	{
 		it->second(selectedId, data->prevId);

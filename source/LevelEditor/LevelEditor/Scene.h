@@ -4,13 +4,15 @@
 #include <memory>
 #include "LevelData.h"
 #include "Resources.h"
+#include "SelectionManager.h"
+#include "RaycastManager.h"
 #include <Graphics/Renderer.h>
 
 struct SceneImpl;
 
 struct Scene
 {
-	Scene(Renderer& renderer, Resources& resouces);
+	Scene(Renderer& renderer, Resources& resouces, SelectionManager& selectionManager, RaycastManager& raycastManager);
 	~Scene();
 
 	void load(const LevelData& levelData);

@@ -2,6 +2,8 @@
 #include "LevelObject.h"
 #include "InputPriorities.h"
 #include "Resources.h"
+#include "SelectionManager.h"
+#include "RaycastManager.h"
 #include <Graphics/Renderer.h>
 #include <Graphics/OrbitCameraController.h>
 #include <Graphics/InputClient.h>
@@ -15,6 +17,10 @@ struct LevelEditorImpl
 	std::unique_ptr<Renderer> renderer;
 	std::unique_ptr<OrbitCameraController> cameraController;
 	Resources resources;
+	SelectionManager selectionManager;
+	RaycastManager raycastManager;
+
+
 	InputClient inputClient;
 
 	std::vector<std::shared_ptr<LevelObject>> levelObjects;
@@ -49,12 +55,12 @@ LevelEditor::LevelEditor(RenderTarget& renderTarget)
 	data->renderer->getSettings().fogDistance = 100.0f;
 	data->renderer->getSettings().fogColor = glm::vec3(0.5f, 0.7f, 0.7f);
 
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < 5; i++)
 	{
-		for (int j = 0; j < 1; j++)
+		for (int j = 0; j < 5; j++)
 		{
-			//auto levelObject = std::make_shared<LevelObject>(*data->renderer, data->resources, glm::vec3( + i * 10, + j * 10, 0), glm::vec3(1, 1, 5));
-			//data->levelObjects.push_back(levelObject);
+			auto levelObject = std::make_shared<LevelObject>(*data->renderer, data->resources, data->selectionManager, data->raycastManager, glm::vec3( + i * 2, + j * 2, 0), glm::vec3(1, 1, 5));
+			data->levelObjects.push_back(levelObject);
 		}
 	}
 
@@ -65,17 +71,6 @@ LevelEditor::LevelEditor(RenderTarget& renderTarget)
 	line->material.ambient = glm::vec3(0, 0, 0);
 	line->transform.position = glm::vec3(0, 0, 0.055);
 	line->castsShadows = false;
-
-	//cylinder:
-
-	//auto cylinderGeometry = GeometryDefinition::createCone(100, 1, 4) + GeometryDefinition::createCylinder(100, 1, 4).translate(glm::vec3(2, 0, 0));
-	//cylinderGeometry = cylinderGeometry.rotate(glm::vec3(45.0f, 0.0f, 0.0f));
-	//auto cylinderGeometry = GeometryDefinition::createArrow(100, 3, 1, 0.8, 1.0);
-	auto cylinderGeometry = GeometryDefinition::createArrow(100);
-
-	auto cylinder = data->renderer->createRenderObject(*data->resources.getWhiteTexture().lock(), cylinderGeometry, Material());
-	//cylinder.lock()->transform.rotation.x = 90.0f;
-	cylinder.lock()->transform.position.z = 2.0f;
 
 	data->inputClient.onMouseMoved([this, &renderTarget](double x, double y) 
 		{
@@ -92,7 +87,7 @@ LevelEditor::LevelEditor(RenderTarget& renderTarget)
 			for (auto& levelObject : data->levelObjects)
 			{
 				bool intersects = levelObject->getAABB().intersectsWith(ray);
-				levelObject->setOutlineEnabled(intersects);
+				//levelObject->setOutlineEnabled(intersects);
 			}
 			return false;
 		});
@@ -112,28 +107,7 @@ LevelEditor::LevelEditor(RenderTarget& renderTarget)
 
 			Ray ray = data->renderer->getCamera().getMouseRay(normalizedX, normalizedY);
 
-			auto lineDef = GeometryDefinition::createLine(ray.origin,
-				ray.origin + glm::vec3(ray.direction.x * 100, ray.direction.y * 100, ray.direction.z * 100));
-			auto line = data->renderer->createRenderObject(*data->resources.getWhiteTexture().lock(), lineDef, Material()).lock();
-			line->material.diffuse = glm::vec3(0, 0, 0);
-			line->material.ambient = glm::vec3(0, 0, 0);
-
-			for (auto& levelObject : data->levelObjects)
-			{
-				bool intersects = levelObject->getAABB().intersectsWith(ray);
-				if (intersects)
-				{
-					auto aabb = levelObject->getAABB();
-
-					std::cout << "intersection!" << std::endl << std::endl;
-					std::cout << "aabb params: " << std::endl;
-					std::cout << "pos: " << aabb.position.x << " " << aabb.position.y << " " << aabb.position.z << std::endl;
-					std::cout << "scale: " << aabb.size.x << " " << aabb.size.y << " " << aabb.size.z << std::endl << std::endl;
-					std::cout << "ray params: " << std::endl;
-					std::cout << "origin: " << ray.origin.x << " " << ray.origin.y << " " << ray.origin.z << std::endl;
-					std::cout << "direction: " << ray.direction.x << " " << ray.direction.y << " " << ray.direction.z << std::endl << std::endl << std::endl;
-				}
-			}
+			data->raycastManager.raycast(ray);
 
 			return false;
 		});
