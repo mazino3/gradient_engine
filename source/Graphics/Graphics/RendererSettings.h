@@ -15,6 +15,7 @@ struct RendererSettings
 	float bloomThreshold;
 
 	glm::vec3 fogColor;
+	glm::vec3 outlineColor;
 	float fogDistance;
 	float fogPower;
 
@@ -27,6 +28,7 @@ struct RendererSettings
 		bloomEnabled(true),
 		bloomThreshold(0.7f),
 		fogColor(1, 1, 1),
+		outlineColor(1.0f, 0.5f, 0.0f),
 		fogDistance(50.0f),
 		fogPower(5.0f)
 	{}

@@ -435,7 +435,7 @@ void Renderer::renderScene()
 	data->baseRenderTarget.bind();
 	
 	data->outlineAddShader.bind();
-	data->outlineAddShader.setOutlineColor(glm::vec3(1.0f, 0.5f, 0.0f));
+	data->outlineAddShader.setOutlineColor(data->settings.outlineColor);
 	data->outlineAddShader.setOutlineTexture(data->textureForOutline3->getRenderedTexture());
 	data->outlineAddShader.setScreenTexture(data->textureForOutline2->getRenderedTexture());
 	data->screenMesh.draw();
