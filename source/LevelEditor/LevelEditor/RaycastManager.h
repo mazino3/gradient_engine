@@ -15,7 +15,7 @@ struct RaycastManager
 
 	void registerAABB(AABB& aabb, std::function<void(void)> onRaycast);
 	void unregisterAABB(AABB& aabb);
-	void raycast(const Ray& ray);
+	bool raycast(const Ray& ray);
 
 private:
 	std::unique_ptr<RaycastManagerImpl> data;

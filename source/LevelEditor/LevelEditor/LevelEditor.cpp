@@ -19,6 +19,7 @@ struct LevelEditorImpl
 	Resources resources;
 	SelectionManager selectionManager;
 	RaycastManager raycastManager;
+	RaycastManager hoverRaycastManager;
 
 
 	InputClient inputClient;
@@ -54,12 +55,13 @@ LevelEditor::LevelEditor(RenderTarget& renderTarget)
 	data->renderer->getSettings().bloomEnabled = false;
 	data->renderer->getSettings().fogDistance = 100.0f;
 	data->renderer->getSettings().fogColor = glm::vec3(0.5f, 0.7f, 0.7f);
+	data->renderer->getSettings().outlineColor = glm::vec3(0.3f, 0.1f, 0.7f);
 
 	for (int i = 0; i < 5; i++)
 	{
 		for (int j = 0; j < 5; j++)
 		{
-			auto levelObject = std::make_shared<LevelObject>(*data->renderer, data->resources, data->selectionManager, data->raycastManager, glm::vec3( + i * 2, + j * 2, 0), glm::vec3(1, 1, 5));
+			auto levelObject = std::make_shared<LevelObject>(*data->renderer, data->resources, data->selectionManager, data->raycastManager, data->hoverRaycastManager, glm::vec3( + i * 2, + j * 2, 0), glm::vec3(1, 1, 5));
 			data->levelObjects.push_back(levelObject);
 		}
 	}
@@ -83,11 +85,21 @@ LevelEditor::LevelEditor(RenderTarget& renderTarget)
 			normalizedY *= 2;
 			
 
-			Ray ray = data->renderer->getCamera().getMouseRay(normalizedX, normalizedY);
-			for (auto& levelObject : data->levelObjects)
+			if (!data->selectionManager.hasSelection())
 			{
-				bool intersects = levelObject->getAABB().intersectsWith(ray);
-				//levelObject->setOutlineEnabled(intersects);
+				Ray ray = data->renderer->getCamera().getMouseRay(normalizedX, normalizedY);
+				for (auto& levelObject : data->levelObjects)
+				{
+					levelObject->setOutlineEnabled(false);
+				}
+				data->hoverRaycastManager.raycast(ray);
+				/*
+				for (auto& levelObject : data->levelObjects)
+				{
+					bool intersects = levelObject->getAABB().intersectsWith(ray);
+					levelObject->setOutlineEnabled(intersects);
+				}
+				*/
 			}
 			return false;
 		});
@@ -107,7 +119,16 @@ LevelEditor::LevelEditor(RenderTarget& renderTarget)
 
 			Ray ray = data->renderer->getCamera().getMouseRay(normalizedX, normalizedY);
 
-			data->raycastManager.raycast(ray);
+			bool isRaycastSuccess = data->raycastManager.raycast(ray);
+			if (!isRaycastSuccess)
+			{
+				data->selectionManager.removeCurrentSelection();
+				data->renderer->getSettings().outlineColor = glm::vec3(0.3f, 0.1f, 0.7f);
+			}
+			else
+			{
+				data->renderer->getSettings().outlineColor = glm::vec3(1.0f, 0.5f, 0.0f);
+			}
 
 			return false;
 		});

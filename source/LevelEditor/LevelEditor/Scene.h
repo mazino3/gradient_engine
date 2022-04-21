@@ -12,7 +12,7 @@ struct SceneImpl;
 
 struct Scene
 {
-	Scene(Renderer& renderer, Resources& resouces, SelectionManager& selectionManager, RaycastManager& raycastManager);
+	Scene(Renderer& renderer, Resources& resouces, SelectionManager& selectionManager, RaycastManager& raycastManager, RaycastManager& hoverRaycastManager);
 	~Scene();
 
 	void load(const LevelData& levelData);

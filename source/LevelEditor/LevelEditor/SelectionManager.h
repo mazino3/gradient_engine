@@ -18,6 +18,8 @@ struct SelectionManager
 
 	int getId();
 	void fireSelectionChanged(int selectedId);
+	void removeCurrentSelection();
+	bool hasSelection();
 	std::shared_ptr<SelectionSubscription> subscribe(std::function<void(int, int)> callback);
 
 private:

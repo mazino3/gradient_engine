@@ -15,7 +15,7 @@ struct LevelObjectImpl;
 struct LevelObject
 {
 	LevelObject(Renderer& renderer, Resources& resources, SelectionManager& selectionManager,
-				RaycastManager& raycastManager, glm::vec3 pos, glm::vec3 scale);
+				RaycastManager& raycastManager, RaycastManager& hoverRaycastManager, glm::vec3 pos, glm::vec3 scale);
 	~LevelObject();
 
 	void setPosition(const glm::vec3& pos);

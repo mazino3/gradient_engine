@@ -8,23 +8,25 @@ struct SceneImpl
 	Resources& resources;
 	SelectionManager& selectionManager;
 	RaycastManager& raycastManager;
+	RaycastManager& hoverRaycastManager;
 
 	std::vector<std::shared_ptr<LevelObject>> objects;
 
-	SceneImpl(Renderer& renderer, Resources& resources, SelectionManager& selectionManager, RaycastManager& raycastManager);
+	SceneImpl(Renderer& renderer, Resources& resources, SelectionManager& selectionManager, RaycastManager& raycastManager, RaycastManager& hoverRaycastManager);
 };
 
-SceneImpl::SceneImpl(Renderer& renderer, Resources& resources, SelectionManager& selectionManager, RaycastManager& raycastManager) :
+SceneImpl::SceneImpl(Renderer& renderer, Resources& resources, SelectionManager& selectionManager, RaycastManager& raycastManager, RaycastManager& hoverRaycastManager) :
 	renderer(renderer),
 	resources(resources),
 	selectionManager(selectionManager),
-	raycastManager(raycastManager)
+	raycastManager(raycastManager),
+	hoverRaycastManager(hoverRaycastManager)
 {
 }
 
-Scene::Scene(Renderer& renderer, Resources& resources, SelectionManager& selectionManager, RaycastManager& raycastManager)
+Scene::Scene(Renderer& renderer, Resources& resources, SelectionManager& selectionManager, RaycastManager& raycastManager, RaycastManager& hoverRaycastManager)
 {
-	data = std::make_unique<SceneImpl>(renderer, resources, selectionManager, raycastManager);
+	data = std::make_unique<SceneImpl>(renderer, resources, selectionManager, raycastManager, hoverRaycastManager);
 }
 
 Scene::~Scene()
@@ -35,7 +37,7 @@ void Scene::load(const LevelData& levelData)
 {
 	for (auto& obj : levelData.objects)
 	{
-		auto newObject = std::make_shared<LevelObject>(data->renderer, data->resources, data->selectionManager, data->raycastManager, obj.position, obj.scale);
+		auto newObject = std::make_shared<LevelObject>(data->renderer, data->resources, data->selectionManager, data->raycastManager, data->hoverRaycastManager, obj.position, obj.scale);
 		data->objects.push_back(newObject);
 	}
 }

@@ -53,7 +53,7 @@ void RaycastManager::unregisterAABB(AABB& aabb)
 	}
 }
 
-void RaycastManager::raycast(const Ray& ray)
+bool RaycastManager::raycast(const Ray& ray)
 {
 	RaycastManagerElement closest;
 	bool firstElementFound = false;
@@ -78,5 +78,6 @@ void RaycastManager::raycast(const Ray& ray)
 	{
 		closest.callback();
 	}
+	return firstElementFound;
 }
 
