@@ -14,13 +14,17 @@ struct LevelObjectImpl
 	int selectionId;
 
 	LevelObjectImpl(Renderer& renderer, SelectionManager& selectionManager, RaycastManager& raycastManager, RaycastManager& hoverRaycastManager);
+
+	bool isSelected;
+	void onSelectionUpdated(bool isSelected);
 };
 
 LevelObjectImpl::LevelObjectImpl(Renderer& renderer, SelectionManager& selectionManager, RaycastManager& raycastManager, RaycastManager& hoverRaycastManager) :
 	renderer(renderer),
 	selectionManager(selectionManager),
 	raycastManager(raycastManager),
-	hoverRaycastManager(hoverRaycastManager)
+	hoverRaycastManager(hoverRaycastManager),
+	isSelected(false)
 {}
 
 
@@ -53,12 +57,19 @@ LevelObject::LevelObject(Renderer& renderer,
 
 	data->selectionSubscription = selectionManager.subscribe([this](int selectedId, int prevId) 
 	{
-			if (selectedId == data->selectionId)
-			{
-				std::cout << "selected!" << std::endl;
-			}
-			data->renderObject.lock()->hasOutline = (selectedId == data->selectionId);
+			data->onSelectionUpdated(selectedId == data->selectionId);
 	});
+}
+
+void LevelObjectImpl::onSelectionUpdated(bool isSelected)
+{
+	if (this->isSelected == isSelected)
+	{
+		return;
+	}
+	this->isSelected = isSelected;
+
+	renderObject.lock()->hasOutline = isSelected;
 }
 
 LevelObject::~LevelObject()
