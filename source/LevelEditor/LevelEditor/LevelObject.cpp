@@ -67,7 +67,10 @@ LevelObject::LevelObject(Renderer& renderer,
 
 	hoverRaycastManager.registerAABB(data->aabb, [this]() 
 	{
-			data->renderObject.lock()->hasOutline = true;
+			if (!data->isSelected)
+			{
+				data->renderObject.lock()->hasOutline = true;
+			}
 	});
 
 	data->selectionSubscription = selectionManager.subscribe([this](int selectedId, int prevId) 
@@ -93,7 +96,7 @@ void LevelObjectImpl::onSelectionUpdated(bool isSelected)
 		resizeComponent.onUnselected();
 	}
 
-	renderObject.lock()->hasOutline = isSelected;
+	renderObject.lock()->hasOutline = isSelected && false;
 }
 
 LevelObject::~LevelObject()

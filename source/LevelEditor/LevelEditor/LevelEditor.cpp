@@ -84,23 +84,13 @@ LevelEditor::LevelEditor(RenderTarget& renderTarget)
 			normalizedX *= 2;
 			normalizedY *= 2;
 			
-
-			if (!data->selectionManager.hasSelection())
+			Ray ray = data->renderer->getCamera().getMouseRay(normalizedX, normalizedY);
+			for (auto& levelObject : data->levelObjects)
 			{
-				Ray ray = data->renderer->getCamera().getMouseRay(normalizedX, normalizedY);
-				for (auto& levelObject : data->levelObjects)
-				{
-					levelObject->setOutlineEnabled(false);
-				}
-				data->hoverRaycastManager.raycast(ray);
-				/*
-				for (auto& levelObject : data->levelObjects)
-				{
-					bool intersects = levelObject->getAABB().intersectsWith(ray);
-					levelObject->setOutlineEnabled(intersects);
-				}
-				*/
+				levelObject->setOutlineEnabled(false);
 			}
+			data->hoverRaycastManager.raycast(ray);
+
 			return false;
 		});
 
@@ -123,11 +113,6 @@ LevelEditor::LevelEditor(RenderTarget& renderTarget)
 			if (!isRaycastSuccess)
 			{
 				data->selectionManager.removeCurrentSelection();
-				data->renderer->getSettings().outlineColor = glm::vec3(0.3f, 0.1f, 0.7f);
-			}
-			else
-			{
-				data->renderer->getSettings().outlineColor = glm::vec3(1.0f, 0.5f, 0.0f);
 			}
 
 			return false;
