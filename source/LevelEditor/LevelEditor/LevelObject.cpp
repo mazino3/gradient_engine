@@ -1,4 +1,5 @@
 #include <LevelEditor/LevelObject.h>
+#include <LevelEditor/ResizeComponent.h>
 #include <iostream>
 
 struct LevelObjectImpl
@@ -7,24 +8,38 @@ struct LevelObjectImpl
 	SelectionManager& selectionManager;
 	RaycastManager& raycastManager;
 	RaycastManager& hoverRaycastManager;
+	Resources& resources;
 
 	std::weak_ptr<RenderObject> renderObject;
 	std::shared_ptr<SelectionSubscription> selectionSubscription;
 	AABB aabb;
 	int selectionId;
+	ResizeComponent resizeComponent;
 
-	LevelObjectImpl(Renderer& renderer, SelectionManager& selectionManager, RaycastManager& raycastManager, RaycastManager& hoverRaycastManager);
+	LevelObjectImpl(Renderer& renderer, 
+		SelectionManager& selectionManager, 
+		RaycastManager& raycastManager, 
+		RaycastManager& hoverRaycastManager, 
+		Resources& resources,
+		LevelObject& levelObject);
 
 	bool isSelected;
 	void onSelectionUpdated(bool isSelected);
 };
 
-LevelObjectImpl::LevelObjectImpl(Renderer& renderer, SelectionManager& selectionManager, RaycastManager& raycastManager, RaycastManager& hoverRaycastManager) :
+LevelObjectImpl::LevelObjectImpl(Renderer& renderer,
+	SelectionManager& selectionManager,
+	RaycastManager& raycastManager,
+	RaycastManager& hoverRaycastManager,
+	Resources& resources,
+	LevelObject& levelObject) :
 	renderer(renderer),
 	selectionManager(selectionManager),
 	raycastManager(raycastManager),
 	hoverRaycastManager(hoverRaycastManager),
-	isSelected(false)
+	resources(resources),
+	isSelected(false),
+	resizeComponent(levelObject, renderer, resources)
 {}
 
 
@@ -36,7 +51,7 @@ LevelObject::LevelObject(Renderer& renderer,
 						glm::vec3 pos, 
 						glm::vec3 scale)
 {
-	data = std::make_unique<LevelObjectImpl>(renderer, selectionManager, raycastManager, hoverRaycastManager);
+	data = std::make_unique<LevelObjectImpl>(renderer, selectionManager, raycastManager, hoverRaycastManager, resources, *this);
 	data->renderObject = renderer.createRenderObject(*resources.getWhiteTexture().lock(), GeometryDefinition::CUBE, Material());
 	data->aabb.position = pos;
 	data->aabb.size = scale;
@@ -68,6 +83,15 @@ void LevelObjectImpl::onSelectionUpdated(bool isSelected)
 		return;
 	}
 	this->isSelected = isSelected;
+
+	if (isSelected)
+	{
+		resizeComponent.onSelected();
+	}
+	else
+	{
+		resizeComponent.onUnselected();
+	}
 
 	renderObject.lock()->hasOutline = isSelected;
 }
@@ -118,6 +142,7 @@ bool LevelObject::getOutlineEnabled()
 
 void LevelObject::update()
 {
+	data->resizeComponent.update();
 }
 
 LevelDataObject LevelObject::toDataObject()
