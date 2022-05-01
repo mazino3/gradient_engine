@@ -37,14 +37,34 @@ ResizeComponent::~ResizeComponent()
 void ResizeComponent::onSelected()
 {
 	data->isSelected = true;
-	auto arrowDef = GeometryDefinition::CUBE.scale(glm::vec3(0.1f, 0.1f, 0.1f));
+	auto arrowDef = GeometryDefinition::createArrow(20, 1.0f, 0.3f, 0.5f, 0.8f).scale(glm::vec3(0.5f, 0.5f, 0.8f));
 	
-	data->arrowMinusX = data->renderer.createRenderObject(*data->resources.getWhiteTexture().lock(), arrowDef, Material());
-	data->arrowPlusX = data->renderer.createRenderObject(*data->resources.getWhiteTexture().lock(), arrowDef, Material());
-	data->arrowMinusY = data->renderer.createRenderObject(*data->resources.getWhiteTexture().lock(), arrowDef, Material());
-	data->arrowPlusY = data->renderer.createRenderObject(*data->resources.getWhiteTexture().lock(), arrowDef, Material());
-	data->arrowMinusZ = data->renderer.createRenderObject(*data->resources.getWhiteTexture().lock(), arrowDef, Material());
-	data->arrowPlusZ = data->renderer.createRenderObject(*data->resources.getWhiteTexture().lock(), arrowDef, Material());
+	glm::vec3 xColor(1.0f, 0.0f, 0.0f);
+	glm::vec3 yColor(0.0f, 1.0f, 0.0f);
+	glm::vec3 zColor(0.0f, 0.0f, 1.0f);
+
+	Material xArrowMat;
+	Material yArrowMat;
+	Material zArrowMat;
+
+	xArrowMat.specular = glm::vec3(0, 0, 0);
+	yArrowMat.specular = glm::vec3(0, 0, 0);
+	zArrowMat.specular = glm::vec3(0, 0, 0);
+
+	xArrowMat.diffuse = xColor;
+	yArrowMat.diffuse = yColor;
+	zArrowMat.diffuse = zColor;
+	
+	xArrowMat.ambient = xColor;
+	yArrowMat.ambient = yColor;
+	zArrowMat.ambient = zColor;
+
+	data->arrowMinusX = data->renderer.createRenderObject(*data->resources.getWhiteTexture().lock(), arrowDef.rotate(glm::vec3(0, -90, 0)), xArrowMat);
+	data->arrowPlusX = data->renderer.createRenderObject(*data->resources.getWhiteTexture().lock(), arrowDef.rotate(glm::vec3(0, 90, 0)), xArrowMat);
+	data->arrowMinusY = data->renderer.createRenderObject(*data->resources.getWhiteTexture().lock(), arrowDef.rotate(glm::vec3(90, 0, 0)), yArrowMat);
+	data->arrowPlusY = data->renderer.createRenderObject(*data->resources.getWhiteTexture().lock(), arrowDef.rotate(glm::vec3(-90, 0, 0)), yArrowMat);
+	data->arrowMinusZ = data->renderer.createRenderObject(*data->resources.getWhiteTexture().lock(), arrowDef.rotate(glm::vec3(180, 0, 0)), zArrowMat);
+	data->arrowPlusZ = data->renderer.createRenderObject(*data->resources.getWhiteTexture().lock(), arrowDef, zArrowMat);
 
 	data->updateArrowPositions();
 }

@@ -457,10 +457,10 @@ std::weak_ptr<RenderObject> Renderer::createRenderObject(Texture& diffuseTexture
 
 void Renderer::removeRenderObject(RenderObject& objectToRemove)
 {
-	std::remove_if(data->renderObjects.begin(), data->renderObjects.end(), [&](const auto& renderObject) 
+	data->renderObjects.erase(std::remove_if(data->renderObjects.begin(), data->renderObjects.end(), [&](const auto& renderObject)
 	{
 		return &(*renderObject) == &objectToRemove;
-	});
+	}));
 }
 
 void Renderer::createSkybox(CubeMap& cubemap)

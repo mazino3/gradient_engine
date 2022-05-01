@@ -61,7 +61,7 @@ LevelEditor::LevelEditor(RenderTarget& renderTarget)
 	{
 		for (int j = 0; j < 5; j++)
 		{
-			auto levelObject = std::make_shared<LevelObject>(*data->renderer, data->resources, data->selectionManager, data->raycastManager, data->hoverRaycastManager, glm::vec3( + i * 2, + j * 2, 0), glm::vec3(1, 1, 5));
+			auto levelObject = std::make_shared<LevelObject>(*data->renderer, data->resources, data->selectionManager, data->raycastManager, data->hoverRaycastManager, glm::vec3( + i * 2, + j * 2, 1.25f), glm::vec3(1, 1, 2.5f));
 			data->levelObjects.push_back(levelObject);
 		}
 	}
