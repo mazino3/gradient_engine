@@ -36,15 +36,6 @@ LevelObjectImpl::LevelObjectImpl(DepSupplier& depSupplier, LevelObject& levelObj
 {}
 
 
-/*
-LevelObject::LevelObject(Renderer& renderer, 
-					    Resources& resources, 
-						SelectionManager& selectionManager, 
-						RaycastManager& raycastManager,
-						RaycastManager& hoverRaycastManager,
-						glm::vec3 pos, 
-						glm::vec3 scale)
-						*/
 LevelObject::LevelObject(DepSupplier& depSupplier, glm::vec3 pos, glm::vec3 scale)
 {
 	data = std::make_unique<LevelObjectImpl>(depSupplier, *this);
