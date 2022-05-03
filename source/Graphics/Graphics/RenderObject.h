@@ -18,6 +18,7 @@ struct RenderObject
 	bool castsShadows;
 	bool hasOutline;
 	float textureScaleMultiplier;
+	int renderLayer;
 
 	RenderObject(Texture& diffuseTexture, const GeometryDefinition& geometryDefinition, const Material& material) :
 		diffuseTexture(&diffuseTexture),
@@ -28,7 +29,8 @@ struct RenderObject
 		textureScalingEnabled(false),
 		textureScaleMultiplier(1.0f),
 		castsShadows(true),
-		hasOutline(false)
+		hasOutline(false),
+		renderLayer(0)
 	{}
 
 	RenderObject(Texture& diffuseTexture, Texture& normalTexture, const GeometryDefinition& geometryDefinition, const Material& material) :
@@ -40,7 +42,8 @@ struct RenderObject
 		textureScalingEnabled(false),
 		textureScaleMultiplier(1.0f),
 		castsShadows(true),
-		hasOutline(false)
+		hasOutline(false),
+		renderLayer(0)
 	{}
 
 	Texture& getDiffuseTexture()

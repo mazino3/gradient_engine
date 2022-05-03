@@ -15,6 +15,7 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
+#include <unordered_set>
 
 
 enum class RenderObjectsType
@@ -26,6 +27,7 @@ enum class RenderObjectsType
 
 struct RendererImpl
 {
+	static const int NO_LAYER = -1;
 	static const int MAX_LIGHTS_WITH_SHADOWS = 4;
 	static const int MAX_LIGHTS_WITHOUT_SHADOWS = 16;
 
@@ -97,8 +99,24 @@ struct RendererImpl
 	void renderObject(RenderObject& obj);
 	void renderObjectShadow(RenderObject& obj);
 	void renderObjectOutline(RenderObject& obj);
-	void renderGameObjects(RenderObjectsType renderType, const Camera& camera);
+	void renderGameObjects(RenderObjectsType renderType, const Camera& camera, int layer);
+	std::vector<int> getObjectLayers();
 };
+
+std::vector<int> RendererImpl::getObjectLayers()
+{
+	std::unordered_set<int> layers;
+	for (auto& object : renderObjects)
+	{
+		layers.insert(object->renderLayer);
+	}
+	std::vector<int> result;
+	for (auto& layer : layers)
+	{
+		result.push_back(layer);
+	}
+	return result;
+}
 
 Renderer::Renderer(RenderTarget& baseRenderTarget)
 {
@@ -196,13 +214,21 @@ void RendererImpl::renderObjectOutline(RenderObject& obj)
 	obj.mesh.draw();
 }
 
-void RendererImpl::renderGameObjects(RenderObjectsType renderType, const Camera& camera)
+void RendererImpl::renderGameObjects(RenderObjectsType renderType, const Camera& camera, int layer)
 {
 	static const float eps = 0.00001f;
 	std::vector<std::shared_ptr<RenderObject>> opaqueObjects;
 	std::vector<std::shared_ptr<RenderObject>> transparentObjects;
 	for (const auto& renderObject : renderObjects)
 	{
+		if (layer != NO_LAYER)
+		{
+			if (renderObject->renderLayer != layer)
+			{
+				continue;
+			}
+		}
+
 		if (abs(renderObject->material.alpha - 1.0f) < eps)
 		{
 			if (renderType != RenderObjectsType::Shadows || renderObject->castsShadows)
@@ -305,7 +331,7 @@ void Renderer::renderScene()
 		lightCameras.push_back(data->camera.getDirectionalLightCamera(-lightsWithShadows[i]->direction, 12.0f));
 		data->shadowShader.setViewMatrix(lightCameras.back().getViewMatrix());
 		data->shadowShader.setProjectionMatrix(lightCameras.back().getProjectionMatrix());
-		data->renderGameObjects(RenderObjectsType::Shadows, lightCameras.back());
+		data->renderGameObjects(RenderObjectsType::Shadows, lightCameras.back(), RendererImpl::NO_LAYER);
 	}
 
 	//bind render texture
@@ -365,7 +391,12 @@ void Renderer::renderScene()
 		data->shader.setPositionalLight(*data->positionalLights[i], i);
 	}
 
-	data->renderGameObjects(RenderObjectsType::Normal, data->camera);
+	auto layers = data->getObjectLayers();
+	for (auto& layer : layers)
+	{
+		data->renderGameObjects(RenderObjectsType::Normal, data->camera, layer);
+		data->renderTexture->clearDepth();
+	}
 	data->renderTexture->updateTexture(false);
 
 	//applying bloom
@@ -386,7 +417,7 @@ void Renderer::renderScene()
 	data->simpleShader3d.setViewMatrix(data->camera.getViewMatrix());
 	data->simpleShader3d.setEyeDirection(data->camera.dirFront);
 
-	data->renderGameObjects(RenderObjectsType::Outline, data->camera);
+	data->renderGameObjects(RenderObjectsType::Outline, data->camera, RendererImpl::NO_LAYER);
 	data->textureForOutline->updateTexture(false);
 
 	data->textureForOutline2->bind();

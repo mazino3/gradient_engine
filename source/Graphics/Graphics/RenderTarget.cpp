@@ -21,3 +21,9 @@ void RenderTarget::clear()
 	glClearColor(_data->color.r, _data->color.g, _data->color.b, _data->color.a);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
+
+void RenderTarget::clearDepth()
+{
+	glClearColor(_data->color.r, _data->color.g, _data->color.b, _data->color.a);
+	glClear(GL_DEPTH_BUFFER_BIT);
+}

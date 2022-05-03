@@ -18,6 +18,7 @@ struct RenderTarget
 	virtual int getHeight() = 0;
 	void setClearColor(const glm::vec4& color);
 	void clear();
+	void clearDepth();
 
 private:
 

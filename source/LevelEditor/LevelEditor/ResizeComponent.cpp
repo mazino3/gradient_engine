@@ -66,6 +66,13 @@ void ResizeComponent::onSelected()
 	data->arrowMinusZ = data->renderer.createRenderObject(*data->resources.getWhiteTexture().lock(), arrowDef.rotate(glm::vec3(180, 0, 0)), zArrowMat);
 	data->arrowPlusZ = data->renderer.createRenderObject(*data->resources.getWhiteTexture().lock(), arrowDef, zArrowMat);
 
+	data->arrowMinusX.lock()->renderLayer = 1;
+	data->arrowPlusX.lock()->renderLayer = 1;
+	data->arrowMinusY.lock()->renderLayer = 1;
+	data->arrowPlusY.lock()->renderLayer = 1;
+	data->arrowMinusZ.lock()->renderLayer = 1;
+	data->arrowPlusZ.lock()->renderLayer = 1;
+
 	data->updateArrowPositions();
 }
 
