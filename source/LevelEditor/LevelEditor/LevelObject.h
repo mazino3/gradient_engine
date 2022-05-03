@@ -9,13 +9,15 @@
 #include "LevelData.h"
 #include "SelectionManager.h"
 #include "RaycastManager.h"
+#include "DepSupplier.h"
 
 struct LevelObjectImpl;
 
 struct LevelObject
 {
-	LevelObject(Renderer& renderer, Resources& resources, SelectionManager& selectionManager,
-				RaycastManager& raycastManager, RaycastManager& hoverRaycastManager, glm::vec3 pos, glm::vec3 scale);
+	//LevelObject(Renderer& renderer, Resources& resources, SelectionManager& selectionManager,
+	//			RaycastManager& raycastManager, RaycastManager& hoverRaycastManager, glm::vec3 pos, glm::vec3 scale);
+	LevelObject(DepSupplier& depSupplier, glm::vec3 pos, glm::vec3 scale);
 	~LevelObject();
 
 	void setPosition(const glm::vec3& pos);

@@ -6,13 +6,14 @@
 #include "Resources.h"
 #include "SelectionManager.h"
 #include "RaycastManager.h"
+#include "DepSupplier.h"
 #include <Graphics/Renderer.h>
 
 struct SceneImpl;
 
 struct Scene
 {
-	Scene(Renderer& renderer, Resources& resouces, SelectionManager& selectionManager, RaycastManager& raycastManager, RaycastManager& hoverRaycastManager);
+	Scene(DepSupplier& depSupplier);
 	~Scene();
 
 	void load(const LevelData& levelData);

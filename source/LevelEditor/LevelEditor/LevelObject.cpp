@@ -1,6 +1,9 @@
 #include <LevelEditor/LevelObject.h>
 #include <LevelEditor/ResizeComponent.h>
+#include <LevelEditor/DependencyKeys.h>
 #include <iostream>
+
+using namespace DependencyKeys;
 
 struct LevelObjectImpl
 {
@@ -16,33 +19,24 @@ struct LevelObjectImpl
 	int selectionId;
 	ResizeComponent resizeComponent;
 
-	LevelObjectImpl(Renderer& renderer, 
-		SelectionManager& selectionManager, 
-		RaycastManager& raycastManager, 
-		RaycastManager& hoverRaycastManager, 
-		Resources& resources,
-		LevelObject& levelObject);
+	LevelObjectImpl(DepSupplier& depSupplier, LevelObject& levelObject);
 
 	bool isSelected;
 	void onSelectionUpdated(bool isSelected);
 };
 
-LevelObjectImpl::LevelObjectImpl(Renderer& renderer,
-	SelectionManager& selectionManager,
-	RaycastManager& raycastManager,
-	RaycastManager& hoverRaycastManager,
-	Resources& resources,
-	LevelObject& levelObject) :
-	renderer(renderer),
-	selectionManager(selectionManager),
-	raycastManager(raycastManager),
-	hoverRaycastManager(hoverRaycastManager),
-	resources(resources),
+LevelObjectImpl::LevelObjectImpl(DepSupplier& depSupplier, LevelObject& levelObject) :
+	renderer(depSupplier.get<Renderer>()),
+	selectionManager(depSupplier.get<SelectionManager>()),
+	raycastManager(depSupplier.get<RaycastManager>(RAYCAST_MANAGER)),
+	hoverRaycastManager(depSupplier.get<RaycastManager>(HOVER_RAYCAST_MANAGER)),
+	resources(depSupplier.get<Resources>()),
 	isSelected(false),
 	resizeComponent(levelObject, renderer, resources)
 {}
 
 
+/*
 LevelObject::LevelObject(Renderer& renderer, 
 					    Resources& resources, 
 						SelectionManager& selectionManager, 
@@ -50,22 +44,24 @@ LevelObject::LevelObject(Renderer& renderer,
 						RaycastManager& hoverRaycastManager,
 						glm::vec3 pos, 
 						glm::vec3 scale)
+						*/
+LevelObject::LevelObject(DepSupplier& depSupplier, glm::vec3 pos, glm::vec3 scale)
 {
-	data = std::make_unique<LevelObjectImpl>(renderer, selectionManager, raycastManager, hoverRaycastManager, resources, *this);
-	data->renderObject = renderer.createRenderObject(*resources.getWhiteTexture().lock(), GeometryDefinition::CUBE, Material());
+	data = std::make_unique<LevelObjectImpl>(depSupplier, *this);
+	data->renderObject = data->renderer.createRenderObject(*data->resources.getWhiteTexture().lock(), GeometryDefinition::CUBE, Material());
 	data->aabb.position = pos;
 	data->aabb.size = scale;
 	data->renderObject.lock()->transform.position = pos;
 	data->renderObject.lock()->transform.scale = scale;
 	data->selectionId = data->selectionManager.getId();
 
-	raycastManager.registerAABB(data->aabb, [this]() 
+	data->raycastManager.registerAABB(data->aabb, [this]() 
 	{
 			std::cout << "raycast hit!" << std::endl;
 			data->selectionManager.fireSelectionChanged(data->selectionId);
 	});
 
-	hoverRaycastManager.registerAABB(data->aabb, [this]() 
+	data->hoverRaycastManager.registerAABB(data->aabb, [this]() 
 	{
 			if (!data->isSelected)
 			{
@@ -73,7 +69,7 @@ LevelObject::LevelObject(Renderer& renderer,
 			}
 	});
 
-	data->selectionSubscription = selectionManager.subscribe([this](int selectedId, int prevId) 
+	data->selectionSubscription = data->selectionManager.subscribe([this](int selectedId, int prevId) 
 	{
 			data->onSelectionUpdated(selectedId == data->selectionId);
 	});

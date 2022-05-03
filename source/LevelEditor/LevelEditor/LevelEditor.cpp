@@ -4,6 +4,8 @@
 #include "Resources.h"
 #include "SelectionManager.h"
 #include "RaycastManager.h"
+#include "DepSupplier.h"
+#include "DependencyKeys.h"
 #include <Graphics/Renderer.h>
 #include <Graphics/OrbitCameraController.h>
 #include <Graphics/InputClient.h>
@@ -11,6 +13,8 @@
 #include <vector>
 #include <Graphics/InputClient.h>
 #include <iostream>
+
+using namespace DependencyKeys;
 
 struct LevelEditorImpl
 {
@@ -20,7 +24,7 @@ struct LevelEditorImpl
 	SelectionManager selectionManager;
 	RaycastManager raycastManager;
 	RaycastManager hoverRaycastManager;
-
+	DepSupplier depSupplier;
 
 	InputClient inputClient;
 
@@ -30,7 +34,14 @@ struct LevelEditorImpl
 LevelEditor::LevelEditor(RenderTarget& renderTarget)
 {
 	data = std::make_unique<LevelEditorImpl>();
+	data->depSupplier.put(data->resources);
+	data->depSupplier.put(data->selectionManager);
+	data->depSupplier.put(RAYCAST_MANAGER, data->raycastManager);
+	data->depSupplier.put(HOVER_RAYCAST_MANAGER, data->hoverRaycastManager);
+
 	data->renderer = std::make_unique<Renderer>(renderTarget);
+	data->depSupplier.put(*data->renderer);
+
 	auto& camera = data->renderer->getCamera();
 	camera.setPerspective(45.0f, (float)renderTarget.getWidth() / (float)renderTarget.getHeight(), 0.1f, 200.0f);
 	camera.position = glm::vec3(-5, 0, 5);
@@ -61,7 +72,7 @@ LevelEditor::LevelEditor(RenderTarget& renderTarget)
 	{
 		for (int j = 0; j < 5; j++)
 		{
-			auto levelObject = std::make_shared<LevelObject>(*data->renderer, data->resources, data->selectionManager, data->raycastManager, data->hoverRaycastManager, glm::vec3( + i * 2, + j * 2, 1.25f), glm::vec3(1, 1, 2.5f));
+			auto levelObject = std::make_shared<LevelObject>(data->depSupplier, glm::vec3( + i * 2, + j * 2, 1.25f), glm::vec3(1, 1, 2.5f));
 			data->levelObjects.push_back(levelObject);
 		}
 	}
