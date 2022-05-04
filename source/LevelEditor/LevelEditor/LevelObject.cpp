@@ -28,8 +28,8 @@ struct LevelObjectImpl
 LevelObjectImpl::LevelObjectImpl(DepSupplier& depSupplier, LevelObject& levelObject) :
 	renderer(depSupplier.get<Renderer>()),
 	selectionManager(depSupplier.get<SelectionManager>()),
-	raycastManager(depSupplier.get<RaycastManager>(RAYCAST_MANAGER)),
-	hoverRaycastManager(depSupplier.get<RaycastManager>(HOVER_RAYCAST_MANAGER)),
+	raycastManager(depSupplier.get(RAYCAST_MANAGER)),
+	hoverRaycastManager(depSupplier.get(HOVER_RAYCAST_MANAGER)),
 	resources(depSupplier.get<Resources>()),
 	isSelected(false),
 	resizeComponent(levelObject, renderer, resources)

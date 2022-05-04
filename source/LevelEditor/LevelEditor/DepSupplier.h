@@ -7,16 +7,26 @@
 #include <iostream>
 #include <typeindex>
 
+template<typename T>
+struct DependencyKey
+{
+	std::string key;
+
+	DependencyKey(const std::string key) :
+		key(key)
+	{}
+};
+
 struct DepSupplier
 {
 	template<typename T>
-	void put(const std::string& key, T& value);
+	void put(const DependencyKey<T>& key, T& value);
 	
 	template<typename T>
 	void put(T& value);
 
 	template<typename T>
-	T& get(const std::string& key);
+	T& get(const DependencyKey<T>& key);
 
 	template<typename T>
 	T& get();
@@ -32,27 +42,27 @@ private:
 */
 
 template<typename T>
-void DepSupplier::put(const std::string& key, T& value)
+void DepSupplier::put(const DependencyKey<T>& key, T& value)
 {
-	values[key] = &value;
+	values[key.key] = &value;
 }
 
 template<typename T>
-T& DepSupplier::get(const std::string& key)
+T& DepSupplier::get(const DependencyKey<T>& key)
 {
-	if (values.find(key) == values.end())
+	if (values.find(key.key) == values.end())
 	{
-		std::cout << "key " << key << " is not present in DepSupplier" << std::endl;
+		std::cout << "key " << key.key << " is not present in DepSupplier" << std::endl;
 	}
 
 	T* ptr;
 	try
 	{
-		ptr = std::any_cast<T*>(values[key]);
+		ptr = std::any_cast<T*>(values[key.key]);
 	}
 	catch (const std::bad_any_cast& e)
 	{
-		std::cout << "key " << key << " is present, but has a different type" << std::endl << e.what() << std::endl;
+		std::cout << "key " << key.key << " is present, but has a different type" << std::endl << e.what() << std::endl;
 	}
 	return *ptr;
 }
