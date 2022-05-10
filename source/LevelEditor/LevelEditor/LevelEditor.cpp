@@ -24,6 +24,8 @@ struct LevelEditorImpl
 	SelectionManager selectionManager;
 	RaycastManager raycastManager;
 	RaycastManager hoverRaycastManager;
+	RaycastManager arrowRaycastManager;
+
 	DepSupplier depSupplier;
 
 	InputClient inputClient;
@@ -38,6 +40,7 @@ LevelEditor::LevelEditor(RenderTarget& renderTarget)
 	data->depSupplier.put(data->selectionManager);
 	data->depSupplier.put(RAYCAST_MANAGER, data->raycastManager);
 	data->depSupplier.put(HOVER_RAYCAST_MANAGER, data->hoverRaycastManager);
+	data->depSupplier.put(ARROW_RAYCAST_MANAGER, data->arrowRaycastManager);
 
 	data->renderer = std::make_unique<Renderer>(renderTarget);
 	data->depSupplier.put(*data->renderer);
