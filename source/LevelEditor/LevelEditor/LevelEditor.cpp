@@ -123,10 +123,15 @@ LevelEditor::LevelEditor(RenderTarget& renderTarget)
 
 			Ray ray = data->renderer->getCamera().getMouseRay(normalizedX, normalizedY);
 
-			bool isRaycastSuccess = data->raycastManager.raycast(ray);
-			if (!isRaycastSuccess)
+			bool arrowRaycast = data->arrowRaycastManager.raycast(ray);
+			
+			if (!arrowRaycast)
 			{
-				data->selectionManager.removeCurrentSelection();
+				bool isRaycastSuccess = data->raycastManager.raycast(ray);
+				if (!isRaycastSuccess)
+				{
+					data->selectionManager.removeCurrentSelection();
+				}
 			}
 
 			return false;

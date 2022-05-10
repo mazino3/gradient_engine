@@ -32,7 +32,7 @@ LevelObjectImpl::LevelObjectImpl(DepSupplier& depSupplier, LevelObject& levelObj
 	hoverRaycastManager(depSupplier.get(HOVER_RAYCAST_MANAGER)),
 	resources(depSupplier.get<Resources>()),
 	isSelected(false),
-	resizeComponent(levelObject, renderer, resources)
+	resizeComponent(levelObject, depSupplier)
 {}
 
 
@@ -63,6 +63,11 @@ LevelObject::LevelObject(DepSupplier& depSupplier, glm::vec3 pos, glm::vec3 scal
 	data->selectionSubscription = data->selectionManager.subscribe([this](int selectedId, int prevId) 
 	{
 			data->onSelectionUpdated(selectedId == data->selectionId);
+	});
+
+	data->resizeComponent.onArrowClicked([](ArrowType arrowType) 
+	{
+			std::cout << "arrow clicked: " << (int)arrowType << std::endl;
 	});
 }
 

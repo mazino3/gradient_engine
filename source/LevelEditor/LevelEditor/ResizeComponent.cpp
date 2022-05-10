@@ -97,12 +97,14 @@ void ResizeComponent::onSelected()
 	data->arrowMinusZ = data->renderer.createRenderObject(*data->resources.getWhiteTexture().lock(), arrowDef.rotate(glm::vec3(180, 0, 0)), zArrowMat);
 	data->arrowPlusZ = data->renderer.createRenderObject(*data->resources.getWhiteTexture().lock(), arrowDef, zArrowMat);
 
-	data->aabbMinusX = std::make_shared<AABB>(glm::vec3(0, 0, 0), glm::vec3(0.2f, 0.2f, 0.2f));
-	data->aabbPlusX = std::make_shared<AABB>(glm::vec3(0, 0, 0), glm::vec3(0.2f, 0.2f, 0.2f));
-	data->aabbMinusY = std::make_shared<AABB>(glm::vec3(0, 0, 0), glm::vec3(0.2f, 0.2f, 0.2f));
-	data->aabbPlusY = std::make_shared<AABB>(glm::vec3(0, 0, 0), glm::vec3(0.2f, 0.2f, 0.2f));
-	data->aabbMinusZ = std::make_shared<AABB>(glm::vec3(0, 0, 0), glm::vec3(0.2f, 0.2f, 0.2f));
-	data->aabbPlusZ = std::make_shared<AABB>(glm::vec3(0, 0, 0), glm::vec3(0.2f, 0.2f, 0.2f));
+	static glm::vec3 aabbArrowSize(0.6f, 0.6f, 0.6f);
+
+	data->aabbMinusX = std::make_shared<AABB>(glm::vec3(0, 0, 0), aabbArrowSize);
+	data->aabbPlusX = std::make_shared<AABB>(glm::vec3(0, 0, 0), aabbArrowSize);
+	data->aabbMinusY = std::make_shared<AABB>(glm::vec3(0, 0, 0), aabbArrowSize);
+	data->aabbPlusY = std::make_shared<AABB>(glm::vec3(0, 0, 0), aabbArrowSize);
+	data->aabbMinusZ = std::make_shared<AABB>(glm::vec3(0, 0, 0), aabbArrowSize);
+	data->aabbPlusZ = std::make_shared<AABB>(glm::vec3(0, 0, 0), aabbArrowSize);
 
 	data->arrowRaycastManager.registerAABB(*data->aabbMinusX, data->getRaycastCallback(ArrowType::MINUS_X));
 	data->arrowRaycastManager.registerAABB(*data->aabbPlusX, data->getRaycastCallback(ArrowType::PLUS_X));
