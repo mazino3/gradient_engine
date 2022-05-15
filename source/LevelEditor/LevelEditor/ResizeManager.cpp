@@ -58,8 +58,8 @@ ResizeManager::ResizeManager(double windowSizeX, double windowSizeY, Camera& cam
 		return false;
 	});
 
-	data->inputClient.onMouseMoved([this](double mouseX, double mouseY) 
-	{
+	data->inputClient.onMouseMoved([this](double mouseX, double mouseY)
+		{
 			if (!data->isDragging)
 			{
 				return false;
@@ -98,26 +98,31 @@ ResizeManager::ResizeManager(double windowSizeX, double windowSizeY, Camera& cam
 
 				glm::vec3 delta = newHit - oldHit;
 				glm::vec3 deltaProjection;
+				float dir = 1.0f;
 				switch (data->currentArrowType)
 				{
-					case ArrowType::MINUS_X:
-					case ArrowType::PLUS_X:
-						deltaProjection = glm::vec3(delta.x, 0, 0);
-						break;
-					case ArrowType::MINUS_Y:
-					case ArrowType::PLUS_Y:
-						deltaProjection = glm::vec3(0, delta.y, 0);
-						break;
-					case ArrowType::MINUS_Z:
-					case ArrowType::PLUS_Z:
-						deltaProjection = glm::vec3(0, 0, delta.z);
-						break;
+				case ArrowType::MINUS_X:
+					dir = -1.0f;
+				case ArrowType::PLUS_X:
+					deltaProjection = glm::vec3(delta.x, 0, 0);
+					break;
+				case ArrowType::MINUS_Y:
+					dir = -1.0f;
+				case ArrowType::PLUS_Y:
+					deltaProjection = glm::vec3(0, delta.y, 0);
+					break;
+				case ArrowType::MINUS_Z:
+					dir = -1.0f;
+				case ArrowType::PLUS_Z:
+					deltaProjection = glm::vec3(0, 0, delta.z);
+					break;
 				}
 
-				std::cout << "delta: " << delta.x << " " << delta.y << " " << delta.z << std::endl;
+				deltaProjection = deltaProjection * dir;
 
 				glm::vec3 newScale = data->currentObject->getScale() + deltaProjection;
 				data->currentObject->setScale(newScale);
+				data->currentObject->setPosition(data->currentObject->getPosition() + deltaProjection * 0.5f * dir);
 			}
 			return true;
 	});
