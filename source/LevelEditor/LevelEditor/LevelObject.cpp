@@ -1,6 +1,7 @@
 #include <LevelEditor/LevelObject.h>
 #include <LevelEditor/ResizeComponent.h>
 #include <LevelEditor/DependencyKeys.h>
+#include <LevelEditor/ResizeManager.h>
 #include <iostream>
 
 using namespace DependencyKeys;
@@ -12,6 +13,7 @@ struct LevelObjectImpl
 	RaycastManager& raycastManager;
 	RaycastManager& hoverRaycastManager;
 	Resources& resources;
+	ResizeManager& resizeManager;
 
 	std::weak_ptr<RenderObject> renderObject;
 	std::shared_ptr<SelectionSubscription> selectionSubscription;
@@ -32,7 +34,8 @@ LevelObjectImpl::LevelObjectImpl(DepSupplier& depSupplier, LevelObject& levelObj
 	hoverRaycastManager(depSupplier.get(HOVER_RAYCAST_MANAGER)),
 	resources(depSupplier.get<Resources>()),
 	isSelected(false),
-	resizeComponent(levelObject, depSupplier)
+	resizeComponent(levelObject, depSupplier),
+	resizeManager(depSupplier.get<ResizeManager>())
 {}
 
 
@@ -65,9 +68,30 @@ LevelObject::LevelObject(DepSupplier& depSupplier, glm::vec3 pos, glm::vec3 scal
 			data->onSelectionUpdated(selectedId == data->selectionId);
 	});
 
-	data->resizeComponent.onArrowClicked([](ArrowType arrowType) 
+	data->resizeComponent.onArrowClicked([this](ArrowType arrowType) 
 	{
 			std::cout << "arrow clicked: " << (int)arrowType << std::endl;
+
+			Plane plane;
+			switch (arrowType)
+			{
+			case ArrowType::MINUS_X:
+			case ArrowType::PLUS_X:
+				plane = Plane::PLANE_XY;
+				break;
+			case ArrowType::MINUS_Y:
+			case ArrowType::PLUS_Y:
+				plane = Plane::PLANE_XY;
+				break;
+			case ArrowType::MINUS_Z:
+			case ArrowType::PLUS_Z:
+				plane = Plane::PLANE_YZ;
+				break;
+			}
+
+			plane.origin = data->aabb.position;
+
+			data->resizeManager.startDragging(*this, arrowType, plane);
 	});
 }
 

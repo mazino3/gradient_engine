@@ -2,6 +2,7 @@
 #include <glm/vec2.hpp>
 #include <glm/ext.hpp>
 #include <Graphics/Camera.h>
+#include <istream>
 
 struct ResizeManagerImpl
 {
@@ -68,6 +69,7 @@ ResizeManager::ResizeManager(double windowSizeX, double windowSizeY, Camera& cam
 			{
 				data->prevMouseX = mouseX;
 				data->prevMouseY = mouseY;
+				data->isFirstMove = false;
 			}
 			else
 			{
@@ -77,11 +79,22 @@ ResizeManager::ResizeManager(double windowSizeX, double windowSizeY, Camera& cam
 				Ray oldRay = data->camera.getMouseRay(oldMousePos);
 				Ray newRay = data->camera.getMouseRay(newMousePos);
 
+				data->prevMouseX = mouseX;
+				data->prevMouseY = mouseY;
+
 				glm::vec3 oldHit;
 				glm::vec3 newHit;
 
-				if (!data->currentPlane.intersectsWith(oldRay, oldHit)) return true;
-				if (!data->currentPlane.intersectsWith(newRay, newHit)) return true;
+				if (!data->currentPlane.intersectsWith(oldRay, oldHit))
+				{
+					std::cout << "old hit not intersecting" << std::endl;
+					return true;
+				}
+				if (!data->currentPlane.intersectsWith(newRay, newHit))
+				{
+					std::cout << "new hit not intersecting" << std::endl;
+					return true;
+				}
 
 				glm::vec3 delta = newHit - oldHit;
 				glm::vec3 deltaProjection;
@@ -101,11 +114,26 @@ ResizeManager::ResizeManager(double windowSizeX, double windowSizeY, Camera& cam
 						break;
 				}
 
+				std::cout << "delta: " << delta.x << " " << delta.y << " " << delta.z << std::endl;
+
 				glm::vec3 newScale = data->currentObject->getScale() + deltaProjection;
 				data->currentObject->setScale(newScale);
 			}
 			return true;
 	});
+
+	data->inputClient.onMouseReleased([this](double mouseX, double mouseY, int button) 
+		{
+			if (data->isDragging)
+			{
+				data->isDragging = false;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		});
 }
 
 ResizeManager::~ResizeManager()
@@ -124,4 +152,6 @@ void ResizeManager::startDragging(LevelObject& levelObject, ArrowType arrowType,
 	data->currentArrowType = arrowType;
 	data->currentPlane = arrowPlane;
 	data->currentObject = &levelObject;
+
+	std::cout << "dragging started" << std::endl;
 }

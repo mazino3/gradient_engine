@@ -158,7 +158,8 @@ std::vector<std::pair<float, InputClientBase*>> LevelEditor::getInputClients()
 {
 	return std::vector<std::pair<float, InputClientBase*>>
 	{
-		std::make_pair(InputPriorities::EDITOR, & data->cameraController->getInputClient()),
-		std::make_pair(InputPriorities::SELECTION, &data->inputClient)
+		std::make_pair(InputPriorities::EDITOR, &data->cameraController->getInputClient()),
+		std::make_pair(InputPriorities::SELECTION, &data->inputClient),
+		std::make_pair(InputPriorities::DRAGGING, &data->resizeManager->getInputClient())
 	};
 }
