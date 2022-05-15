@@ -150,6 +150,10 @@ LevelEditor::~LevelEditor()
 void LevelEditor::render(RenderTarget& renderTarget, float dt)
 {
 	data->cameraController->update(dt);
+	for (auto& gameObject : data->levelObjects)
+	{
+		gameObject->update();
+	}
 	renderTarget.bind();
 	data->renderer->renderScene();
 }
