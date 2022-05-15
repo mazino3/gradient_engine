@@ -5,14 +5,16 @@
 #include <Graphics/InputClient.h>
 #include <Math/Geometry/Plane.h>
 #include <Math/Geometry/Ray.h>
-#include "LevelObject.h"
 #include "ResizeComponent.h"
+#include "LevelObject.h"
 
 struct ResizeManagerImpl;
 
+enum class ArrowType;
+
 struct ResizeManager
 {
-	ResizeManager();
+	ResizeManager(double windowSizeX, double windowSizeY, Camera& camera);
 	~ResizeManager();
 
 	InputClient& getInputClient();

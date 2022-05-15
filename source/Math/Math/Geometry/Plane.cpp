@@ -7,6 +7,11 @@ Plane::Plane(const glm::vec3& origin, const glm::vec3& normal) :
 	normal(normal)
 {}
 
+Plane::Plane() :
+	origin(glm::vec3(0, 0, 0)),
+	normal(glm::vec3(1, 0, 0))
+{}
+
 bool Plane::intersectsWith(const Ray& ray)
 {
 	glm::vec3 unused;

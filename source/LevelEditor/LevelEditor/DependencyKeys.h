@@ -7,6 +7,8 @@
 #include "SelectionManager.h"
 #include <Graphics/Renderer.h>
 
+struct ResizeManager;
+
 namespace DependencyKeys
 {
 	const DependencyKey<RaycastManager> RAYCAST_MANAGER = "raycast_manager";
@@ -15,6 +17,7 @@ namespace DependencyKeys
 	const DependencyKey<Resources> RESOURCES = "resources";
 	const DependencyKey<SelectionManager> SELECTION_MANAGER = "selection_manager";
 	const DependencyKey<Renderer> RENDERER = "renderer";
+	const DependencyKey<ResizeManager> RESIZE_MANAGER = "resize_manager";
 }
 
 #endif

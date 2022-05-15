@@ -3,6 +3,7 @@
 #include "InputPriorities.h"
 #include "Resources.h"
 #include "SelectionManager.h"
+#include "ResizeManager.h"
 #include "RaycastManager.h"
 #include "DepSupplier.h"
 #include "DependencyKeys.h"
@@ -20,6 +21,7 @@ struct LevelEditorImpl
 {
 	std::unique_ptr<Renderer> renderer;
 	std::unique_ptr<OrbitCameraController> cameraController;
+	std::unique_ptr<ResizeManager> resizeManager;
 	Resources resources;
 	SelectionManager selectionManager;
 	RaycastManager raycastManager;
@@ -53,6 +55,9 @@ LevelEditor::LevelEditor(RenderTarget& renderTarget)
 	data->cameraController->setMaxDistance(100);
 	data->cameraController->setDistance(10);
 	data->cameraController->setVerticalAngle(45.0f);
+
+	data->resizeManager = std::make_unique<ResizeManager>(renderTarget.getWidth(), renderTarget.getHeight(), camera);
+	data->depSupplier.put(*data->resizeManager);
 	
 	auto& light = data->renderer->createDirectionalLight();
 	light.ambientColor = glm::vec3(0.3f, 0.3f, 0.3f);
