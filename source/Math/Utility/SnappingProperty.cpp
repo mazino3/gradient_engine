@@ -28,6 +28,12 @@ SnappingProperty::SnappingProperty(float step)
 	data->step = step;
 }
 
+SnappingProperty::SnappingProperty()
+{
+	data = std::make_unique<SnappingPropertyImpl>();
+	data->step = 0.2f;
+}
+
 SnappingProperty::~SnappingProperty()
 {
 }

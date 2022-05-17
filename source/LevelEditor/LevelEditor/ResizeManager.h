@@ -19,6 +19,7 @@ struct ResizeManager
 
 	InputClient& getInputClient();
 	void startDragging(LevelObject& levelObject, ArrowType arrowType, Plane arrowPlane);
+	void update();
 private:
 	std::unique_ptr<ResizeManagerImpl> data;
 };

@@ -154,6 +154,7 @@ void LevelEditor::render(RenderTarget& renderTarget, float dt)
 	{
 		gameObject->update();
 	}
+	data->resizeManager->update();
 	renderTarget.bind();
 	data->renderer->renderScene();
 }

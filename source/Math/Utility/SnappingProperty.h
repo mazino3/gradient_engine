@@ -9,6 +9,7 @@ struct SnappingPropertyImpl;
 struct SnappingProperty
 {
 	SnappingProperty(float step);
+	SnappingProperty();
 	~SnappingProperty();
 
 	void setTargetValue(float value);
