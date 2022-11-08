@@ -73,6 +73,11 @@ Texture::Texture(const std::string& filename)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisoSetting);
 	}
 
+	if (glGetError() != GL_NO_ERROR)
+	{
+		std::cout << "texture creation error: " << glewGetErrorString(glGetError()) << std::endl;
+	}
+
 	stbi_image_free(imageData);
 }
 

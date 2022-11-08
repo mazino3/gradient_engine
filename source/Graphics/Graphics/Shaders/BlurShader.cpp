@@ -135,11 +135,6 @@ BlurShader::BlurShader(float radius)
 	auto vertexCode = bigRadius ? generateVertexShaderBigRadius() : generateVertexShader(kernel);
 	auto fragmentCode = bigRadius ? generateFragmentShaderBigRadius(kernel) : generateFragmentShader(kernel);
 
-	std::cout << "big radius: " << (bigRadius ? "yes" : "no") << std::endl;
-
-	std::cout << "vertex code: " << vertexCode << std::endl;
-	std::cout << "fragment code: " << fragmentCode << std::endl;
-
 	init(ShaderInitType::Code, vertexCode, fragmentCode);
 }
 
