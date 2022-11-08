@@ -1,6 +1,7 @@
 #version 130
 
 in vec2 texCoords;
+out vec4 outColor;
 
 uniform sampler2D screenTexture;
 uniform float brightnessThreshold;
@@ -11,10 +12,10 @@ void main(void)
 	float brightness = (color.r * 0.2126 + color.g * 0.7152 + color.b * 0.0722);
 	if (brightness > brightnessThreshold)
 	{
-		gl_FragColor = color;
+		outColor = color;
 	}
 	else
 	{
-		gl_FragColor = vec4(0.0);
+		outColor = vec4(0.0);
 	}
 }

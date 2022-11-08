@@ -1,6 +1,7 @@
 #version 130
 
 in vec2 texCoords[11];
+out vec4 outColor;
 
 uniform sampler2D screenTexture;
 
@@ -11,6 +12,6 @@ void main(void)
 	gl_FragColor = vec4(0.0);
 	for (int i = 0; i < 11; i++)
 	{
-		gl_FragColor += texture(screenTexture, texCoords[i]) * kernel[i];
+		outColor += texture(screenTexture, texCoords[i]) * kernel[i];
 	}
 }

@@ -60,7 +60,7 @@ in vec3 ex_Tangent;
 in vec3 ex_Bitangent;
 in vec3 ex_VertPos;
 in vec3 ex_VertPosWorld;
-out vec4 gl_FragColor;
+out vec4 outColor;
 
 void main(void) {
 	vec3 resultColor = vec3(0.0, 0.0, 0.0);
@@ -172,5 +172,5 @@ void main(void) {
 	
 	finalColor = vec4(fogColor, 1.0) * (1.0 - fogValue) + vec4(clamp(finalColor.r, 0.0, 1.0), clamp(finalColor.g, 0.0, 1.0), clamp(finalColor.b, 0.0, 1.0), finalColor.a) * (fogValue);
 	
-	gl_FragColor = finalColor;
+	outColor = finalColor;
 }

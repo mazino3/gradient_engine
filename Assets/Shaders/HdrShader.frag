@@ -1,6 +1,7 @@
 #version 130
 
 in vec2 texCoords;
+out vec4 outColor;
 
 uniform sampler2D screenTexture;
 uniform bool toneMappingEnabled;
@@ -26,5 +27,5 @@ void main(void)
 	
 	color = (color - 0.5) * (1.0 + contrast) + 0.5;
 	
-	gl_FragColor = vec4(color, 1.0);
+	outColor = vec4(color, 1.0);
 }

@@ -93,7 +93,7 @@ TestSceneRenderer::TestSceneRenderer(RenderTarget& renderTarget)
         "Assets/Sprites/Skybox/Front.bmp",
         "Assets/Sprites/Skybox/Back.bmp"
     }));
-    data->renderer->createSkybox(*data->skybox);
+    //data->renderer->createSkybox(*data->skybox);
 }
 
 std::vector<InputClientBase*> TestSceneRenderer::getInputClients()
